@@ -9,7 +9,7 @@ export const earlyClose = async studyId => {
   }
 
   const response = await axios.patch(
-    `https://www.api-sejongpeer.shop/api/v1/study/relations/early-close/${studyId}`,
+    `${process.env.REACT_APP_BACK_SERVER}/study/relations/early-close/${studyId}`,
     {},
     {
       headers: {
@@ -17,7 +17,7 @@ export const earlyClose = async studyId => {
         'Refresh-token': refreshToken,
         'Content-Type': 'application/json',
       },
-      // withCredentials: true,
+      withCredentials: true,
     }
   );
   return response;

@@ -4,13 +4,38 @@ import COLORS from '../../theme';
 
 import { useEffect, useState } from 'react';
 
+import Popup from '../studyPopup/Popup';
+import usePopupStroe from '../studyPopup/usePopupStore';
+
 import { fetchMyPost } from './api/fetchMyPost';
 import { applicantSelection } from './api/applicantSelection';
 import { earlyClose } from './api/earlyClose';
 
-
 const StudyMyPost = () => {
   const [myPosts, setMyPosts] = useState([]);
+  const [isEndBtnClick, setIsEndBtnClick] = useState(false);
+
+  const {
+    isPopupVisible,
+    popupMessage,
+    popupTitle,
+    setPopupVisible,
+    setPopupMessage,
+    setPopupTitle,
+  } = usePopupStroe();
+
+  const togglePopup = ({ message, title }) => {
+    setPopupTitle(title);
+    setPopupMessage(message);
+    setPopupVisible(!isPopupVisible);
+  };
+
+  const closePopup = () => {
+    setPopupVisible(false);
+    setIsEndBtnClick(false);
+    console.log('팝업 닫힘');
+  };
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -24,7 +49,6 @@ const StudyMyPost = () => {
 
     loadPosts();
   }, []);
-
 
   const AcceptHandle = async (studyId, nickname, value) => {
     const patchData = {
@@ -45,6 +69,12 @@ const StudyMyPost = () => {
     try {
       const response = await earlyClose(studyId);
       console.log('Response:', response);
+      setIsEndBtnClick(true);
+      const popUpData = {
+        title: '스터디 마감 완료',
+        message: '수락한 지원자들에겐 오픈채팅방 링크가 전달됩니다.',
+      };
+      togglePopup(popUpData);
     } catch (error) {
       console.log(error);
     }
@@ -53,52 +83,78 @@ const StudyMyPost = () => {
   return (
     <Container>
       {myPosts.map((post, index) => (
-        <OuterBox key={index}>
+        <OuterBox key={index} status={post.recruitmentStatus}>
           <HeaderStyle>
+            <Title status={post.recruitmentStatus}>{post.studyTitle}</Title>
+            {post.recruitmentStatus === 'RECRUITING' ? (
+              <HeaderBottom>
+                <ApplicantNum>
+                  수락: {post.participantsCount}명 / 정원:{' '}
+                  {post.recruitmentCount}명
+                </ApplicantNum>
 
-            <Title>{post.studyTitle}</Title>
-            <HeaderBottom>
-              <ApplicantNum>지원인원 : {post.applicants.length}명</ApplicantNum>
-              <EndBtn onClick={() => CancelHandle(post.studyId)}>
-                모집마감하기
-              </EndBtn>
+                <EndBtn
+                  status={post.recruitmentStatus}
+                  onClick={() => CancelHandle(post.studyId)}
+                >
+                  모집마감하기
+                </EndBtn>
+              </HeaderBottom>
+            ) : (
+              <HeaderBottom>
+                <ApplicantNum>
+                  지원인원: {post.participantsCount}명
+                </ApplicantNum>
 
-            </HeaderBottom>
+                <EndBtn status={post.recruitmentStatus}>모집완료</EndBtn>
+              </HeaderBottom>
+            )}
           </HeaderStyle>
 
-          {post.applicants.length > 0 && (
-
-            <BottomStyle>
-
-              {post.applicants.map((applicant, appIndex) => (
-                <ApplicantBox key={appIndex}>
-                  <ApplicantInfo>
-                    {applicant.major} {applicant.grade}학년
-                  </ApplicantInfo>
-                  <BtnBox>
-
-                    <AcceptBtn
-                      onClick={() =>
-                        AcceptHandle(post.studyId, applicant.nickname, true)
-                      }
-                    >
-                      수락
-                    </AcceptBtn>
-                    <RefuseBtn
-                      onClick={() =>
-                        AcceptHandle(post.studyId, applicant.nickname, false)
-                      }
-                    >
-                      거절
-                    </RefuseBtn>
-
-                  </BtnBox>
-                </ApplicantBox>
-              ))}
-            </BottomStyle>
-          )}
+          {post.applicants.length > 0 &&
+            post.recruitmentStatus === 'RECRUITING' && (
+              <BottomStyle>
+                {post.applicants.map((applicant, appIndex) => (
+                  <ApplicantBox key={appIndex}>
+                    <ApplicantInfo>
+                      {applicant.major} {applicant.grade}학년
+                    </ApplicantInfo>
+                    {applicant.studyMatchingStatus === '수락' ||
+                    applicant.studyMatchingStatus === '거절' ? (
+                      <MsgBox>
+                        {applicant.studyMatchingStatus}되었습니다.
+                      </MsgBox>
+                    ) : (
+                      <BtnBox>
+                        <AcceptBtn
+                          onClick={() =>
+                            AcceptHandle(post.studyId, applicant.nickname, true)
+                          }
+                        >
+                          수락
+                        </AcceptBtn>
+                        <RefuseBtn
+                          onClick={() =>
+                            AcceptHandle(
+                              post.studyId,
+                              applicant.nickname,
+                              false
+                            )
+                          }
+                        >
+                          거절
+                        </RefuseBtn>
+                      </BtnBox>
+                    )}
+                  </ApplicantBox>
+                ))}
+              </BottomStyle>
+            )}
         </OuterBox>
       ))}
+      {isEndBtnClick && (
+        <Popup title={popupTitle} message={popupMessage} onClose={closePopup} />
+      )}
     </Container>
   );
 };
@@ -115,7 +171,8 @@ const Container = styled.div`
 `;
 
 const OuterBox = styled.div`
-  background-color: ${COLORS.back2};
+  background-color: ${props =>
+    props.status === 'RECRUITING' ? `${COLORS.back2}` : `${COLORS.back1}`};
 `;
 const HeaderStyle = styled.div`
   height: 10vh;
@@ -130,7 +187,6 @@ const HeaderStyle = styled.div`
     height: 9vh;
     gap: 15%;
   }
-
 `;
 const Title = styled.p`
   width: 100%;
@@ -139,6 +195,7 @@ const Title = styled.p`
   padding: 0;
   font-size: 1.2rem;
   font-weight: 700;
+  /* color: ${props => (props.status === 'RECRUITING' ? 'black' : 'gray')}; */
   @media (min-width: 768px) {
     font-size: 1.5rem;
   }
@@ -155,10 +212,11 @@ const ApplicantNum = styled.span`
   @media (min-width: 768px) {
     font-size: 1.2rem;
   }
-
 `;
 const EndBtn = styled.button`
-  background-color: ${COLORS.back2};
+  /* background-color: ${COLORS.back2}; */
+  background-color: ${props =>
+    props.status === 'RECRUITING' ? `${COLORS.back2}` : `${COLORS.back1}`};
   color: ${COLORS.font4};
   font-size: 0.9rem;
   font-weight: 500;
@@ -193,9 +251,22 @@ const BtnBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 120px;
+  width: 125px;
   gap: 2%;
 `;
+const MsgBox = styled.button`
+  background-color: ${COLORS.back2};
+  color: ${COLORS.font4};
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  @media (min-width: 768px) {
+    font-size: 1.1rem;
+  }
+`;
+
 const AcceptBtn = styled.button`
   display: block;
   width: 55px;

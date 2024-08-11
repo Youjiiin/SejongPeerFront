@@ -1,0 +1,5 @@
+[0808/231946.874:ERROR:registration_protocol_win.cc(108)] CreateFile: 지정된 파일을 찾을 수 없습니다. (0x2)
+[0808/231946.887:ERROR:registration_protocol_win.cc(108)] CreateFile: 지정된 파일을 찾을 수 없습니다. (0x2)
+[0808/232006.019:ERROR:registration_protocol_win.cc(108)] CreateFile: 지정된 파일을 찾을 수 없습니다. (0x2)
+[0808/232006.859:ERROR:registration_protocol_win.cc(108)] CreateFile: 지정된 파일을 찾을 수 없습니다. (0x2)
+[0808/234435.323:ERROR:registration_protocol_win.cc(108)] CreateFile: 지정된 파일을 찾을 수 없습니다. (0x2)
