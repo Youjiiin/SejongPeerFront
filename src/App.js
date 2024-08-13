@@ -61,6 +61,7 @@ import AnimalMatchInfo from './pages/festival/animalMatchResult/AnimalMatchInfo.
 import AnimalMatchResult from './pages/festival/animalMatchResult/AnimalMatchResult.js';
 import AnimalCheck from './pages/festival/animalCheck/AnimalCheck.js';
 import AnimalResult from './pages/festival/animalResult/AnimalResult.js';
+import { Buddy } from 'pages/buddy/Buddy';
 
 export const MyContext = createContext();
 
@@ -174,6 +175,7 @@ const App = () => {
               <Route exact path="/" element={<StartLoading />} />
               <Route path="/main" element={<MainPage />} />
 
+              <Route path='/buddy' element={<Buddy />} />
               <Route path="/buddy/start1" element={<BuddyStart1 />} />
               <Route path="/buddy/start2" element={<BuddyStart2 />} />
               <Route path="/buddy/matching" element={<BuddyMatching />} />
