@@ -21,6 +21,7 @@ const StudyList = () => {
     const loadPosts = async () => {
       try {
         const fetchedPosts = await fetchPosts();
+        console.log(fetchedPosts);
         setPosts(fetchedPosts);
       } catch (error) {
         console.error('Error fetching posts:', error);
