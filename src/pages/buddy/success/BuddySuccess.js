@@ -72,7 +72,7 @@ const BuddySuccess = () => {
 
   const getBuddyInfoHandler = () => {
     fetch(
-      process.env.REACT_APP_BACK_SERVER + '/buddy/matched/partner/details',
+      process.env.REACT_APP_BACK_SERVER + '/buddy/matched-partner/details',
       {
         method: 'GET',
         headers: {

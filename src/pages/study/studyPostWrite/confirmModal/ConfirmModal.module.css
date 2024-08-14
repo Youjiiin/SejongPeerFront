@@ -22,18 +22,22 @@
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
+  flex-shrink: 0;
+  gap: 8.5px;
 }
 
 .cancelButton,
 .confirmButton {
-  width: 120px;
-  padding: 12px 10px;
+  padding: 12px 0;
   border: none;
   border-radius: 35px;
   cursor: pointer;
   color: #FFFFFF;
   font-size: 17px;
-  font-weight: 600;
+  font-weight: bold;
+  flex-basis: 0;
+  min-width: 135px;
+  line-height: 24px;
 }
 
 .cancelButton {

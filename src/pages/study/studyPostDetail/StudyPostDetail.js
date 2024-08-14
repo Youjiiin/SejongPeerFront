@@ -177,7 +177,7 @@ const StudyListPostDetail = () => {
 
   return (
     <Container>
-      <div>
+      <Wrapper>
         <Title>
           {studyData.data.title}
           {isWriter ? (
@@ -299,10 +299,11 @@ const StudyListPostDetail = () => {
           <Popup
             title={popupTitle}
             message={popupMessage}
+            message2={'*스터디 신청 후 취소할 시, 취소한 스터디의 지원에 1시간 제한이 생깁니다.'}
             onClose={closePopup}
           />
         )}
-      </div>
+      </Wrapper>
     </Container>
   );
 };
@@ -310,6 +311,7 @@ const StudyListPostDetail = () => {
 export default StudyListPostDetail;
 
 const Container = styled.div`
+  margin: auto;
   margin-top: 80px;
   display: flex;
   flex-direction: column;
@@ -318,6 +320,12 @@ const Container = styled.div`
   height: 85%;
   background-color: ${COLORS.back1};
   position: relative;
+`;
+
+const Wrapper = styled.div`
+  @media (min-width: 768px) {
+    width: 375px;
+  }
 `;
 
 const Title = styled.div`
@@ -398,7 +406,6 @@ const Line = styled.div`
 `;
 
 const Content = styled.div`
-  margin: auto;
   max-width: 343px;
   width: 100%;
   height: 120px;

@@ -137,8 +137,6 @@ const MainPage = () => {
             ></button>
           </div>
         </div>
-      </div>
-      <div onClick={kakaoChat}>
         <button
           className={style.kakao}
           onClick={kakaoChat}

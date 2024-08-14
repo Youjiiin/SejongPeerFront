@@ -39,6 +39,10 @@ const ConfirmModal = ({ isOpen, onClose }) => {
     navigate('/study');
   };
 
+  const closeHandler = () => {
+    
+  };
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
