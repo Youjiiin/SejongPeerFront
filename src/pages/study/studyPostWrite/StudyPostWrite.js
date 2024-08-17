@@ -63,6 +63,7 @@ const StudyPostWrite = props => {
     setQuestionLink,
     setTags,
   } = usePostStore();
+
   const {
     isPopupVisible,
     popupMessage,
@@ -83,7 +84,16 @@ const StudyPostWrite = props => {
     questionLink,
     content,
     studyLink,
-    tags,);
+    tags
+  );
+  // 게시글 초기화
+  const reset = usePostStore(state => state.reset);
+  const resetCategory = useTimeTableStore(state => state.reset);
+  useEffect(() => {
+    reset();
+    resetCategory();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleDatePickerFocus = event => {
@@ -232,7 +242,10 @@ const StudyPostWrite = props => {
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
-
+    const tagSplit = tags
+      .replace(/(\s*)/g, '')
+      .split('#')
+      .filter(e => e !== '');
     const studyData =
       studyType === 'lecture'
         ? {
@@ -246,7 +259,7 @@ const StudyPostWrite = props => {
             lectureId: category,
             recruitmentStartAt: formStartDate,
             recruitmentEndAt: formEndDate,
-            tags: tags,
+            tags: tagSplit,
             images: null,
           }
         : {
@@ -260,7 +273,7 @@ const StudyPostWrite = props => {
             externalActivityId: category,
             recruitmentStartAt: formStartDate,
             recruitmentEndAt: formEndDate,
-            tags: tags,
+            tags: tagSplit,
             images: null,
           };
     console.log(studyData);
@@ -286,18 +299,9 @@ const StudyPostWrite = props => {
       }
       alert('게시글 작성 완료');
 
-      // 게시글 초기화
-      setTitle('');
-      setCategory(null);
-      setStartDate('');
-      setEndDate('');
-      setMemberNum(1);
-      setSelectedWay('FACE_TO_FACE');
-      setSelectedFrequency('ONCE_OR_TWICE_A_WEEK');
-      setContent('');
-      setStudyLink('');
-      setQuestionLink('');
-      setTags([]);
+      //게시글 초기화 함수
+      reset();
+      resetCategory();
 
       navigate(`/study/post/${studyId}`);
       if (!response.ok) {
@@ -335,7 +339,10 @@ const StudyPostWrite = props => {
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
-
+    const tagSplit = tags
+      .replace(/(\s*)/g, '')
+      .split('#')
+      .filter(e => e !== '');
     const studyData = {
       title: title,
       content: content,
@@ -347,7 +354,7 @@ const StudyPostWrite = props => {
       lectureId: category,
       recruitmentStartAt: formStartDate,
       recruitmentEndAt: formEndDate,
-      tags: tags,
+      tags: tagSplit,
       images: null,
     };
     console.log(studyData);
@@ -369,7 +376,6 @@ const StudyPostWrite = props => {
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
 
-
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
@@ -379,17 +385,9 @@ const StudyPostWrite = props => {
       }
       alert('게시글 수정 완료');
 
-      // 게시글 초기화
-      setTitle('');
-      setStartDate('');
-      setEndDate('');
-      setMemberNum(1);
-      setSelectedWay('FACE_TO_FACE');
-      setSelectedFrequency('ONCE_OR_TWICE_A_WEEK');
-      setContent('');
-      setStudyLink('');
-      setQuestionLink('');
-      setTags([]);
+      //게시글 초기화
+      reset();
+      resetCategory();
 
       navigate(`/study/post/${props.studyId}`);
     } catch (err) {

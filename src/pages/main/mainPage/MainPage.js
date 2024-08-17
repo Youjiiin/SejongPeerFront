@@ -16,7 +16,6 @@ import style from './MainPage.module.css';
 
 import useStudyInfoStore from '../../study/useStudyInfoStore';
 import { BuddyHandler, HonbobHandler } from './api';
-
 const images = [honbobUse, buddyUse, peerUse];
 
 const MainPage = () => {
