@@ -1,11 +1,10 @@
 // src/api/study.js
 import axios from 'axios';
-import useStudyInfoStore from '../../study/useStudyInfoStore';
 
 export const fetchPosts = async () => {
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
-  const { studyType } = useStudyInfoStore.getState();
+  const studyType = localStorage.getItem('studyType');
 
   if (!accessToken || !refreshToken) {
     throw new Error('Tokens not found in local storage.');

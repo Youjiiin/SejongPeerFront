@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchAppliedStudies } from './api';
 import styled from 'styled-components';
-import COLORS from 'theme';
+import COLORS from '../../../theme';
 import { useNavigate } from 'react-router-dom';
 
 const AppliedStudy = () => {

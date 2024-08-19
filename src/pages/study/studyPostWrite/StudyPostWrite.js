@@ -8,6 +8,7 @@ import ConfirmModal from './confirmModal/ConfirmModal';
 
 // modal components
 import StudyPostField from './studyPostField/StudyPostField';
+import StudyPostExternalField from './studyPostField/StudyPostExternalField';
 import StudyMember from './studyMember/StudyMember';
 
 // components
@@ -28,7 +29,6 @@ import Popup from '../../../components/studyPopup/Popup';
 
 //zustand
 import usePostStore from './usePostStore';
-import useStudyInfoStore from '../useStudyInfoStore';
 import usePopupStroe from '../../../components/studyPopup/usePopupStore';
 import useTimeTableStore from '../timeTable/useTimeTableStore';
 import { format } from 'date-fns';
@@ -71,7 +71,7 @@ const StudyPostWrite = props => {
     setPopupVisible,
     setPopupMessage,
   } = usePopupStroe();
-  const { studyType } = useStudyInfoStore();
+  const studyType = localStorage.getItem('studyType');
   const { subjectName, setTableInfos, setShowData } = useTimeTableStore();
   console.log(
     title,
@@ -217,7 +217,7 @@ const StudyPostWrite = props => {
   };
 
   const [isFilled, setIsFilled] = useState(true);
-
+  //게시글 작성 통신
   const submitHandler = async e => {
     //제목/모집기간/모집인원/내용/오픈채팅 링크/카테고리
     const validation = (name, text) => {
@@ -277,9 +277,11 @@ const StudyPostWrite = props => {
             images: null,
           };
     console.log(studyData);
+    const studyTypeM =
+      studyType === 'lecture' ? studyType : 'external-activity';
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACK_SERVER}/study/${studyType}`,
+        `${process.env.REACT_APP_BACK_SERVER}/study/${studyTypeM}`,
         {
           method: 'POST',
           body: JSON.stringify(studyData),
@@ -443,7 +445,13 @@ const StudyPostWrite = props => {
           deleteHandler={deleteHandler}
           state={isClickedStudy ? 'studyPostField' : null}
         >
-          {isClickedStudy && <StudyPostField />}
+          {isClickedStudy ? (
+            studyType === 'lecture' ? (
+              <StudyPostField />
+            ) : (
+              <StudyPostExternalField />
+            )
+          ) : null}
           {isClickedMember && <StudyMember />}
         </BottomModal>
       )}
