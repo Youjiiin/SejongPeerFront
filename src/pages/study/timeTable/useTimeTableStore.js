@@ -7,6 +7,12 @@ const useTimeTableStore = create(set => ({
   setTableInfos: tableInfos => set({ tableInfos }),
   setShowData: showData => set({ showData }),
   setSubjectName: subjectName => set({ subjectName }),
+  reset: () =>
+    set({
+      tableInfos: [],
+      showData: [],
+      subjectName: '',
+    }),
 }));
 
 export default useTimeTableStore;

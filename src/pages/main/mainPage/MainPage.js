@@ -14,7 +14,6 @@ import buddy_button from '../../../assets/image/buddy_button.png';
 import honbobButton from '../../../assets/image/honbobButton.png';
 import style from './MainPage.module.css';
 import { BuddyHandler, HonbobHandler } from './api';
-
 const images = [honbobUse, buddyUse, peerUse];
 
 const MainPage = () => {
