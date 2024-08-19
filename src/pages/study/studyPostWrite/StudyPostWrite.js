@@ -8,6 +8,7 @@ import ConfirmModal from './confirmModal/ConfirmModal';
 
 // modal components
 import StudyPostField from './studyPostField/StudyPostField';
+import StudyPostExternalField from './studyPostField/StudyPostExternalField';
 import StudyMember from './studyMember/StudyMember';
 
 // components
@@ -83,7 +84,8 @@ const StudyPostWrite = props => {
     questionLink,
     content,
     studyLink,
-    tags,);
+    tags
+  );
   const navigate = useNavigate();
 
   const handleDatePickerFocus = event => {
@@ -207,7 +209,7 @@ const StudyPostWrite = props => {
   };
 
   const [isFilled, setIsFilled] = useState(true);
-
+  //게시글 작성 통신
   const submitHandler = async e => {
     //제목/모집기간/모집인원/내용/오픈채팅 링크/카테고리
     const validation = (name, text) => {
@@ -369,7 +371,6 @@ const StudyPostWrite = props => {
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
 
-
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
@@ -445,7 +446,13 @@ const StudyPostWrite = props => {
           deleteHandler={deleteHandler}
           state={isClickedStudy ? 'studyPostField' : null}
         >
-          {isClickedStudy && <StudyPostField />}
+          {isClickedStudy ? (
+            studyType === 'lecture' ? (
+              <StudyPostField />
+            ) : (
+              <StudyPostExternalField />
+            )
+          ) : null}
           {isClickedMember && <StudyMember />}
         </BottomModal>
       )}
