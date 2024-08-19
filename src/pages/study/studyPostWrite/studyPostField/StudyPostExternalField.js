@@ -5,7 +5,7 @@ import search from '../../../../assets/image/search_gray.png';
 import { fetchData } from './api';
 
 //zustand
-import useStudyInfoStore from '../../useStudyInfoStore';
+
 import usePostStore from '../usePostStore';
 import useTimeTableStore from '../../timeTable/useTimeTableStore';
 
@@ -13,7 +13,9 @@ import { MyContext } from '../../../../App';
 
 const StudyPostExternalField = () => {
   const { setModalOpen } = useContext(MyContext);
-  const { studyType } = useStudyInfoStore();
+
+  const studyType = localStorage.getItem('studyType');
+
   const { setCategory } = usePostStore();
   const [datas, setDatas] = useState([]);
   const { setSubjectName } = useTimeTableStore();
@@ -22,7 +24,7 @@ const StudyPostExternalField = () => {
     const loadPosts = async () => {
       try {
         const fetchedData = await fetchData();
-        console.log(fetchedData);
+
         setDatas(fetchedData);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -33,7 +35,6 @@ const StudyPostExternalField = () => {
   }, []);
 
   const selectHandle = data => {
-    // console.log(id);
     setSubjectName(data.categoryName);
     setCategory(data.id);
     setModalOpen(false);

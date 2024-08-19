@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import StudyPostWrite from '../studyPostWrite/StudyPostWrite';
 import usePostStore from '../studyPostWrite/usePostStore';
-import useStudyInfoStore from '../useStudyInfoStore';
 
 const StudyModify = () => {
-  const {studyId} = useParams();
+  const { studyId } = useParams();
   const [studyData, setStudyData] = useState(null);
 
   const {
@@ -19,7 +18,7 @@ const StudyModify = () => {
     setQuestionLink,
     setContent,
     setStudyLink,
-    setTags
+    setTags,
   } = usePostStore();
 
   useEffect(() => {
@@ -54,16 +53,16 @@ const StudyModify = () => {
 
   useEffect(() => {
     if (studyData) {
-      if(studyData.data.studyFrequency === '주 1~2회') {
-        setSelectedFrequency("ONCE_OR_TWICE_A_WEEK");
+      if (studyData.data.studyFrequency === '주 1~2회') {
+        setSelectedFrequency('ONCE_OR_TWICE_A_WEEK');
       } else if (studyData.data.studyFrequency === '주 3~4회') {
         setSelectedFrequency('THREE_TO_FOUR_TIMES_A_WEEK');
       } else {
         setSelectedFrequency('FIVE_OR_MORE_TIMES_A_WEEK');
       }
 
-      if(studyData.data.studyMethod === '대면') {
-        setSelectedWay("FACE_TO_FACE");
+      if (studyData.data.studyMethod === '대면') {
+        setSelectedWay('FACE_TO_FACE');
       } else if (studyData.data.studyMethod === '비대면') {
         setSelectedWay('NON_FACE_TO_FACE');
       } else {
@@ -83,10 +82,7 @@ const StudyModify = () => {
   }, [studyData]);
 
   return studyData ? (
-    <StudyPostWrite
-      studyId={studyId}
-      imgUrl = {studyData.data.imgUrlList}
-    />
+    <StudyPostWrite studyId={studyId} imgUrl={studyData.data.imgUrlList} />
   ) : (
     <div>Loading...</div>
   );

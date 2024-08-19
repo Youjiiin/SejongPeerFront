@@ -21,8 +21,14 @@ const BottomModal = forwardRef(({ state = null, children }, ref) => {
 
   return (
     <div className={style.modal}>
-      <div onClick={cancelHandler} className={style.backdrop} />
-      <div ref={ref} className={`${style.container} ${animate ? style.animate : ''}`}>
+      <div
+        onClick={state === 'studyPostField' ? null : cancelHandler}
+        className={style.backdrop}
+      />
+      <div
+        ref={ref}
+        className={`${style.container} ${animate ? style.animate : ''}`}
+      >
         {children}
       </div>
     </div>

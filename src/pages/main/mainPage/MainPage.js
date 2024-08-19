@@ -13,19 +13,17 @@ import buddyUse from '../../../assets/image/buddyUse.png';
 import buddy_button from '../../../assets/image/buddy_button.png';
 import honbobButton from '../../../assets/image/honbobButton.png';
 import style from './MainPage.module.css';
-
-import useStudyInfoStore from '../../study/useStudyInfoStore';
 import { BuddyHandler, HonbobHandler } from './api';
 
 const images = [honbobUse, buddyUse, peerUse];
 
 const MainPage = () => {
+  localStorage.removeItem('studyType');
   const navigate = useNavigate();
   const { setBuddyCount } = useContext(MyContext);
-  const { studyType, setStudyType } = useStudyInfoStore();
 
   const StudyHandler = type => {
-    setStudyType(type);
+    localStorage.setItem('studyType', type);
     const refreshToken = localStorage.getItem('refreshToken');
     const accessToken = localStorage.getItem('accessToken');
     if (refreshToken === null || accessToken === null) {

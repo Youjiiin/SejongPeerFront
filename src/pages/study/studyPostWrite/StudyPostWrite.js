@@ -29,7 +29,6 @@ import Popup from '../../../components/studyPopup/Popup';
 
 //zustand
 import usePostStore from './usePostStore';
-import useStudyInfoStore from '../useStudyInfoStore';
 import usePopupStroe from '../../../components/studyPopup/usePopupStore';
 import useTimeTableStore from '../timeTable/useTimeTableStore';
 import { format } from 'date-fns';
@@ -71,7 +70,7 @@ const StudyPostWrite = props => {
     setPopupVisible,
     setPopupMessage,
   } = usePopupStroe();
-  const { studyType } = useStudyInfoStore();
+  const studyType = localStorage.getItem('studyType');
   const { subjectName, setTableInfos, setShowData } = useTimeTableStore();
   console.log(
     title,
@@ -266,9 +265,11 @@ const StudyPostWrite = props => {
             images: null,
           };
     console.log(studyData);
+    const studyTypeM =
+      studyType === 'lecture' ? studyType : 'external-activity';
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACK_SERVER}/study/${studyType}`,
+        `${process.env.REACT_APP_BACK_SERVER}/study/${studyTypeM}`,
         {
           method: 'POST',
           body: JSON.stringify(studyData),
