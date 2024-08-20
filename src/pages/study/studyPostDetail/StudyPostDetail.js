@@ -65,22 +65,26 @@ const StudyListPostDetail = () => {
       try {
         const data = await fetchStudyData(studyId);
         setStudyData(data);
+
         const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
         setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
+
         const appliedStatus = localStorage.getItem(`isApplied_${studyId}`);
         if (appliedStatus) {
           setApplied(JSON.parse(appliedStatus));
         }
+
+        // fetchScrapCount 함수에서 올바른 데이터를 받고 있는지 확인합니다.
         const scrapData = await fetchScrapCount(studyId);
-        console.log(data);
-        setScrapCount(scrapData.data.scrapCount);
+        console.log('scrapData:', scrapData); // 콘솔에 스크랩 데이터 출력
+        setScrapCount(scrapData.data);
       } catch (error) {
-        console.error('Error fetching study data:', error);
+        console.error(error);
       }
     };
 
     fetchData();
-  }, [studyId, setStudyData, setScrapped, setApplied]);
+  }, [studyId, setStudyData, setScrapped, setApplied, setScrapCount]);
 
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
@@ -158,7 +162,7 @@ const StudyListPostDetail = () => {
           localStorage.setItem(`scrapId_${studyId}`, response.data.data);
           setScrapCount(scrapCount + 1);
         } else {
-          toast.success('스크랩에서 제거합니다!');
+          toast.error('스크랩에서 제거합니다!');
           localStorage.removeItem(`scrapId_${studyId}`);
           setScrapCount(scrapCount - 1);
         }
@@ -299,7 +303,9 @@ const StudyListPostDetail = () => {
           <Popup
             title={popupTitle}
             message={popupMessage}
-            message2={'*스터디 신청 후 취소할 시, 취소한 스터디의 지원에 1시간 제한이 생깁니다.'}
+            message2={
+              '*스터디 신청 후 취소할 시, 취소한 스터디의 지원에 1시간 제한이 생깁니다.'
+            }
             onClose={closePopup}
           />
         )}
