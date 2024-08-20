@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  height: 55vh;
+  height: 100%;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -65,7 +65,18 @@
   font-weight: 600;
   cursor: pointer;
 }
+.cateGoryItem_E {
+  height: 15%;
+  padding: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.DesText {
+  font-size: 0.9rem;
+  color: #777777;
+}
 .subsProfsDiv {
+  font-size: 1em;
   width: 100%;
   display: flex;
   justify-content: space-between;

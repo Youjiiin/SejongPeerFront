@@ -9,7 +9,7 @@ const Tag = () => {
       .split('#')
       .filter(e => e !== '');
 
-    setTags(tagSplit);
+    setTags(list);
   };
   return (
     <div className={style.inputWrapper}>

@@ -59,6 +59,7 @@ const ReucruitDate = ({ handleDatePickerFocus }) => {
         onChange={dates => setChangeDate(dates)}
         onFocus={handleDatePickerFocus}
         showPopperArrow={false}
+        minDate={new Date()}
       />
     </div>
   );

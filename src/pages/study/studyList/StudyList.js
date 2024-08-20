@@ -23,6 +23,7 @@ const StudyList = () => {
     const loadPosts = async () => {
       try {
         const fetchedPosts = await fetchPosts();
+        //console.log(fetchedPosts);
         setPosts(fetchedPosts);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -93,9 +94,10 @@ const StudyList = () => {
           <SelectImage src={select} alt="select" />
         </Filter>
         <Filter
-          onClick={() =>
-            setModalOpen(modalOpen === 'members' ? null : 'members')
-          }
+          onClick={() =>{
+              setIsClickedStudy(true)
+              setModalOpen(modalOpen === 'members' ? null : 'members')
+          }}
         >
           <p>모집인원</p>
           <SelectImage src={select} alt="select" />

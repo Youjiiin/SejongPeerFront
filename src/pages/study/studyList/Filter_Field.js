@@ -13,7 +13,7 @@ const Filter_Field = () => {
     const { tableInfos, setTableInfos, showData, setShowData, setSubjectName } = useTimeTableStore();
     const { category, setCategory } = useFilterStore();
     const [selectingState, setSelectingState] = useState('college');
-    console.log(category);
+    //console.log(category);
 
     //모달 닫기
     const { setModalOpen } = useContext(MyContext);

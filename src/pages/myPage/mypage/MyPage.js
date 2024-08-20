@@ -265,7 +265,10 @@ const MyPage = () => {
                     </div>
                     <div className={styles.rightImg}></div>
                   </button>
-                  <button className={styles.matchingButton}>
+                  <button
+                    className={styles.matchingButton}
+                    onClick={() => navigate('/mypost')}
+                  >
                     <div className={styles.leftBox}>
                       <div className={`${styles.redWord} ${styles.checkWord}`}>
                         내 스터디 게시글 관리
