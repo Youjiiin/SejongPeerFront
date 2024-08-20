@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { toggleScrap } from '../../study/studyPostDetail/api';
 import { fetchAppliedStudies } from './api';
 import styled from 'styled-components';
 import COLORS from '../../../theme';
 import { useNavigate } from 'react-router-dom';
+import filledHeart from '../../../assets/image/filledHeart.svg';
+import heart from '../../../assets/image/heart_postdetail.svg';
 
 const AppliedStudy = () => {
   const [appliedStudies, setAppliedStudies] = useState([]);
@@ -11,17 +14,18 @@ const AppliedStudy = () => {
   const isMounted = useRef(false);
   const navigate = useNavigate();
 
-  const handleStudyClick = studyId => {
-    navigate(`/study/post/${studyId}`);
-  };
   useEffect(() => {
     const getAppliedStudies = async () => {
       try {
         const data = await fetchAppliedStudies();
-        console.log(data);
-        setAppliedStudies(data.data);
+        setAppliedStudies(
+          data.data.map(study => ({
+            ...study,
+            isScrapped:
+              localStorage.getItem(`isScrapped_${study.studyId}`) === 'true',
+          }))
+        );
       } catch (err) {
-        console.log(err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -34,6 +38,33 @@ const AppliedStudy = () => {
     }
   }, []);
 
+  const handleStudyClick = studyId => {
+    navigate(`/study/post/${studyId}`);
+  };
+
+  const handleScrapToggle = async (studyId, currentStatus, index) => {
+    try {
+      const response = await toggleScrap(studyId, currentStatus);
+      if (response.status === 200) {
+        const newScrappedStatus = !currentStatus;
+        const updatedStudies = [...appliedStudies];
+        updatedStudies[index] = {
+          ...updatedStudies[index],
+          isScrapped: newScrappedStatus,
+          scrapCount: newScrappedStatus
+            ? updatedStudies[index].scrapCount + 1
+            : updatedStudies[index].scrapCount - 1,
+        };
+        setAppliedStudies(updatedStudies);
+        localStorage.setItem(`isScrapped_${studyId}`, newScrappedStatus);
+      } else {
+        console.error('Failed to toggle scrap status:', response);
+      }
+    } catch (error) {
+      console.error('Error toggling scrap status:', error);
+    }
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -44,7 +75,7 @@ const AppliedStudy = () => {
 
   return (
     <Container>
-      {appliedStudies.map(study => (
+      {appliedStudies.map((study, index) => (
         <PostWrapper
           key={study.studyId}
           onClick={() => handleStudyClick(study.studyId)}
@@ -83,6 +114,20 @@ const AppliedStudy = () => {
               {study.participantsCount} / {study.recruitmentCount}
             </Count>
           </div>
+          <PostBottom>
+            <Like
+              onClick={e => {
+                e.stopPropagation(); // 스크랩 버튼 클릭 시 상세 페이지로 이동 방지
+                handleScrapToggle(study.studyId, study.isScrapped, index);
+              }}
+            >
+              <LikeIcon
+                src={study.isScrapped ? filledHeart : heart}
+                alt="heart"
+              />
+              <LikeNumber>{study.scrapCount}</LikeNumber>
+            </Like>
+          </PostBottom>
         </PostWrapper>
       ))}
     </Container>
@@ -97,17 +142,13 @@ const Container = styled.div`
 const PostWrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid ${COLORS.line2};
-  padding: 16px 12px;
-  @media (max-width: 768px) {
-  }
+  padding: 1% 3%;
 `;
 
 const PostTop = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  @media (max-width: 768px) {
-  }
 `;
 
 const TagWrapper = styled.div`
@@ -148,7 +189,6 @@ const PostMiddle = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 0 1.2%;
   margin-top: 6px;
 `;
 
@@ -170,17 +210,17 @@ const Title = styled.p`
 
 const PostBottom = styled.div`
   width: 100%;
-  height: 30%;
   display: flex;
   align-items: center;
   gap: 5%;
-  padding: 0 1.2%;
+  margin-top: 12px;
 `;
 
 const Like = styled.div`
   display: flex;
   align-items: center;
   gap: 8%;
+  cursor: pointer;
 `;
 
 const LikeIcon = styled.img`
@@ -190,4 +230,5 @@ const LikeIcon = styled.img`
 
 const LikeNumber = styled.p`
   color: ${COLORS.font3};
+  margin: 0px;
 `;
