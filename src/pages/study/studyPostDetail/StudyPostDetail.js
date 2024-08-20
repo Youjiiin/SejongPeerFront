@@ -408,7 +408,6 @@ const Line = styled.div`
 const Content = styled.div`
   max-width: 343px;
   width: 100%;
-  height: 120px;
   flex-shrink: 0;
   color: ${COLORS.font1};
   font-size: 15px;

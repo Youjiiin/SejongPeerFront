@@ -1,9 +1,13 @@
-import { useState } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import style from './Filter_Member.module.css';
+import { useContext } from 'react';
+import { MyContext } from '../../../App';
+import useFilterStore from './useFilterStore';
 
-const Filter_Member = () => {
+const Filter_Member = ({ closeModal }) => {
+  const { setModalOpen } = useContext(MyContext);
+  
   const trackStyle = {
     backgroundColor: '#FF4B4B',
   };
@@ -17,14 +21,18 @@ const Filter_Member = () => {
     boxShodow: '0 0 0 3px #FFF',
   };
   const sliderwidth = {
-    width: '93%',
+    width: '95%',
   };
 
-  const [sliderValue, setSliderValue] = useState([2, 8]); // 슬라이더의 초기 값
-
+  const { member, setMember } = useFilterStore();
   const handleSliderChange = value => {
-    setSliderValue(value); // 슬라이더 값을 업데이트
-    // console.log(sliderValue);
+    setMember(value); // 슬라이더 값을 업데이트
+  };
+
+  const cancelHandler = () => {
+    if (closeModal) {
+      closeModal();
+    }
   };
 
   return (
@@ -34,11 +42,11 @@ const Filter_Member = () => {
       </header>
       <div className={style.filter_wrapper}>
         <Slider
-          range
-          min={2}
-          max={8}
+          // range
+          min={1}
+          max={7}
           step={1}
-          defaultValue={[2, 8]}
+          defaultValue={member}
           allowCross={false}
           trackStyle={trackStyle}
           handleStyle={handleStyle}
@@ -46,13 +54,14 @@ const Filter_Member = () => {
           onChange={handleSliderChange}
         />
         <div className={style.member_value}>
-          <span className={style.member_num}>2명</span>
-          <span className={style.member_num}>4명</span>
-          <span className={style.member_num}>6명</span>
-          <span className={style.member_num}>8명</span>
+          <span className={style.member_num}>1명</span>
+          <span className={style.member_num}>3명</span>
+          <span className={style.member_num}>5명</span>
+          <span className={style.member_num}>7명</span>
         </div>
       </div>
-      <div className={style.finish}>
+      <div className={style.text}>*본인제외입니다.</div>
+      <div className={style.finish} onClick={cancelHandler}>
         <span>확인</span>
       </div>
     </div>

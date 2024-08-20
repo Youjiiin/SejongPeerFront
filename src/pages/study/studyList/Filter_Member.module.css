@@ -1,30 +1,29 @@
 .container {
   width: 100%;
-  height: 40vh;
   align-items: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 16px 0;
 }
 .header {
   width: 100%;
   height: 18%;
   display: flex;
   align-items: center;
-  padding: 0 5%;
+  padding: 8px 16px;
   border-bottom: 1px solid #e5e5e5;
 }
 .header span {
-  font-size: 1.3rem;
+  font-size: 18px;
   color: #111111;
   font-weight: 600;
 }
 
 .filter_wrapper {
   width: 100%;
-  height: 45%;
-  padding: 0 5%;
-  margin-bottom: 10%;
+  padding: 0 50px;
+  margin: 46px 0 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,20 +35,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 15px;
 }
 .member_num {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
 }
-
+.text {
+  color: #777777;
+}
 .finish {
   width: 90%;
-  height: 17%;
   background-color: #ff4b4b;
   border-radius: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 70px;
+  padding: 14px;
 }
 .finish span {
   font-size: 1.3rem;

@@ -1,35 +1,32 @@
-import style from './Filter_now.module.css';
-import check from '../../../assets/image/check.png';
-
 import { useContext, useEffect, useState } from 'react';
 import { MyContext } from '../../../App';
+import useFilterStore from './useFilterStore';
+
+import style from './Filter_now.module.css';
+import check from '../../../assets/image/check.png';
 
 const Filter_now = props => {
   const { setModalOpen } = useContext(MyContext);
   const [isNowCheck, SetIsNowCheck] = useState(false);
   const [isFinishCheck, SetIsFinishNowCheck] = useState(false);
-  const [filterConditions, setFilterConditions] = useState([props.onFilter]);
-
+  
   const checkNowHandler = () => {
-    SetIsNowCheck(!isNowCheck);
+    SetIsNowCheck(true);
+    SetIsFinishNowCheck(false);
   };
   const checkFinishHandler = () => {
-    SetIsFinishNowCheck(!isFinishCheck);
+    SetIsNowCheck(false);
+    SetIsFinishNowCheck(true);
   };
-
-  useEffect(() => {
-    const newConditions = [];
-    if (isNowCheck) {
-      newConditions.push('ongoing');
-    }
-    if (isFinishCheck) {
-      newConditions.push('finish');
-    }
-    setFilterConditions(newConditions);
-  }, [isNowCheck, isFinishCheck]);
-
+  
+  const { setRecruiting } = useFilterStore();
   const onSubmitHandler = () => {
-    props.onFilterHandler(filterConditions);
+    if (isNowCheck) {
+      setRecruiting(true);
+    } else {
+      setRecruiting(false);
+    }
+
     setModalOpen(false);
     props.deleteHandler();
   };

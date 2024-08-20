@@ -5,7 +5,7 @@ import COLORS from '../../../theme';
 import StudyListPost from '../../study/studyList/StudyListPost';
 import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from '../../study/studyList/Filter_now';
-import Filter_Feild from '../../study/studyList/Filter_Feild';
+import Filter_Field from '../../study/studyList/Filter_Field';
 import Filter_Member from '../../study/studyList/Filter_Member';
 import select from '../../../assets/image/select.png';
 import useScrapStore from './useScrapStore';
@@ -45,7 +45,7 @@ const MyPageScrapList = () => {
       </ListWrapper>
       {modalOpen && (
         <BottomModal deleteHandler={() => setModalOpen(false)}>
-          <Filter_Feild />
+          <Filter_Field />
           <Filter_Member />
           <Filter_now />
         </BottomModal>

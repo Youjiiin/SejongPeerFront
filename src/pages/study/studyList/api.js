@@ -30,3 +30,38 @@ export const fetchPosts = async () => {
   console.log(response.data.data.content[0].id);
   return response.data.data.content;
 };
+
+const getAuthHeaders = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (!accessToken || !refreshToken) {
+    alert('재로그인 해야합니다!');
+    toast.error('재로그인 해야합니다!');
+    throw new Error('토큰이 없음!');
+  }
+
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${accessToken}`,
+    'Refresh-token': `${refreshToken}`,
+  };
+};
+
+export const searchHandler = async () => {
+    const response = await axios.post(
+      `${process.env.REACT_APP_BACK_SERVER}/study/post/search`,
+      { 
+        "recruitmentMin": 2,
+        "recruitmentMax": 9,
+        "recruitmentStartAt": "2024-05-18 00:00:00",
+        "recruitmentEndAt": "2023-05-19 00:00:00",
+        "isRecruiting": true,
+        "searchWord": "string"
+       },
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response;
+};
