@@ -6,9 +6,11 @@ import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from './Filter_now';
 import select from '../../../assets/image/select.png';
 import useStudyStore from './useStudyStore';
+import useTimeTableStore from '../timeTable/useTimeTableStore';
 import Filter_Member from './Filter_Member';
 import useFilterStore from './useFilterStore';
 import Filter_Field from './Filter_Field';
+import getTimeTable from '../timeTable/getTimeTable';
 
 import styled from 'styled-components';
 import COLORS from '../../../theme';
@@ -18,6 +20,8 @@ const StudyList = () => {
   const [modalOpen, setModalOpen] = useState(null);
   const navigate = useNavigate();
   const modalRef = useRef();
+  const { subjectName, setShowData, setTableInfos } = useTimeTableStore();
+  const { member, recruiting } = useFilterStore();
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -32,6 +36,10 @@ const StudyList = () => {
 
     loadPosts();
   }, [setPosts]);
+
+  useEffect(() => {
+    console.log(subjectName);
+  }, [subjectName])
 
   const goPost = () => {
     navigate('/study/post');
@@ -81,7 +89,16 @@ const StudyList = () => {
     }
   }, [isCategory, isMember, isNow]);
 
-  const { member, recruiting } = useFilterStore();
+  //강의 시간표 get
+  useEffect(() => {
+    const fetchAndSetTimeTable = async () => {
+      const data = await getTimeTable();
+      setTableInfos(data.tableInfos);
+      setShowData(data.showData);
+    };
+
+    fetchAndSetTimeTable();
+  }, []);
 
   return (
     <Container>
@@ -90,7 +107,15 @@ const StudyList = () => {
         <Filter
           onClick={() => setModalOpen(modalOpen === 'study' ? null : 'study')}
         >
-          <p>스터디</p>
+          {subjectName === '' 
+          ? <p>스터디</p> 
+          :
+          <p style={{
+            color: `${COLORS.main}`,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>{subjectName}</p>}
           <SelectImage src={select} alt="select" />
         </Filter>
         <Filter
@@ -99,13 +124,29 @@ const StudyList = () => {
               setModalOpen(modalOpen === 'members' ? null : 'members')
           }}
         >
-          <p>모집인원</p>
+          {member === 0 
+          ? <p>모집인원</p>
+          :
+          <p style={{
+            color: `${COLORS.main}`,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>{member}</p>}
           <SelectImage src={select} alt="select" />
         </Filter>
         <Filter
           onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
         >
-          <p>모집여부</p>
+          {recruiting === null 
+          ? <p>모집여부</p>
+          :
+          <p style={{
+            color: `${COLORS.main}`,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>{recruiting === true ? '모집 중' : '모집 마감'}</p>}
           <SelectImage src={select} alt="select" />
         </Filter>
       </FilterBox>
@@ -178,7 +219,7 @@ const FilterBox = styled.div`
 
 const Filter = styled.div`
   min-width: 20%;
-  max-width: 100px;
+  max-width: 160px;
   padding: 6px 8px;
   border: 1px solid ${COLORS.line1};
   border-radius: 25px;

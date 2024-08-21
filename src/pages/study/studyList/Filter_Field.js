@@ -11,12 +11,11 @@ import search from '../../../assets/image/search_gray.png';
 
 const Filter_Field = () => {
     const { tableInfos, setTableInfos, showData, setShowData, setSubjectName } = useTimeTableStore();
-    const { category, setCategory } = useFilterStore();
+    const { setCategory } = useFilterStore();
     const [selectingState, setSelectingState] = useState('college');
-    //console.log(category);
 
     //모달 닫기
-    const { setModalOpen } = useContext(MyContext);
+    const { modalOpen, setModalOpen } = useContext(MyContext);
     const selectHandle = (item, state) => {
         if (state === 'college') {
             const newTableInfo = tableInfos.filter(row => row[1] === item);
@@ -50,7 +49,7 @@ const Filter_Field = () => {
 
             fetchAndSetTimeTable();
             setSelectingState('college');
-            setModalOpen(false);
+            setModalOpen(null);
         }
     };
     
