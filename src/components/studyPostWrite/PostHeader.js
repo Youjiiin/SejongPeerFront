@@ -7,10 +7,9 @@ const Header = ({ onOpenConfirmModal }) => {
       <h3
         style={{
           fontFamily: 'jalnan',
-          marginTop: '21px',
           fontWeight: 500,
-          fontSize: '25px',
-          paddingTop: '5px',
+          fontSize: '20px',
+          marginTop: '3px'
         }}
       >
         팀원 모으기

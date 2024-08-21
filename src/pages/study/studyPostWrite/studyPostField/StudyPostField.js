@@ -16,6 +16,7 @@ const StudyPostField = () => {
 
   //모달 닫기
   const { setModalOpen } = useContext(MyContext);
+  
   const selectHandle = (item, state) => {
     if (state === 'college') {
       const newTableInfo = tableInfos.filter(row => row[1] === item);

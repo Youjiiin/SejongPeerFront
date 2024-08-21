@@ -286,7 +286,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 34vh;
+    margin-top: 38vh;
   }
 
   .informTitleBox {
@@ -412,7 +412,6 @@
   }
 
   .myInformWord {
-    width: 40vw;
     text-align: left;
     margin-left: 1vw;
   }

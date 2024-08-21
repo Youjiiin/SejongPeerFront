@@ -1,15 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import COLORS from '../../../theme';
+import { fetchPosts } from './api';
 import StudyListPost from './StudyListPost';
 import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from './Filter_now';
-import Filter_Feild from './Filter_Feild';
-import Filter_Member from './Filter_Member';
 import select from '../../../assets/image/select.png';
 import useStudyStore from './useStudyStore';
-import { fetchPosts } from './api';
+import Filter_Member from './Filter_Member';
+import useFilterStore from './useFilterStore';
+import Filter_Field from './Filter_Field';
+
+import styled from 'styled-components';
+import COLORS from '../../../theme';
 
 const StudyList = () => {
   const { posts, setPosts } = useStudyStore();
@@ -21,7 +23,7 @@ const StudyList = () => {
     const loadPosts = async () => {
       try {
         const fetchedPosts = await fetchPosts();
-        console.log(fetchedPosts);
+        //console.log(fetchedPosts);
         setPosts(fetchedPosts);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -52,9 +54,38 @@ const StudyList = () => {
     };
   }, [modalRef]);
 
+  // 모달 오픈,
+  const [isClickedStudy, setIsClickedStudy] = useState(false);
+  const [isClickedMember, setIsClickedMember] = useState(false);
+
+  const deleteHandler = () => {
+    setModalOpen(false);
+    setIsClickedStudy(false);
+    setIsClickedMember(false);
+  };
+  const [isCategory, setIsCategory] = useState(false);
+  const [isMember, setIsMember] = useState(false);
+  const [isNow, setIsNow] = useState(false);
+
+  const tagStyle = 1;
+
+  useEffect(() => {
+    if (isCategory !== '') {
+      setIsCategory(true);
+    }
+    if (isMember !== 0) {
+      setIsMember(true);
+    }
+    if (isNow !== null) {
+      setIsNow(true);
+    }
+  }, [isCategory, isMember, isNow]);
+
+  const { member, recruiting } = useFilterStore();
+
   return (
     <Container>
-      <Header></Header>
+      <Header/>
       <FilterBox>
         <Filter
           onClick={() => setModalOpen(modalOpen === 'study' ? null : 'study')}
@@ -63,9 +94,10 @@ const StudyList = () => {
           <SelectImage src={select} alt="select" />
         </Filter>
         <Filter
-          onClick={() =>
-            setModalOpen(modalOpen === 'members' ? null : 'members')
-          }
+          onClick={() =>{
+              setIsClickedStudy(true)
+              setModalOpen(modalOpen === 'members' ? null : 'members')
+          }}
         >
           <p>모집인원</p>
           <SelectImage src={select} alt="select" />
@@ -86,15 +118,20 @@ const StudyList = () => {
       </ListWrapper>
       <WriteButton onClick={goPost}>모집글 작성</WriteButton>
       {modalOpen && (
-        <BottomModal ref={modalRef} setModalOpen={setModalOpen}>
+        <BottomModal 
+          ref={modalRef} 
+          setModalOpen={setModalOpen} 
+          deleteHandler={deleteHandler}
+        >
           {modalOpen === 'study' && (
-            <Filter_Feild closeModal={() => setModalOpen(null)} />
+            <Filter_Field closeModal={() => setModalOpen(null)} />
           )}
           {modalOpen === 'members' && (
             <Filter_Member closeModal={() => setModalOpen(null)} />
           )}
           {modalOpen === 'status' && (
-            <Filter_now closeModal={() => setModalOpen(null)} />
+            <Filter_now 
+            deleteHandler = {deleteHandler} />
           )}
         </BottomModal>
       )}
@@ -109,7 +146,7 @@ const Container = styled.div`
   height: 100vh;
   position: relative;
   @media (min-width: 768px) {
-    width: 30vw;
+    width: 400px;
     height: 100vh;
     position: relative;
     margin-top: 2vh;
@@ -120,44 +157,45 @@ const Header = styled.div`
   width: 100%;
   height: 7%;
   @media (min-width: 768px) {
-    width: 30vw;
+    width: 100%;
     height: 7%;
   }
 `;
 
 const FilterBox = styled.div`
-  width: 100%;
-  height: 5%;
+  width: 100vw;
   display: flex;
   align-items: center;
-  padding: 0 2.5%;
+  padding: 6px 16px;
   background-color: #fafafa;
   position: fixed;
   border-bottom: 3px solid #e5e5e5;
+  gap: 6px;
   @media (min-width: 768px) {
-    width: 30vw;
+    width: 400px;
   }
 `;
 
 const Filter = styled.div`
-  width: auto;
   min-width: 20%;
   max-width: 100px;
-  padding: 1% 2%;
-  height: 70%;
+  padding: 6px 8px;
   border: 1px solid ${COLORS.line1};
   border-radius: 25px;
-  margin: 0 1%;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 6px;
   white-space: nowrap;
   overflow: hidden;
   flex-basis: auto;
   p {
     font-size: 1rem;
     white-space: nowrap;
+    margin: 0;
     color: ${COLORS.font3};
+  }
+  img {
+    margin: 0;
   }
 `;
 
@@ -170,9 +208,9 @@ const SelectImage = styled.img`
 const ListWrapper = styled.div`
   width: 100vw;
   height: auto;
-  margin: 5vh 0;
+  margin: 7vh 0;
   @media (min-width: 768px) {
-    width: 30vw;
+    width: 100%;
   }
 `;
 
