@@ -47,6 +47,7 @@ const StudyListPostDetail = () => {
     navigate(`/study/modify/${studyId}`);
   };
 
+  // 게시글 삭제
   const deleteHandler = async () => {
     try {
       const data = await deletePostHandler(studyId);
@@ -60,6 +61,7 @@ const StudyListPostDetail = () => {
 
   const [ismodalOpen, setIsmodalOpen] = useState(false);
 
+  // 스크랩
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,6 +88,7 @@ const StudyListPostDetail = () => {
     fetchData();
   }, [studyId, setStudyData, setScrapped, setApplied, setScrapCount]);
 
+  // 작성자 확인
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
     const getNick = localStorage.getItem('nickname');
@@ -110,6 +113,7 @@ const StudyListPostDetail = () => {
     setPopupVisible(false);
   };
 
+  // 지원하기
   const applyForStudyHandler = async () => {
     try {
       if (isApplied) {
@@ -177,7 +181,6 @@ const StudyListPostDetail = () => {
       }
     }
   };
-  // console.log(studyData.data.img)
 
   return (
     <Container>
@@ -261,9 +264,19 @@ const StudyListPostDetail = () => {
           <Title2>문의</Title2>
           <StudyMethod>{studyData.data.questionKakaoLink}</StudyMethod>
         </FlexContainer>
-        <Tag>
-          <TagText>{studyData.data.categoryName}</TagText>
-        </Tag>
+        <FlexContainer2>
+          <Tag>
+            <TagText>{studyData.data.categoryName}</TagText>
+          </Tag>
+
+          {studyData.data.tags.map((tag, index) => (
+            <Tag2 key={index}>
+              <TagText2>
+                {tag}
+              </TagText2>
+            </Tag2>
+          ))}
+        </FlexContainer2>
         <Line />
         <Content>{studyData.data.content}</Content>
         <TagContainer>
@@ -288,7 +301,7 @@ const StudyListPostDetail = () => {
             <ScrapCount>{scrapCount}</ScrapCount>
           </ScrapButton>
           {isWriter ? (
-            <ApplyButton>
+            <ApplyButton onClick={() => navigate('/mypost')}>
               {`신청현황 보기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
             </ApplyButton>
           ) : (
@@ -399,6 +412,14 @@ const FlexContainer = styled.div`
   width: 100%;
 `;
 
+const FlexContainer2 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  width: 100%;
+  gap : 4px;
+`;
+
 const Line = styled.div`
   height: 1px;
   width: 100vw;
@@ -443,8 +464,29 @@ const Tag = styled.button`
   cursor: pointer;
 `;
 
+const Tag2 = styled.button`
+  display: flex;
+  padding: 4px 8px;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 500;
+  border-radius: 15px;
+  border: 1px solid ${COLORS.font3};
+  margin-top: 15px;
+  background: none;
+  cursor: pointer;
+`;
+
 const TagText = styled.div`
   color: ${COLORS.main};
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.333px;
+`;
+const TagText2 = styled.div`
+  color: ${COLORS.font3};
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -456,6 +498,7 @@ const CommentContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 30px;
 `;
 
 const ScrapButton = styled.button`
