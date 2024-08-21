@@ -72,7 +72,7 @@ const StudyPostWrite = props => {
     setPopupMessage,
   } = usePopupStroe();
   const studyType = localStorage.getItem('studyType');
-  const { subjectName, setTableInfos, setShowData } = useTimeTableStore();
+  const { setTableInfos,setFilteredInfos, setShowData } = useTimeTableStore();
   console.log(
     title,
     category,
@@ -105,11 +105,13 @@ const StudyPostWrite = props => {
     const fetchAndSetTimeTable = async () => {
       const data = await getTimeTable();
       setTableInfos(data.tableInfos);
+      setFilteredInfos(data.filteredInfos);
       setShowData(data.showData);
     };
 
     fetchAndSetTimeTable();
   }, []);
+
   // 모달 오픈,
   const [isClickedStudy, setIsClickedStudy] = useState(false);
   const [isClickedMember, setIsClickedMember] = useState(false);
@@ -242,7 +244,7 @@ const StudyPostWrite = props => {
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
-    const tagSplit = tags
+    const tagSplit = tags.length===0?[]:tags
       .replace(/(\s*)/g, '')
       .split('#')
       .filter(e => e !== '');
