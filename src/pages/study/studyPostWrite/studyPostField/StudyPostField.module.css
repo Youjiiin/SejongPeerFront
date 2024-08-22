@@ -14,6 +14,7 @@
   align-items: center;
   padding: 0 5%;
   border-bottom: 1px solid #e5e5e5;
+  gap:2.5%;
 }
 
 .header span {
@@ -45,7 +46,10 @@
   width: 24px;
   height: 24px;
 }
-
+.backImg {
+  width: 10px;
+  height: 20px;
+}
 .search_input {
   background-color: transparent;
   border: none;
