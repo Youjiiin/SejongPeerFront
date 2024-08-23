@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useContext } from 'react-router-dom';
+import { toast } from 'sonner';
 import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 
@@ -38,11 +39,11 @@ const AnimalMatchInfo = () => {
       // console.log(data.data.id);
       localStorage.setItem('userId', data.data.id);
       localStorage.setItem('gender', data.data.gender);
-      alert('매칭 결과페이지로 이동합니다!');
+      toast.info('매칭 결과페이지로 이동합니다!');
       navigate('/fest/AnimalMatchResult');
     } else {
       console.error('Error:', response.statusText);
-      alert('아직 매칭되지 않았습니다!');
+      toast.error('아직 매칭되지 않았습니다!');
     }
   };
 

@@ -3,6 +3,7 @@ import usePostStore from '../../../pages/study/studyPostWrite/usePostStore';
 import style from '../StudyRequirement.module.css';
 import arrow from '../../../assets/image/down_black.png';
 import useTimeTableStore from '../../../pages/study/timeTable/useTimeTableStore';
+import { toast } from 'sonner';
 const Category = ({ studyFilterHandler }) => {
   const { category } = usePostStore();
   const { subjectName } = useTimeTableStore();
@@ -17,7 +18,7 @@ const Category = ({ studyFilterHandler }) => {
   }, []);
 
   const modify = () => {
-    alert('카테고리는 수정할 수 없습니다!');
+    toast.error('카테고리는 수정할 수 없습니다!');
   };
 
   return (

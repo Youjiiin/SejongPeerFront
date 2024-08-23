@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from '../animalApply2/AnimalApply2.module.css';
+import { toast } from 'sonner';
 
 // 동물상 미팅 신청 2페이지
 const AnimalApply2 = () => {
@@ -19,7 +20,7 @@ const AnimalApply2 = () => {
   // 다음 페이지로 이동하는 함수
   const handleNextPage = () => {
     if (isButtonActive) {
-      alert('인증 성공!');
+      toast.success('인증 성공!');
       navigate('/fest/AnimalApply3'); // 버튼 활성화 시 다음 페이지 URL을 변경하세요.
     }
   };

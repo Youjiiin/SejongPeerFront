@@ -53,7 +53,7 @@ const Modify = () => {
         setMyPageData(data.data);
       } catch (error) {
         console.error('Error occurred:', error);
-        alert(error.message);
+        toast.error(error.message);
       }
     };
     getDate();
@@ -96,7 +96,7 @@ const Modify = () => {
       if (!response.ok) {
         const errorData = await response.json();
         if (errorData.data) {
-          alert(errorData.data.message);
+          toast.error(errorData.data.message);
         } else {
           throw new Error(errorData.message);
         }

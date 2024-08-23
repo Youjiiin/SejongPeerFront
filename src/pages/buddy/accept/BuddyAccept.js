@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import findBuddy from '../../../assets/image/findBuddy.png';
 
 import style from './BuddyAccept.module.css';
+import { toast } from 'sonner';
 
 const BuddyAccept = () => {
   const [isAccept, setIsAccept] = useState('');
@@ -72,12 +73,12 @@ const BuddyAccept = () => {
       .then(response => response.json())
       .then(data => {
         if (accept) {
-          alert(
+          toast.success(
             '매칭이 수락되었습니다! \n상대방이 매칭을 수락할 때까지 기다려주세요.'
           );
           navigate('/main');
         } else {
-          alert(
+          toast.error(
             '매칭이 거절되었습니다. \n거절 패널티로 1시간동안 매칭을 등록할 수 없습니다.'
           );
           navigate('/main');

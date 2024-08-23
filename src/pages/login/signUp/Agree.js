@@ -64,7 +64,7 @@ const Agree = () => {
   // };
   const moveToAuth = () => {
     if (agree !== true) {
-      alert('모두 동의를 해야 회원가입이 가능합니다.');
+      toast.error('모두 동의를 해야 회원가입이 가능합니다.');
     } else {
       navigate('/login/auth');
       // navigate("/checksejong");
