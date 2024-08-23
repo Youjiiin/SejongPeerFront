@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import style from '../animalApply5/AnimalApply5.module.css';
+import { toast } from 'sonner';
 
 // 동물상 미팅 신청 1페이지
 const AnimalApply5 = () => {
@@ -115,10 +116,10 @@ const AnimalApply5 = () => {
       );
 
       if (response.ok) {
-        alert('미팅 신청 완료!');
+        toast.success('미팅 신청 완료!');
         navigate('/fest/ApplyComplete'); // 성공 시 성공 페이지로 이동 (페이지 변경 시 적절히 수정)
       } else {
-        alert('올바른 형태의 이름과 전화번호를 입력해주세요!');
+        toast.error('올바른 형태의 이름과 전화번호를 입력해주세요!');
         // console.error('Registration failed', response);
       }
     } catch (error) {

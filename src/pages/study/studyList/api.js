@@ -36,7 +36,7 @@ const getAuthHeaders = () => {
   const refreshToken = localStorage.getItem('refreshToken');
 
   if (!accessToken || !refreshToken) {
-    alert('재로그인 해야합니다!');
+    altoast.errorert('재로그인 해야합니다!');
     toast.error('재로그인 해야합니다!');
     throw new Error('토큰이 없음!');
   }
@@ -60,7 +60,7 @@ export const searchHandler = async ({ category, member, recruiting }) => {
           isRecruiting: recruiting,
           searchWord: '',
           categoryId: category,
-          studyType: studyType
+          studyType: studyType,
         },
         headers: getAuthHeaders(),
       }

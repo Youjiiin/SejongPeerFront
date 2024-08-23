@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import waitingCat from '../../../assets/image/waitingCat.png';
 import style from './BuddyWaiting.module.css';
+import { toast } from 'sonner';
 
 const BuddyWaiting = () => {
   const [countBuddy, setCountBuddy] = useState(0);
@@ -40,7 +41,7 @@ const BuddyWaiting = () => {
     const status = await checkMatchingStatus();
 
     if (status) {
-      alert('이미 매칭이 완료 되었습니다.');
+      toast.error('이미 매칭이 완료 되었습니다.');
       navigate('/main');
     } else {
       if (confirm('신청을 취소하시겠습니까?')) {
@@ -63,14 +64,14 @@ const BuddyWaiting = () => {
             throw new Error(data.message);
           }
 
-          alert('버디 신청이 취소되었습니다.');
+          toast.error('버디 신청이 취소되었습니다.');
           navigate('/main');
         } catch (error) {
           console.log(error.message);
-          alert('오류가 발생했습니다.');
+          toast.error('오류가 발생했습니다.');
         }
       } else {
-        alert('버디 신청이 취소되지 않았습니다.');
+        toast.info('버디 신청이 취소되지 않았습니다.');
       }
     }
   };
@@ -95,7 +96,7 @@ const BuddyWaiting = () => {
 
       return false;
     } catch (error) {
-      alert('에러가 발생했습니다.');
+      toast.error('에러가 발생했습니다.');
       console.log(error.message);
       return false;
     }

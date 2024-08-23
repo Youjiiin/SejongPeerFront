@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import SignInBox from '../../signIn/SignInBox.js';
 import style from '../../signIn/SignIn.module.css';
 import css from './ResetPwd.module.css';
+import { toast } from 'sonner';
 
 const ResetPwd = () => {
   const [inputPwd, setInputPwd] = useState('');
@@ -29,12 +30,12 @@ const ResetPwd = () => {
           }
         )
         .then(response => {
-          alert('비밀번호 변경이 정상적으로 이루어 졌습니다.'),
+          toast.success('비밀번호 변경이 정상적으로 이루어 졌습니다.'),
             navigate('/login');
         })
         .catch(err => console.log(err.data));
     } else {
-      alert('비밀번호가 일치하지 않습니다.');
+      toast.error('비밀번호가 일치하지 않습니다.');
     }
   };
 

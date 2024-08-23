@@ -8,6 +8,7 @@ import H_informCheck from './H_InformCheck.js';
 import ProgressBar from '../../progressBar/ProgressBar_Honbob.js';
 
 import style from '../css/Honbob_Matching.module.css';
+import { toast } from 'sonner';
 
 const Honbob_Matching = () => {
   const [slide, setSlide] = useState(0);
@@ -127,12 +128,12 @@ const Honbob_Matching = () => {
         throw new Error(data.message);
       }
 
-      alert('제출 성공');
+      toast.success('제출 성공');
       setHonbobSubmit(false);
       navigate('/honbob/waiting');
     } catch (error) {
       console.error(error.message);
-      alert(error.message);
+      toast.error(error.message);
       e.preventDefault();
     }
   };

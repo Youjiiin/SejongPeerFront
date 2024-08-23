@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import titleImg from '../../../assets/image/animalTitle.png';
 import style from './AnimalCheck.module.css';
+import { toast } from 'sonner';
 
 const AnimalCheck = () => {
   const [verificationCode, setVerificationCode] = useState('');
@@ -55,7 +56,7 @@ const AnimalCheck = () => {
         throw new Error('해당 사용자를 찾을 수 없습니다.');
       }
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 

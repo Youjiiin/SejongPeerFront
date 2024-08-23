@@ -38,6 +38,7 @@ import { useNavigate } from 'react-router-dom';
 
 //강의 시간표
 import getTimeTable from '../timeTable/getTimeTable';
+import { toast } from 'sonner';
 const StudyPostWrite = props => {
   const {
     title,
@@ -72,7 +73,7 @@ const StudyPostWrite = props => {
     setPopupMessage,
   } = usePopupStroe();
   const studyType = localStorage.getItem('studyType');
-  const { setTableInfos,setFilteredInfos, setShowData } = useTimeTableStore();
+  const { setTableInfos, setFilteredInfos, setShowData } = useTimeTableStore();
   console.log(
     title,
     category,
@@ -202,13 +203,12 @@ const StudyPostWrite = props => {
       const data = text ? JSON.parse(text) : {};
 
       console.log(data);
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
 
       return data;
-
     } catch (err) {
       console.log('ErrorMessage : ', err.message);
       throw err;
@@ -259,10 +259,13 @@ const StudyPostWrite = props => {
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
-    const tagSplit = tags.length===0?[]:tags
-      .replace(/(\s*)/g, '')
-      .split('#')
-      .filter(e => e !== '');
+    const tagSplit =
+      tags.length === 0
+        ? []
+        : tags
+            .replace(/(\s*)/g, '')
+            .split('#')
+            .filter(e => e !== '');
     const studyData =
       studyType === 'lecture'
         ? {
@@ -313,20 +316,18 @@ const StudyPostWrite = props => {
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
       const studyId = data.data.id;
-      alert('게시글 작성 완료');
+      toast.success('게시글 작성 완료');
 
-      //게시글 초기화 함수
+      setTimeout(() => {
+        navigate(`/study/post/${studyId}`);
+      }, 100); // 2초 후에 이동
+      // 게시글 초기화 함수
       reset();
       resetCategory();
 
-      navigate(`/study/post/${studyId}`);
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
-
-      // if (data.data !== null) {
-      //   errorClassName = data.data.errorClassName;
-      // }
     } catch (err) {
       console.log('ErrorMessage : ', err.message);
       e.preventDefault();
