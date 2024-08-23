@@ -1,5 +1,6 @@
 // src/api/study.js
 import axios from 'axios';
+import useFilterStore from './useFilterStore';
 
 export const fetchPosts = async () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -47,20 +48,26 @@ const getAuthHeaders = () => {
   };
 };
 
-export const searchHandler = async () => {
-    const response = await axios.post(
+export const searchHandler = async ({ category, member, recruiting }) => {
+  const studyType = localStorage.getItem('studyType');
+  console.log(studyType, member, recruiting, category);
+  try {
+    const response = await axios.get(
       `${process.env.REACT_APP_BACK_SERVER}/study/post/search`,
-      { 
-        "recruitmentMin": 2,
-        "recruitmentMax": 9,
-        "recruitmentStartAt": "2024-05-18 00:00:00",
-        "recruitmentEndAt": "2023-05-19 00:00:00",
-        "isRecruiting": true,
-        "searchWord": "string"
-       },
       {
+        params: {
+          recruitmentPersonnel: member,
+          isRecruiting: recruiting,
+          searchWord: '',
+          categoryId: category,
+          studyType: studyType
+        },
         headers: getAuthHeaders(),
       }
     );
-    return response;
+    return response.data;
+  } catch (error) {
+    console.error('Error during search:', error);
+    throw error;
+  }
 };

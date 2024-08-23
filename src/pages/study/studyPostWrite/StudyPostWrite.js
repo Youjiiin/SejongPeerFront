@@ -175,6 +175,7 @@ const StudyPostWrite = props => {
   //이미지 업로드 통신
   const imgUpload = async id => {
     const imgs = [...imgFiles];
+
     const imgData = {
       studyId: id,
       base64ImagesList: imgs,
@@ -193,18 +194,24 @@ const StudyPostWrite = props => {
         }
       );
 
+      if (response.status === 413) {
+        throw new Error('파일의 용량이 너무 큽니다.');
+      }
+
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
+
       console.log(data);
+      
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
 
-      if (data.data !== null) {
-        errorClassName = data.data.errorClassName;
-      }
+      return data;
+
     } catch (err) {
       console.log('ErrorMessage : ', err.message);
+      throw err;
     }
   };
 
@@ -241,6 +248,14 @@ const StudyPostWrite = props => {
     if (errorMessage) {
       togglePopup(errorMessage);
       return;
+    }
+    if (imgFiles.length > 0) {
+      try {
+        await imgUpload(studyId);
+      } catch (err) {
+        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+        return;
+      }
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
@@ -298,9 +313,6 @@ const StudyPostWrite = props => {
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
       const studyId = data.data.id;
-      if (imgFiles.length > 0) {
-        await imgUpload(studyId);
-      }
       alert('게시글 작성 완료');
 
       //게시글 초기화 함수
@@ -312,12 +324,11 @@ const StudyPostWrite = props => {
         throw new Error(data.message || 'Something went wrong');
       }
 
-      if (data.data !== null) {
-        errorClassName = data.data.errorClassName;
-      }
+      // if (data.data !== null) {
+      //   errorClassName = data.data.errorClassName;
+      // }
     } catch (err) {
       console.log('ErrorMessage : ', err.message);
-
       e.preventDefault();
     }
   };

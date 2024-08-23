@@ -6,7 +6,7 @@ import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from './Filter_now';
 import select from '../../../assets/image/select.png';
 import useStudyStore from './useStudyStore';
-import useTimeTableStore from '../timeTable/useTimeTableStore';
+import useTimeTableStore from './useTimetableStore';
 import Filter_Member from './Filter_Member';
 import useFilterStore from './useFilterStore';
 import Filter_Field from './Filter_Field';
@@ -14,14 +14,16 @@ import getTimeTable from '../timeTable/getTimeTable';
 
 import styled from 'styled-components';
 import COLORS from '../../../theme';
+import Filter_Field2 from './Filter_Field2';
 
 const StudyList = () => {
   const { posts, setPosts } = useStudyStore();
   const [modalOpen, setModalOpen] = useState(null);
   const navigate = useNavigate();
   const modalRef = useRef();
-  const { subjectName, setShowData, setTableInfos } = useTimeTableStore();
-  const { member, recruiting } = useFilterStore();
+  const { setTableInfos,setFilteredInfos, setShowData, subjectName } = useTimeTableStore();
+  const { category, member, recruiting } = useFilterStore();
+  const studyType = localStorage.getItem('studyType');
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -37,9 +39,6 @@ const StudyList = () => {
     loadPosts();
   }, [setPosts]);
 
-  useEffect(() => {
-    console.log(subjectName);
-  }, [subjectName])
 
   const goPost = () => {
     navigate('/study/post');
@@ -65,6 +64,13 @@ const StudyList = () => {
   // 모달 오픈,
   const [isClickedStudy, setIsClickedStudy] = useState(false);
   const [isClickedMember, setIsClickedMember] = useState(false);
+  
+  const studyFilterHandler = () => {
+    if (modalOpen) return;
+    setModalOpen(true);
+    setIsClickedStudy(true);
+    setIsClickedMember(false);
+  };
 
   const deleteHandler = () => {
     setModalOpen(false);
@@ -89,15 +95,30 @@ const StudyList = () => {
     }
   }, [isCategory, isMember, isNow]);
 
+  const handleClick = () => {
+    setModalOpen(modalOpen === 'study' ? null : 'study');
+    studyFilterHandler();
+  };
+  
+
   //강의 시간표 get
   useEffect(() => {
     const fetchAndSetTimeTable = async () => {
       const data = await getTimeTable();
       setTableInfos(data.tableInfos);
+      setFilteredInfos(data.filteredInfos);
       setShowData(data.showData);
     };
 
     fetchAndSetTimeTable();
+  }, []);
+  
+  // 게시글 초기화
+  const reset = useFilterStore(state => state.reset);
+  const resetCategory = useTimeTableStore(state => state.reset);
+  useEffect(() => {
+    reset();
+    resetCategory();
   }, []);
 
   return (
@@ -105,9 +126,12 @@ const StudyList = () => {
       <Header/>
       <FilterBox>
         <Filter
-          onClick={() => setModalOpen(modalOpen === 'study' ? null : 'study')}
+          onClick={() =>{
+              setIsClickedStudy(true)
+              setModalOpen(modalOpen === 'study' ? null : 'study')
+          }}
         >
-          {subjectName === '' 
+          {category === 0 
           ? <p>스터디</p> 
           :
           <p style={{
@@ -132,9 +156,10 @@ const StudyList = () => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis'
-          }}>{member}</p>}
+          }}>{member}명</p>}
           <SelectImage src={select} alt="select" />
         </Filter>
+
         <Filter
           onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
         >
@@ -164,9 +189,13 @@ const StudyList = () => {
           setModalOpen={setModalOpen} 
           deleteHandler={deleteHandler}
         >
-          {modalOpen === 'study' && (
-            <Filter_Field closeModal={() => setModalOpen(null)} />
-          )}
+          {modalOpen === 'study' ? (
+            studyType === 'lecture' ? (
+              <Filter_Field deleteHandler={deleteHandler}/>
+            ) : (
+              <Filter_Field2 deleteHandler={deleteHandler}/>
+            )
+          ) : null}
           {modalOpen === 'members' && (
             <Filter_Member closeModal={() => setModalOpen(null)} />
           )}
@@ -218,13 +247,14 @@ const FilterBox = styled.div`
 `;
 
 const Filter = styled.div`
-  min-width: 20%;
+  min-width: 10%;
   max-width: 160px;
   padding: 6px 8px;
   border: 1px solid ${COLORS.line1};
   border-radius: 25px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
   white-space: nowrap;
   overflow: hidden;
