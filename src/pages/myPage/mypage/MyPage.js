@@ -120,7 +120,7 @@ const MyPage = () => {
   const BuddyHandler = async () => {
     try {
       const response = await fetch(
-        process.env.REACT_APP_BACK_SERVER + '/buddy/check-matching-status',
+        process.env.REACT_APP_BACK_SERVER + '/buddy/matching-status',
         {
           method: 'GET',
           headers: {

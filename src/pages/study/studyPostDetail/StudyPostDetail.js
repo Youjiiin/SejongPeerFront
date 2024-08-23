@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import Modal from '../../../components/modal/Modal'
 import Popup from '../../../components/studyPopup/Popup';
 import styled from 'styled-components';
 import useStore from './useStore';
@@ -45,6 +46,14 @@ const StudyListPostDetail = () => {
   const navigate = useNavigate();
   const modifyHandler = () => {
     navigate(`/study/modify/${studyId}`);
+  };
+
+  const [isImgOpen, setImgOpen] = useState();
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setImgOpen(true);
   };
 
   // 게시글 삭제
@@ -291,9 +300,27 @@ const StudyListPostDetail = () => {
                 key={image.imageId}
                 src={image.imgUrl}
                 alt={`Image ${image.imageId}`}
+                onClick={() => handleImageClick(image)}
               />
             ))}
         </TagContainer>
+        <Modal isOpen={isImgOpen} onClose={() => setImgOpen(false)}>
+          {selectedImage ? (
+              <img
+                style={{
+                  width: '300px',
+                  height: '300px',
+                  borderRadius: '8px',
+                  margin: 'auto',
+                  display: 'block'
+                }}
+                src={selectedImage.imgUrl}
+                alt={`Image ${selectedImage.imageId}`}
+              />
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Modal>
 
         <CommentContainer>
           <ScrapButton onClick={toggleScrapHandler}>

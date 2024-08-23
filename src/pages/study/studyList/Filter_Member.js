@@ -4,6 +4,7 @@ import style from './Filter_Member.module.css';
 import { useContext } from 'react';
 import { MyContext } from '../../../App';
 import useFilterStore from './useFilterStore';
+import { searchHandler } from './api';
 
 const Filter_Member = ({ closeModal }) => {
   const { setModalOpen } = useContext(MyContext);
@@ -29,11 +30,22 @@ const Filter_Member = ({ closeModal }) => {
     setMember(value); // 슬라이더 값을 업데이트
   };
 
-  const cancelHandler = () => {
-    if (closeModal) {
-      closeModal();
+  const submitHandler = async () => {
+    try {
+      const { category, member, recruiting } = useFilterStore.getState();
+      console.log("djdjdjd" + category, member, recruiting)
+      const filterValues = { category, member, recruiting };
+      const data = await searchHandler(filterValues);
+      console.log(data);
+      if (closeModal) {
+        closeModal();
+      }
+    } catch (error) {
+      console.error('Error during submit:', error);
     }
   };
+  
+  
 
   return (
     <div className={style.container}>
@@ -61,7 +73,7 @@ const Filter_Member = ({ closeModal }) => {
         </div>
       </div>
       <div className={style.text}>*본인제외입니다.</div>
-      <div className={style.finish} onClick={cancelHandler}>
+      <div className={style.finish} onClick={submitHandler}>
         <span>확인</span>
       </div>
     </div>
