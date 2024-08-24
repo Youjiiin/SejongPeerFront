@@ -6,6 +6,7 @@ import COLORS from '../../../theme';
 import { useNavigate } from 'react-router-dom';
 import filledHeart from '../../../assets/image/filledHeart.svg';
 import heart from '../../../assets/image/heart_postdetail.svg';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const AppliedStudy = () => {
   const [appliedStudies, setAppliedStudies] = useState([]);
@@ -75,6 +76,7 @@ const AppliedStudy = () => {
 
   return (
     <Container>
+      <SubHeader text="마이페이지" />
       {appliedStudies.map((study, index) => (
         <PostWrapper
           key={study.studyId}
@@ -136,13 +138,11 @@ const AppliedStudy = () => {
 
 export default AppliedStudy;
 
-const Container = styled.div`
-  margin-top: 7vh;
-`;
+const Container = styled.div``;
 const PostWrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid ${COLORS.line2};
-  padding: 1% 3%;
+  padding: 12px 16px;
 `;
 
 const PostTop = styled.div`

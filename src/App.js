@@ -3,9 +3,12 @@ import { useState, createContext, useEffect } from 'react';
 import './App.css';
 import { jwtDecode } from 'jwt-decode';
 import { toast, Toaster } from 'sonner';
+import { useLocation } from 'react-router-dom';
+
+import { MainHeader } from './components/headerRefactor/MainHeader';
+import { SubHeader } from './components/headerRefactor/SubHeader';
 
 // 메인 컴포넌트
-import Header from './components/header/Header.js';
 import StartLoading from './pages/main/landing/StartLoading.js';
 import MainPage from './pages/main/mainPage/MainPage.js';
 
@@ -169,13 +172,13 @@ const App = () => {
               {modalContent === 'selectDoubleMajor' && <Major id="double" />}
             </>
           )}
-          <Header />
+          {/* <Header /> */}
           <main className={modalContent === 'buddyConfirm' ? 'fixed' : ''}>
             <Routes>
               <Route exact path="/" element={<StartLoading />} />
               <Route path="/main" element={<MainPage />} />
 
-              <Route path='/buddy' element={<Buddy />} />
+              <Route path="/buddy" element={<Buddy />} />
               <Route path="/buddy/start1" element={<BuddyStart1 />} />
               <Route path="/buddy/start2" element={<BuddyStart2 />} />
               <Route path="/buddy/matching" element={<BuddyMatching />} />

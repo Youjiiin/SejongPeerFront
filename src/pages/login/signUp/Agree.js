@@ -4,6 +4,7 @@ import check from '../../../assets/image/check2.png';
 import check2 from '../../../assets/image/check3.png';
 import box from './Agree.module.css';
 import sub from './SignUp.module.css';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const Agree = () => {
   const [agree, setAgree] = useState(false);
@@ -79,6 +80,7 @@ const Agree = () => {
 
   return (
     <div className={box.entire_Container}>
+      <SubHeader text="회원가입" />
       <div className={box.container}>
         <div className={box.auto}>
           <div className={box.inputText}>

@@ -42,7 +42,7 @@ const NavBar = () => {
 
 const Container = styled.div`
   width: 100%;
-  height: 6%;
+  height: 48px;
   display: flex;
   justify-content: space-around;
   position: relative;
