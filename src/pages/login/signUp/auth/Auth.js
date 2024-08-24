@@ -4,7 +4,7 @@ import { MyContext } from '../../../../App';
 import axios from 'axios';
 
 import Loading from '../../../../components/load/Loading';
-
+import { SubHeader } from '../../../../components/headerRefactor/SubHeader';
 import style from '../auth/Auth.module.css';
 import { toast } from 'sonner';
 
@@ -61,6 +61,7 @@ const Auth = () => {
   };
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="회원가입" />
       <div className={style.container}>
         <div className={style.innerBox}>
           <div className={style.auto}>

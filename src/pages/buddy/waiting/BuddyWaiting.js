@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import waitingCat from '../../../assets/image/waitingCat.png';
 import style from './BuddyWaiting.module.css';
 import { toast } from 'sonner';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const BuddyWaiting = () => {
   const [countBuddy, setCountBuddy] = useState(0);
@@ -110,6 +111,7 @@ const BuddyWaiting = () => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종버디" />
       <div className={style.TextBox}>
         <p className={style.title}>세종버디</p>
         <p className={style.text1}>

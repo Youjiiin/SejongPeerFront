@@ -20,9 +20,7 @@ const Back = () => {
       navigate(-1);
     }
   };
-  const goLoginHandler = () => {
-    navigate('/login');
-  };
+
   const warningMessage = () => {
     const backToMain = window.confirm(
       '확인을 누르면 메인 화면으로 이동합니다.\n지금까지 작성한 내용들이 모두 초기화 됩니다.'

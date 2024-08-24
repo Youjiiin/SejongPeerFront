@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { toast } from 'sonner';
 import style from './InputTextBox.module.css';
 
 const IDCheckBox = props => {
@@ -53,7 +53,7 @@ const IDCheckBox = props => {
           props.errorHandler(existAccountMsg);
           props.idExistHandler(true);
         } else {
-          toast.error(availableAccountMsg);
+          toast.success(availableAccountMsg);
           RightIdHandler(availableAccountMsg);
           props.idExistHandler(false); // 아이디가 존재 X 사용 O
         }

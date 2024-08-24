@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../../App';
 import { toast } from 'sonner';
 import styled from 'styled-components';
+import { MainHeader } from '../../../components/headerRefactor/MainHeader';
 
 import kakao from '../../../assets/image/kakao.png';
 import honbobUse from '../../../assets/image/honbobUse.png';
@@ -86,6 +87,7 @@ const MainPage = () => {
 
   return (
     <Container>
+      <MainHeader />
       <Wrapper>
         <SliderImage
           src={images[currentImageIndex]}
@@ -130,23 +132,20 @@ const MainPage = () => {
 
 export default MainPage;
 
-// Styled Components
 const Container = styled.div`
   width: 100vw;
   height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 8vh;
   background-color: #fff7f7;
 
   @media (max-width: 768px) {
-    height: 85vh;
+    /* height: 85vh; */
   }
 `;
 
 const Wrapper = styled.div`
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -170,17 +169,21 @@ const ButtonRow = styled.div`
   display: flex;
   width: 100%;
   flex-direction: row;
-  justify-content: space-between;
   margin-top: 1vh;
+  gap: 10px;
 `;
 
 const ActionButton = styled.img`
   width: 166px;
-  height: 160px;
+  height: auto;
   flex-shrink: 0;
   cursor: pointer;
 
   @media (max-width: 768px) {
+    width: 45vw;
+    height: auto;
+    flex-shrink: 0;
+    cursor: pointer;
   }
 `;
 

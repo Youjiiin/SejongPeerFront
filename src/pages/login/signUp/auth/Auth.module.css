@@ -1,6 +1,6 @@
 @media (min-width: 768px) {
   .entire_Container {
-    background-color: #FFF7F7;
+    background-color: #fff7f7;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -97,12 +97,10 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .entire_Container {
-    background-color: #FFF7F7;
+    background-color: #fff7f7;
     width: 100vw;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -113,14 +111,12 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    margin: 5rem 0;
   }
-
+  .auto {
+    margin-top: 24px;
+  }
   .innerBox {
-    margin-top: 10vh;
     height: 100vh;
-    /* width: 28vw; */
-    /* background-color: #FBE4E4; */
     display: flex;
   }
 

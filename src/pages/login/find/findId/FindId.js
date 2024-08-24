@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import SignInBox from '../../signIn/SignInBox.js';
-
+import { SubHeader } from '../../../../components/headerRefactor/SubHeader.js';
 import style from './FindId.module.css';
 import Loading from '../../../../components/load/Loading.js';
 
@@ -94,6 +94,7 @@ const FindId = () => {
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="아이디/비밀번호 찾기" />
       <div className={style.container}>
         <div className={style.explain_box2}>
           <p className={style.explain_title}>아이디/비밀번호 찾기</p>

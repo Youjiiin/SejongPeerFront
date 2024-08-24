@@ -1,122 +1,130 @@
 html {
-    height: 100%;
-    font-family: "Pretendard Std Variable", "Pretendard Std", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  height: 100%;
+  font-family:
+    'Pretendard Std Variable',
+    'Pretendard Std',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
 }
 
 .container {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  padding: 20px 32px;
+  position: relative;
+  background-color: #fff7f7;
+}
+
+.titlebox {
+  text-align: center;
+  margin: 10px 0px 15px 0px;
+}
+.explain {
+  font-size: 14px;
+}
+.title_box {
+  /* margin: 10px 0px 40px 0px; */
+  font-size: 20px;
+  font-weight: bold;
+}
+.title {
+  margin: 30px 0px 40px 0px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.title2 {
+  margin: 0;
+  color: #777777;
+  font-size: 1rem;
+}
+
+.finaltitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.startPage {
+  top: 90px;
+}
+
+.btn3 {
+  display: flex;
+  flex-direction: column;
+}
+.img {
+  width: 80%;
+  height: 42%;
+  margin-top: 20%;
+}
+.img2 {
+  width: 60%;
+  height: 27%;
+}
+.img3 {
+  width: 311px;
+  height: 240px;
+}
+@media (min-width: 768px) {
+}
+@media (max-width: 768px) {
+  .container {
     flex-shrink: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    margin-top: 100px;
-    background-color: #FFF7F7;
-}
+    /* margin-top: 40px; */
+    overflow-y: scroll;
+  }
 
-
-.titlebox{
+  .titlebox {
     text-align: center;
-    margin: 10px 0px 15px 0px;
-}
-.explain{
+    margin: 0px;
+  }
+  .explain {
     font-size: 14px;
-}
-.title_box .title{
-    margin: 10px 0px 40px 0px;
+  }
+  .title_box {
+    /* margin: 10px 0px 40px 0px; */
     font-size: 20px;
     font-weight: bold;
-    text-align: center;
-}
-.title{
-    margin: 30px 0px 40px 0px;
+  }
+  .title {
+    margin: 0px 0px 16px 0px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .title2 {
+    font-size: 14px;
+  }
+  .finaltitle {
     font-size: 20px;
     font-weight: bold;
-    text-align: center;
-}
-.title2{
-    margin: 0;
-    color: #777777;
-    font-size: 1rem;
-}
+    margin: 0px;
+  }
 
-.finaltitle{
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-
-.startPage{
+  .startPage {
     top: 90px;
-}
+  }
 
-.btn3{
+  .btn3 {
     display: flex;
+    width: 100%;
+    gap: 12px;
     flex-direction: column;
-}
-.img{
-    width: 80%;
-    height: 42%;
-    margin-top: 20%;
-}
-.img2{
-    width: 60%;
-    height: 27%;
-}
-.img3{
-    width: 200px;
-    height: 95px;
-    position: absolute;
-    bottom: 0;
-}
-/* @media(min-width: 500px) {
-    .title2{
-        margin: 0;
-        position: absolute;
-        left: 17%;
-        top: 0;
-        color: #777777;
-        font-size: 1rem;
-    }
-} */
-@media (max-height: 670px) {
-    .container {
-        flex-shrink: 0;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        margin-top: 70px;
-        overflow-y: scroll;
-    }
-    
-    .titlebox{
-        text-align: center;
-        margin: 0px;
-    }
-    .explain{
-        font-size: 14px;
-    }
-    .title{
-        margin: 20px 0px 30px 0px;
-        font-size: 20px;
-        font-weight: bold;
-    }
-    .finaltitle{
-        font-size: 20px;
-        font-weight: bold;
-        margin: 0px;
-    }
-    
-    
-    .startPage{
-        top: 90px;
-    }
-    
-    .btn3{
-        display: flex;
-        flex-direction: column;
-    }
+  }
 }

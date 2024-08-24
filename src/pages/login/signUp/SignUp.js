@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import { MyContext } from '../../../App';
 
 import SignUpElement from './SignUpElement';
-import IDCheckBox from './IDCheckBox';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 import style from './SignUp.module.css';
 import { toast } from 'sonner';
@@ -225,6 +225,7 @@ const SignUp = props => {
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="회원가입" />
       <div className={style.container}>
         <h2 className={style.h2}>기본정보</h2>
         <div className={`${style.form} ${fadeEffect}`}>
