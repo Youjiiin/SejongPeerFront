@@ -132,7 +132,9 @@ const StudyList = () => {
           }}
         >
           {category === 0 ? (
-            <p>스터디</p>
+            <p style={{
+              fontSize: '14px',
+            }}>스터디</p>
           ) : (
             <p
               style={{
@@ -140,6 +142,7 @@ const StudyList = () => {
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                fontSize: '14px',
               }}
             >
               {subjectName}
@@ -154,7 +157,9 @@ const StudyList = () => {
           }}
         >
           {member === 0 ? (
-            <p>모집인원</p>
+            <p style={{
+              fontSize: '14px',
+            }}>모집인원</p>
           ) : (
             <p
               style={{
@@ -162,6 +167,7 @@ const StudyList = () => {
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                fontSize: '14px',
               }}
             >
               {member}명
@@ -174,7 +180,9 @@ const StudyList = () => {
           onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
         >
           {recruiting === null ? (
-            <p>모집여부</p>
+            <p style={{
+              fontSize: '14px',
+            }}>모집여부</p>
           ) : (
             <p
               style={{
@@ -182,6 +190,7 @@ const StudyList = () => {
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                fontSize: '14px',
               }}
             >
               {recruiting === true ? '모집 중' : '모집 마감'}
