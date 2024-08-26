@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import styles from './Modify.module.css';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const Modify = () => {
   const [focusedDiv, setFocusedDiv] = useState(null);
@@ -53,7 +54,7 @@ const Modify = () => {
         setMyPageData(data.data);
       } catch (error) {
         console.error('Error occurred:', error);
-        alert(error.message);
+        toast.error(error.message);
       }
     };
     getDate();
@@ -96,7 +97,7 @@ const Modify = () => {
       if (!response.ok) {
         const errorData = await response.json();
         if (errorData.data) {
-          alert(errorData.data.message);
+          toast.error(errorData.data.message);
         } else {
           throw new Error(errorData.message);
         }
@@ -123,6 +124,7 @@ const Modify = () => {
 
   return (
     <div className={styles.Container}>
+      <SubHeader text="마이페이지" />
       <div className={styles.ContainerBox}>
         {myPageData && (
           <div className={styles.outerContainer}>

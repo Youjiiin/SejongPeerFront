@@ -10,9 +10,11 @@ import { searchHandler } from './api';
 
 import style from './Filter_Field.module.css';
 import search from '../../../assets/image/search_gray.png';
+import useStudyStore from './useStudyStore';
 
 const Filter_Field2 = ({ deleteHandler }) => {
   const { setModalOpen } = useContext(MyContext);
+  const { setPosts } = useStudyStore();
 
   const studyType = localStorage.getItem('studyType');
 
@@ -34,11 +36,18 @@ const Filter_Field2 = ({ deleteHandler }) => {
     loadPosts();
   }, []);
 
-  const selectHandle = data => {
+  const selectHandle = async(data) => {
     setSubjectName(data.categoryName);
     setCategory(data.id);
+
+    const { category, member, recruiting } = useFilterStore.getState();
+    const filterValues = { category, member, recruiting };
+    const result = await searchHandler(filterValues);
+    setPosts(result[0].data);
+    
     deleteHandler();
   };
+
   return (
     <div className={style.container}>
       <header className={style.header}>

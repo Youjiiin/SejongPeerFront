@@ -16,7 +16,7 @@ const HonbobWaiting = () => {
     // console.log(status);
 
     if (status) {
-      alert('이미 매칭이 완료 되었습니다.');
+      toast.error('이미 매칭이 완료 되었습니다.');
       navigate('/honbob/success');
     } else {
       if (confirm('신청을 취소하시겠습니까?')) {
@@ -39,14 +39,14 @@ const HonbobWaiting = () => {
             throw new Error(data.message);
           }
 
-          alert('매칭 신청을 취소했습니다!');
+          toast.error('매칭 신청을 취소했습니다!');
           navigate('/main');
         } catch (error) {
           console.error(error.message);
-          alert('오류가 발생했습니다.');
+          toast.error('오류가 발생했습니다.');
         }
       } else {
-        alert('신청이 취소되지 않았습니다.');
+        toast.error('신청이 취소되지 않았습니다.');
       }
     }
   };

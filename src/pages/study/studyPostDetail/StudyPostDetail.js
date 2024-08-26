@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import Modal from '../../../components/modal/Modal'
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
+import Modal from '../../../components/modal/Modal';
 import Popup from '../../../components/studyPopup/Popup';
 import styled from 'styled-components';
 import useStore from './useStore';
@@ -20,7 +21,6 @@ import {
   fetchScrapCount,
   deletePostHandler,
 } from './api';
-
 const StudyListPostDetail = () => {
   const {
     studyData,
@@ -51,7 +51,7 @@ const StudyListPostDetail = () => {
   const [isImgOpen, setImgOpen] = useState();
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageClick = (image) => {
+  const handleImageClick = image => {
     setSelectedImage(image);
     setImgOpen(true);
   };
@@ -193,6 +193,7 @@ const StudyListPostDetail = () => {
 
   return (
     <Container>
+      <SubHeader text="세종스터디" />
       <Wrapper>
         <Title>
           {studyData.data.title}
@@ -280,9 +281,7 @@ const StudyListPostDetail = () => {
 
           {studyData.data.tags.map((tag, index) => (
             <Tag2 key={index}>
-              <TagText2>
-                {tag}
-              </TagText2>
+              <TagText2>{tag}</TagText2>
             </Tag2>
           ))}
         </FlexContainer2>
@@ -306,17 +305,17 @@ const StudyListPostDetail = () => {
         </TagContainer>
         <Modal isOpen={isImgOpen} onClose={() => setImgOpen(false)}>
           {selectedImage ? (
-              <img
-                style={{
-                  width: '300px',
-                  height: '300px',
-                  borderRadius: '8px',
-                  margin: 'auto',
-                  display: 'block'
-                }}
-                src={selectedImage.imgUrl}
-                alt={`Image ${selectedImage.imageId}`}
-              />
+            <img
+              style={{
+                width: '300px',
+                height: '300px',
+                borderRadius: '8px',
+                margin: 'auto',
+                display: 'block',
+              }}
+              src={selectedImage.imgUrl}
+              alt={`Image ${selectedImage.imageId}`}
+            />
           ) : (
             <p>Loading...</p>
           )}
@@ -360,8 +359,7 @@ const StudyListPostDetail = () => {
 export default StudyListPostDetail;
 
 const Container = styled.div`
-  margin: auto;
-  margin-top: 80px;
+  /* margin: auto; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -372,6 +370,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  margin-top: 16px;
   @media (min-width: 768px) {
     width: 375px;
   }
@@ -447,7 +446,7 @@ const FlexContainer2 = styled.div`
   align-items: center;
   justify-content: left;
   width: 100%;
-  gap : 4px;
+  gap: 4px;
 `;
 
 const Line = styled.div`

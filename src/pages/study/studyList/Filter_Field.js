@@ -4,6 +4,7 @@ import { searchHandler } from './api';
 //zustand
 import useTimeTableStore from './useTimetableStore';
 import useFilterStore from './useFilterStore';
+import useStudyStore from './useStudyStore';
 
 import style from './Filter_Field.module.css';
 import search from '../../../assets/image/search_gray.png';
@@ -17,6 +18,8 @@ const Filter_Field = ({ deleteHandler }) => {
     setShowData,
     setSubjectName,
   } = useTimeTableStore();
+
+  const { setPosts } = useStudyStore();
 
   const { category, setCategory } = useFilterStore();
   const [selectingState, setSelectingState] = useState(0); //0->단과대,1->학과,2->과목이 띄워짐
@@ -118,7 +121,7 @@ const Filter_Field = ({ deleteHandler }) => {
       const { category, member, recruiting } = useFilterStore.getState();
       const filterValues = { category, member, recruiting };
       const data = await searchHandler(filterValues);
-      console.log(data);
+      setPosts(data[0].data);
 
     } catch (error) {
       console.error('Error during submit:', error);
@@ -144,7 +147,7 @@ const Filter_Field = ({ deleteHandler }) => {
           <input
             className={style.search_input}
             type="text"
-            placeholder="검색어 입력"
+            placeholder="과목명 입력"
           />
         </div>
       </div>

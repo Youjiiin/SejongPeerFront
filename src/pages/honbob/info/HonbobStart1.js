@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import style from './HonbobStart.module.css';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const HonbobStart1 = () => {
   const [countHonbab, setCountHonbab] = useState(0);
@@ -46,6 +47,7 @@ const HonbobStart1 = () => {
 
   return (
     <div className={style.Container}>
+      <SubHeader text="혼밥탈출" />
       <div className={style.InnerContainer}>
         <div className={style.top}>
           <button onClick={infoHandler} className={style.informBtn}>

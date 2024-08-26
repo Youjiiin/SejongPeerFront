@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { MyContext } from '../../../App';
-import useFilterStore from './useFilterStore';
 import { searchHandler } from './api';
+import useFilterStore from './useFilterStore';
+import useStudyStore from './useStudyStore';
 
 import style from './Filter_now.module.css';
 import check from '../../../assets/image/check.png';
@@ -10,6 +11,7 @@ const Filter_now = props => {
   const { setModalOpen } = useContext(MyContext);
   const [isNowCheck, SetIsNowCheck] = useState(false);
   const [isFinishCheck, SetIsFinishNowCheck] = useState(false);
+  const { setPosts } = useStudyStore();
   
   const checkNowHandler = () => {
     SetIsNowCheck(true);
@@ -46,7 +48,8 @@ const Filter_now = props => {
       const { category, member, recruiting } = useFilterStore.getState();
       const filterValues = { category, member, recruiting };
       const data = await searchHandler(filterValues);
-      console.log(data);
+      setPosts(data[0].data);
+
     } catch (error) {
       console.error('Error during submit:', error);
     }

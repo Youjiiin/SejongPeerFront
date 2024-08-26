@@ -15,13 +15,15 @@ import getTimeTable from '../timeTable/getTimeTable';
 import styled from 'styled-components';
 import COLORS from '../../../theme';
 import Filter_Field2 from './Filter_Field2';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const StudyList = () => {
   const { posts, setPosts } = useStudyStore();
   const [modalOpen, setModalOpen] = useState(null);
   const navigate = useNavigate();
   const modalRef = useRef();
-  const { setTableInfos,setFilteredInfos, setShowData, subjectName } = useTimeTableStore();
+  const { setTableInfos, setFilteredInfos, setShowData, subjectName } =
+    useTimeTableStore();
   const { category, member, recruiting } = useFilterStore();
   const studyType = localStorage.getItem('studyType');
 
@@ -38,7 +40,6 @@ const StudyList = () => {
 
     loadPosts();
   }, [setPosts]);
-
 
   const goPost = () => {
     navigate('/study/post');
@@ -64,7 +65,7 @@ const StudyList = () => {
   // 모달 오픈,
   const [isClickedStudy, setIsClickedStudy] = useState(false);
   const [isClickedMember, setIsClickedMember] = useState(false);
-  
+
   const studyFilterHandler = () => {
     if (modalOpen) return;
     setModalOpen(true);
@@ -99,7 +100,6 @@ const StudyList = () => {
     setModalOpen(modalOpen === 'study' ? null : 'study');
     studyFilterHandler();
   };
-  
 
   //강의 시간표 get
   useEffect(() => {
@@ -112,7 +112,7 @@ const StudyList = () => {
 
     fetchAndSetTimeTable();
   }, []);
-  
+
   // 게시글 초기화
   const reset = useFilterStore(state => state.reset);
   const resetCategory = useTimeTableStore(state => state.reset);
@@ -123,55 +123,79 @@ const StudyList = () => {
 
   return (
     <Container>
-      <Header/>
+      <SubHeader text="세종스터디" />
       <FilterBox>
         <Filter
-          onClick={() =>{
-              setIsClickedStudy(true)
-              setModalOpen(modalOpen === 'study' ? null : 'study')
+          onClick={() => {
+            setIsClickedStudy(true);
+            setModalOpen(modalOpen === 'study' ? null : 'study');
           }}
         >
-          {category === 0 
-          ? <p>스터디</p> 
-          :
-          <p style={{
-            color: `${COLORS.main}`,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>{subjectName}</p>}
+          {category === 0 ? (
+            <p style={{
+              fontSize: '14px',
+            }}>스터디</p>
+          ) : (
+            <p
+              style={{
+                color: `${COLORS.main}`,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: '14px',
+              }}
+            >
+              {subjectName}
+            </p>
+          )}
           <SelectImage src={select} alt="select" />
         </Filter>
         <Filter
-          onClick={() =>{
-              setIsClickedStudy(true)
-              setModalOpen(modalOpen === 'members' ? null : 'members')
+          onClick={() => {
+            setIsClickedStudy(true);
+            setModalOpen(modalOpen === 'members' ? null : 'members');
           }}
         >
-          {member === 0 
-          ? <p>모집인원</p>
-          :
-          <p style={{
-            color: `${COLORS.main}`,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>{member}명</p>}
+          {member === 0 ? (
+            <p style={{
+              fontSize: '14px',
+            }}>모집인원</p>
+          ) : (
+            <p
+              style={{
+                color: `${COLORS.main}`,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: '14px',
+              }}
+            >
+              {member}명
+            </p>
+          )}
           <SelectImage src={select} alt="select" />
         </Filter>
 
         <Filter
           onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
         >
-          {recruiting === null 
-          ? <p>모집여부</p>
-          :
-          <p style={{
-            color: `${COLORS.main}`,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>{recruiting === true ? '모집 중' : '모집 마감'}</p>}
+          {recruiting === null ? (
+            <p style={{
+              fontSize: '14px',
+            }}>모집여부</p>
+          ) : (
+            <p
+              style={{
+                color: `${COLORS.main}`,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: '14px',
+              }}
+            >
+              {recruiting === true ? '모집 중' : '모집 마감'}
+            </p>
+          )}
           <SelectImage src={select} alt="select" />
         </Filter>
       </FilterBox>
@@ -184,24 +208,23 @@ const StudyList = () => {
       </ListWrapper>
       <WriteButton onClick={goPost}>모집글 작성</WriteButton>
       {modalOpen && (
-        <BottomModal 
-          ref={modalRef} 
-          setModalOpen={setModalOpen} 
+        <BottomModal
+          ref={modalRef}
+          setModalOpen={setModalOpen}
           deleteHandler={deleteHandler}
         >
           {modalOpen === 'study' ? (
             studyType === 'lecture' ? (
-              <Filter_Field deleteHandler={deleteHandler}/>
+              <Filter_Field deleteHandler={deleteHandler} />
             ) : (
-              <Filter_Field2 deleteHandler={deleteHandler}/>
+              <Filter_Field2 deleteHandler={deleteHandler} />
             )
           ) : null}
           {modalOpen === 'members' && (
             <Filter_Member closeModal={() => setModalOpen(null)} />
           )}
           {modalOpen === 'status' && (
-            <Filter_now 
-            deleteHandler = {deleteHandler} />
+            <Filter_now deleteHandler={deleteHandler} />
           )}
         </BottomModal>
       )}
@@ -238,7 +261,6 @@ const FilterBox = styled.div`
   align-items: center;
   padding: 6px 16px;
   background-color: #fafafa;
-  position: fixed;
   border-bottom: 3px solid #e5e5e5;
   gap: 6px;
   @media (min-width: 768px) {
@@ -279,7 +301,6 @@ const SelectImage = styled.img`
 const ListWrapper = styled.div`
   width: 100vw;
   height: auto;
-  margin: 7vh 0;
   @media (min-width: 768px) {
     width: 100%;
   }

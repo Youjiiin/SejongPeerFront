@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { MyContext } from "../../../App.js";
+import React, { useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MyContext } from '../../../App.js';
 
-import styles from "./ProgressBar.module.css";
+import styles from './ProgressBar.module.css';
 
-const ProgressBar = (props) => {
+const ProgressBar = props => {
   const [step, setStep] = useState(Array(5).fill(false));
   const [canMoveNext, setCanMoveNext] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
@@ -23,14 +23,14 @@ const ProgressBar = (props) => {
   };
   const submitHandler = () => {
     setModalOpen(true);
-    setModalContent("buddyConfirm");
+    setModalContent('buddyConfirm');
   };
   const moveMainHandler = () => {
     const backToMain = window.confirm(
-      "확인을 누르면 메인 화면으로 이동합니다.\n지금까지 작성한 내용들이 모두 초기화 됩니다."
+      '확인을 누르면 메인 화면으로 이동합니다.\n지금까지 작성한 내용들이 모두 초기화 됩니다.'
     );
     if (backToMain) {
-      navigate("/main");
+      navigate('/main');
     }
   };
 
@@ -47,7 +47,7 @@ const ProgressBar = (props) => {
       updateStep[4] = false;
 
       prev = false;
-      if (props.choiceGender !== "") {
+      if (props.choiceGender !== '') {
         next = true;
         if (!clickedPrev) {
           props.moveNext();
@@ -65,7 +65,7 @@ const ProgressBar = (props) => {
       updateStep[4] = false;
       prev = true;
       next = false;
-      if (props.major !== "") {
+      if (props.major !== '') {
         next = true;
         if (!clickedPrev) {
           props.moveNext();
@@ -78,7 +78,7 @@ const ProgressBar = (props) => {
       updateStep[4] = false;
       prev = true;
       next = false;
-      if (props.grade !== "") {
+      if (props.grade !== '') {
         next = true;
         if (!clickedPrev) {
           props.moveNext();
@@ -90,7 +90,7 @@ const ProgressBar = (props) => {
       updateStep[4] = false;
       prev = true;
       next = false;
-      if (props.gradeDiff !== "") {
+      if (props.gradeDiff !== '') {
         next = true;
         if (!clickedPrev) {
           props.moveNext();
@@ -159,7 +159,7 @@ const ProgressBar = (props) => {
               key={index}
               className={styles.progress}
               style={{
-                backgroundColor: step ? "#FF4B4B" : "#ccc",
+                backgroundColor: step ? '#FF4B4B' : '#ccc',
               }}
             ></div>
           ))}

@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import { MyContext } from '../../../App';
 
 import SignUpElement from './SignUpElement';
-import IDCheckBox from './IDCheckBox';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 import style from './SignUp.module.css';
 import { toast } from 'sonner';
@@ -61,7 +61,7 @@ const SignUp = props => {
   const nextStepHandler = () => {
     //중복 아이디일 경우 다음 단계로 못 넘어감
     if (isIdExist) {
-      alert('아이디 중복확인을 해주세요.');
+      toast.error('아이디 중복확인을 해주세요.');
     } else {
       setStep(prevStep => prevStep + 1);
     }
@@ -147,10 +147,10 @@ const SignUp = props => {
       collegeValue === '' ||
       majorValue === ''
     ) {
-      alert('모든 양식의 작성을 완료해주세요');
+      toast.error('모든 양식의 작성을 완료해주세요');
       e.preventDefault();
     } else if (isNicknameExist) {
-      alert('닉네임 중복검사를 진행해주세요.');
+      toast.error('닉네임 중복검사를 진행해주세요.');
     } else {
       if (error === '가입완료 되었습니다.') {
         let join = {
@@ -207,7 +207,7 @@ const SignUp = props => {
           //   alert("닉네임은 2자 이상 8자 이하 한글, 영어, 숫자만 입력해주세요.");
           // }
           else {
-            alert(
+            toast.error(
               ' 실패했습니다. 다시 시도해주세요. (에러 내용: ' +
                 err.message +
                 ')'
@@ -217,7 +217,7 @@ const SignUp = props => {
         }
       } else {
         console.log(error);
-        alert(error);
+        toast.error(error);
         e.preventDefault();
       }
     }
@@ -225,6 +225,7 @@ const SignUp = props => {
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="회원가입" />
       <div className={style.container}>
         <h2 className={style.h2}>기본정보</h2>
         <div className={`${style.form} ${fadeEffect}`}>

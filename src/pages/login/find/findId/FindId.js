@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import SignInBox from '../../signIn/SignInBox.js';
-
+import { SubHeader } from '../../../../components/headerRefactor/SubHeader.js';
 import style from './FindId.module.css';
 import Loading from '../../../../components/load/Loading.js';
 
@@ -39,9 +39,9 @@ const FindId = () => {
       let result = response1.data.data.isAuth;
 
       if (result === false) {
-        alert('아이디 및 비밀번호가 일치하지 않습니다');
+        toast.error('아이디 및 비밀번호가 일치하지 않습니다');
       } else if (result === true) {
-        alert('인증 완료');
+        toast.success('인증 완료');
         console.log(id);
         setStudentNum(id);
         setName(response1.data.data.name);
@@ -55,10 +55,10 @@ const FindId = () => {
       console.error(err);
       if (err.response && err.response.status === 404) {
         console.log('404 에러 발생: ', err.response.status);
-        alert('해당 정보로 가입된 계정이 존재하지 않습니다.');
+        toast.error('해당 정보로 가입된 계정이 존재하지 않습니다.');
       } else if (err.response && err.response.status === 400) {
         console.log('400 에러 발생: ', err.response.status);
-        alert('아이디 또는 비밀번호를 입력하지 않았습니다.');
+        toast.error('아이디 또는 비밀번호를 입력하지 않았습니다.');
       }
 
       setLoading(false);
@@ -94,6 +94,7 @@ const FindId = () => {
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="아이디/비밀번호 찾기" />
       <div className={style.container}>
         <div className={style.explain_box2}>
           <p className={style.explain_title}>아이디/비밀번호 찾기</p>

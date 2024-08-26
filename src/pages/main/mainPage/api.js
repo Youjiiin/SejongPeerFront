@@ -46,8 +46,6 @@ const statusHandler = (status, count, navigate) => {
       navigate(count > 0 ? '/buddy/success' : '/buddy?page=start1');
       break;
     case 'DENIED':
-      alert('상대방이 거절했습니다. 다시 신청해 주세요.');
-      navigate(count > 0 ? '/buddy/success' : '/buddy/start1');
       // toast.error('상대방이 거절했습니다. 다시 신청해 주세요.');
       navigate(count > 0 ? '/buddy/success' : '/buddy?page=start1');
       break;

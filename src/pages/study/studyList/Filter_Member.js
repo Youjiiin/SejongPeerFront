@@ -1,13 +1,17 @@
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import style from './Filter_Member.module.css';
 import { useContext } from 'react';
 import { MyContext } from '../../../App';
-import useFilterStore from './useFilterStore';
 import { searchHandler } from './api';
+
+import useFilterStore from './useFilterStore';
+import useStudyStore from './useStudyStore';
+
+import style from './Filter_Member.module.css';
 
 const Filter_Member = ({ closeModal }) => {
   const { setModalOpen } = useContext(MyContext);
+  const { setPosts } = useStudyStore();
   
   const trackStyle = {
     backgroundColor: '#FF4B4B',
@@ -38,7 +42,8 @@ const Filter_Member = ({ closeModal }) => {
       const filterValues = { category, member: finalMember, recruiting };
 
       const data = await searchHandler(filterValues);
-      console.log(data);
+      setPosts(data[0].data);
+
 
       if (closeModal) {
         closeModal();

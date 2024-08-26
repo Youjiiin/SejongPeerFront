@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import BuddyStart from '../../../assets/image/buddyStart2.png';
 import style from './BuddyStart.module.css';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const BuddyStart2 = () => {
   const navigate = useNavigate();
@@ -15,10 +16,11 @@ const BuddyStart2 = () => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종버디" />
       <div className={style.top}>
-        <div className={style.imgBack}>
-          <img className={style.buddyImg2} src={BuddyStart} alt="BuddyStart" />
-        </div>
+        {/* <div className={style.imgBack}> */}
+        <img className={style.buddyImg2} src={BuddyStart} alt="BuddyStart" />
+        {/* </div> */}
         <div className={style.wrapper}>
           <p className={style.title}>세종버디란?</p>
           <p className={style.text}>세종버디(Buddy)는</p>

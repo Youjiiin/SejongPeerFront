@@ -11,6 +11,7 @@ import select from '../../../assets/image/select.png';
 import useScrapStore from './useScrapStore';
 import axios from 'axios';
 import { fetchScraps } from './api';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const MyPageScrapList = () => {
   const { posts, modalOpen, setPosts, setModalOpen } = useScrapStore();
@@ -32,16 +33,16 @@ const MyPageScrapList = () => {
     navigate(`/study/post/${index}`);
   };
 
-
   return (
     <Container>
-      <Header></Header>
+      <SubHeader text="마이페이지" />
       <ListWrapper>
-        {posts && posts.map(post => (
-          <div key={post.id} onClick={() => goPostDetail(post.id)}>
-            <StudyListPost post={post} />
-          </div>
-        ))}
+        {posts &&
+          posts.map(post => (
+            <div key={post.id} onClick={() => goPostDetail(post.id)}>
+              <StudyListPost post={post} />
+            </div>
+          ))}
       </ListWrapper>
       {modalOpen && (
         <BottomModal deleteHandler={() => setModalOpen(false)}>
@@ -110,7 +111,6 @@ const SelectImage = styled.img`
 const ListWrapper = styled.div`
   width: 100vw;
   height: auto;
-  margin: 5vh 0;
 `;
 
 const WriteButton = styled.div`

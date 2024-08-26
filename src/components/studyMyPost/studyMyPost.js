@@ -74,7 +74,7 @@ const StudyMyPost = () => {
       console.log(error);
     }
     const msg = value === true ? '수락' : '거절';
-    alert(`${msg}되었습니다`);
+    toast.info(`${msg}되었습니다`);
   };
 
   const CancelHandle = async studyId => {

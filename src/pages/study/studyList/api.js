@@ -1,6 +1,5 @@
 // src/api/study.js
 import axios from 'axios';
-import useFilterStore from './useFilterStore';
 
 export const fetchPosts = async () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -36,7 +35,7 @@ const getAuthHeaders = () => {
   const refreshToken = localStorage.getItem('refreshToken');
 
   if (!accessToken || !refreshToken) {
-    alert('재로그인 해야합니다!');
+    altoast.errorert('재로그인 해야합니다!');
     toast.error('재로그인 해야합니다!');
     throw new Error('토큰이 없음!');
   }
@@ -94,6 +93,7 @@ export const searchHandler = async ({ category, member, recruiting }) => {
     // }
     console.log('All data fetched:', allData);
     return allData;  // 모든 페이지의 데이터를 반환합니다.
+
 
   } catch (error) {
     console.error('Error during search:', error);

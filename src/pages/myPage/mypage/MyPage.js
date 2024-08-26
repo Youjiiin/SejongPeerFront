@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import styles from './MyPage.module.css';
 import { toast } from 'sonner';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const MyPage = () => {
   const [myPageData, setMyPageData] = useState({});
@@ -233,6 +234,7 @@ const MyPage = () => {
 
   return (
     <div className={styles.Container}>
+      <SubHeader text="마이페이지" />
       <div className={styles.container}>
         {myPageData && (
           <>
@@ -241,7 +243,7 @@ const MyPage = () => {
                 <div className={styles.informTitleBox}>
                   <span className={styles.br}></span>
                   <p
-                    style={{ fontWeight: '700', marginBottom: '0px' }}
+                    style={{ fontWeight: '800', marginBottom: '0px' }}
                     className={styles.informTitle}
                   >
                     매칭정보
@@ -258,7 +260,7 @@ const MyPage = () => {
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         내가 지원한 스터디 현황 확인하기
                       </div>
@@ -275,7 +277,7 @@ const MyPage = () => {
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         내가 업로드한 게시글, 신청자 관리하기
                       </div>
@@ -293,7 +295,7 @@ const MyPage = () => {
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         매칭 상대 확인
                       </div>
@@ -310,7 +312,7 @@ const MyPage = () => {
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         밥짝꿍 확인
                       </div>
@@ -324,7 +326,7 @@ const MyPage = () => {
                 <div className={styles.informTitleBox}>
                   <span className={styles.br}></span>
                   <p
-                    style={{ fontWeight: '700', marginBottom: '0px' }}
+                    style={{ fontWeight: '800', marginBottom: '0px' }}
                     className={styles.informTitle}
                   >
                     세종스터디
@@ -357,9 +359,7 @@ const MyPage = () => {
               </div>
               <div className={styles.container2}>
                 <div className={styles.informTitleBox}>
-                  <p style={{ fontWeight: '700', marginBottom: '0px' }}>
-                    내 정보
-                  </p>
+                  <p style={{ fontWeight: '800' }}>내 정보</p>
                 </div>
 
                 <div className={styles.myInformBox}>
@@ -367,7 +367,7 @@ const MyPage = () => {
                     <div className={styles.leftBox}>
                       <div
                         className={`${styles.blackWord} ${styles.myInformWord}`}
-                        style={{ fontWeight: '700', fontSize: '1.8vh' }}
+                        style={{ fontWeight: '800', fontSize: '1.8vh' }}
                       >
                         {myPageData.name}
                       </div>
@@ -383,15 +383,13 @@ const MyPage = () => {
               </div>
               <div className={styles.container3}>
                 <div className={styles.informTitleBox}>
-                  <p style={{ fontWeight: '700', marginBottom: '0px' }}>
-                    사용방법
-                  </p>
+                  <p style={{ fontWeight: '800' }}>사용방법</p>
                 </div>
                 <div className={styles.useInformBox}>
                   <button className={styles.useInformBtn}>
                     <div
                       className={styles.redWord2}
-                      style={{ fontWeight: '900' }}
+                      style={{ fontWeight: '400', fontFamily: 'jalnan' }}
                     >
                       세종스터디
                     </div>
@@ -403,7 +401,7 @@ const MyPage = () => {
                   >
                     <div
                       className={styles.redWord2}
-                      style={{ fontWeight: '900' }}
+                      style={{ fontWeight: '400', fontFamily: 'jalnan' }}
                     >
                       세종버디
                     </div>
@@ -415,7 +413,7 @@ const MyPage = () => {
                   >
                     <div
                       className={styles.redWord2}
-                      style={{ fontWeight: '900' }}
+                      style={{ fontWeight: '400', fontFamily: 'jalnan' }}
                     >
                       혼밥탈출
                     </div>
@@ -425,7 +423,7 @@ const MyPage = () => {
               </div>
               <div className={styles.container4}>
                 <div className={styles.informTitleBox}>
-                  <p style={{ fontWeight: '700', marginBottom: '0px' }}>
+                  <p style={{ fontWeight: '800', marginBottom: '0px' }}>
                     이용안내
                   </p>
                 </div>
@@ -462,7 +460,7 @@ const MyPage = () => {
               >
                 <p
                   style={{
-                    fontWeight: '700',
+                    fontWeight: '800',
                     fontSize: '1.3em',
                   }}
                 >

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { MyContext } from '../../../App';
 import SignInBox from './SignInBox';
-
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 import style from './SignIn.module.css';
 import { toast } from 'sonner';
 
@@ -80,6 +80,7 @@ const SignIn = () => {
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="로그인" />
       <div className={style.container}>
         <SignInBox inputID={inputID} name="아이디" />
         <SignInBox inputPwd={inputPwd} name="비밀번호" id="pwd" />

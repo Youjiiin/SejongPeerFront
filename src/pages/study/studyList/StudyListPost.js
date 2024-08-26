@@ -107,6 +107,7 @@ const TagText = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 12px;
 `;
 
 const TagText1 = styled.p`
@@ -119,6 +120,7 @@ const TagText1 = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 12px;
 `;
 
 const DateText = styled.div`

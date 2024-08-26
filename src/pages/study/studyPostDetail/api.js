@@ -7,7 +7,7 @@ const getAuthHeaders = () => {
   const refreshToken = localStorage.getItem('refreshToken');
 
   if (!accessToken || !refreshToken) {
-    alert('재로그인 해야합니다!');
+    toast.error('재로그인 해야합니다!');
     toast.error('재로그인 해야합니다!');
     throw new Error('토큰이 없음!');
   }
