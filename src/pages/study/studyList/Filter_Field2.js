@@ -6,6 +6,7 @@ import useTimeTableStore from './useTimetableStore';
 import useFilterStore from './useFilterStore';
 
 import { fetchData } from '../studyPostWrite/studyPostField/api';
+import { searchHandler } from './api';
 
 import style from './Filter_Field.module.css';
 import search from '../../../assets/image/search_gray.png';

@@ -44,7 +44,7 @@ const Filter_Field = ({ deleteHandler }) => {
   };
 
   //다음 데이터 갱신
-  const selectHandle = (item, state) => {
+  const selectHandle = async (item, state) => {
     if (state === 0) {
       const newTableInfo = tableInfos.filter(row => row[1] === item);
       setFilteredInfos(newTableInfo);
@@ -90,6 +90,7 @@ const Filter_Field = ({ deleteHandler }) => {
       );
 
       setSelectingState(0);
+      await submitHandler();
 
       //모달 닫기
       deleteHandler();
@@ -109,6 +110,19 @@ const Filter_Field = ({ deleteHandler }) => {
 
     //이전 단계로 돌아가기
     setSelectingState(s => s - 1);
+  };
+
+  // 검색 핸들러
+  const submitHandler = async () => {
+    try {
+      const { category, member, recruiting } = useFilterStore.getState();
+      const filterValues = { category, member, recruiting };
+      const data = await searchHandler(filterValues);
+      console.log(data);
+
+    } catch (error) {
+      console.error('Error during submit:', error);
+    }
   };
 
   return (

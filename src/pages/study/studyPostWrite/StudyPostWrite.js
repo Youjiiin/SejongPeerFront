@@ -194,14 +194,15 @@ const StudyPostWrite = props => {
         }
       );
 
+      console.log("error???????????????" + response.status);
       if (response.status === 413) {
-        throw new Error('파일의 용량이 너무 큽니다.');
+        return 'imgError';
       }
 
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
 
-      console.log(data);
+      //console.log(data);
       
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
@@ -249,9 +250,12 @@ const StudyPostWrite = props => {
       togglePopup(errorMessage);
       return;
     }
+
     if (imgFiles.length > 0) {
+      console.log('11111111111111111111111111111111')
       try {
         await imgUpload(studyId);
+        console.log(await imgUpload(studyId));
       } catch (err) {
         togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
         return;

@@ -332,7 +332,10 @@ const StudyListPostDetail = () => {
               {`신청현황 보기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
             </ApplyButton>
           ) : (
-            <ApplyButton onClick={applyForStudyHandler} isApplied={isApplied}>
+            <ApplyButton 
+              onClick={applyForStudyHandler} 
+              // isApplied={isApplied}
+            >
               {isApplied
                 ? '지원취소'
                 : `지원하기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}

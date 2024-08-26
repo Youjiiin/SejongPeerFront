@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { MyContext } from '../../../App';
 import useFilterStore from './useFilterStore';
+import { searchHandler } from './api';
 
 import style from './Filter_now.module.css';
 import check from '../../../assets/image/check.png';
@@ -33,6 +34,27 @@ const Filter_now = props => {
 
   const finishBtn = isNowCheck || isFinishCheck ? style.finish : style.finish_n;
 
+  // 검색 핸들러
+  const submitHandler = async () => {
+    if (isNowCheck) {
+      setRecruiting(true);
+    } else {
+      setRecruiting(false);
+    }
+
+    try {
+      const { category, member, recruiting } = useFilterStore.getState();
+      const filterValues = { category, member, recruiting };
+      const data = await searchHandler(filterValues);
+      console.log(data);
+    } catch (error) {
+      console.error('Error during submit:', error);
+    }
+
+    setModalOpen(false);
+    props.deleteHandler();
+  };
+
   return (
     <div className={style.container}>
       <header className={style.header}>
@@ -58,7 +80,7 @@ const Filter_now = props => {
       </div>
       <button
         className={finishBtn}
-        onClick={onSubmitHandler}
+        onClick={submitHandler}
         disabled={!isNowCheck && !isFinishCheck}
       >
         <span>확인</span>

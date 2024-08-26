@@ -33,10 +33,13 @@ const Filter_Member = ({ closeModal }) => {
   const submitHandler = async () => {
     try {
       const { category, member, recruiting } = useFilterStore.getState();
-      console.log("djdjdjd" + category, member, recruiting)
-      const filterValues = { category, member, recruiting };
+      console.log('member ' + member)
+      const finalMember = member === 0 ? 1 : member;
+      const filterValues = { category, member: finalMember, recruiting };
+
       const data = await searchHandler(filterValues);
       console.log(data);
+
       if (closeModal) {
         closeModal();
       }

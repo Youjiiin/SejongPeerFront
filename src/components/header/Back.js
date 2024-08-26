@@ -16,6 +16,10 @@ const Back = () => {
   const backHandler = () => {
     if (location.pathname === '/main') {
       navigate('/main');
+    } else if (location.pathname === '/study') {
+      navigate('/main');
+    } else if (location.pathname.startsWith('/study/post') || location.pathname.startsWith('/study/modify')) {
+      navigate('/study');
     } else {
       navigate(-1);
     }
