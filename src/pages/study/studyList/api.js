@@ -94,7 +94,6 @@ export const searchHandler = async ({ category, member, recruiting }) => {
     console.log('All data fetched:', allData);
     return allData;  // 모든 페이지의 데이터를 반환합니다.
 
-
   } catch (error) {
     console.error('Error during search:', error);
     throw error;
