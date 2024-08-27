@@ -44,16 +44,7 @@ const StudyPostExternalField = () => {
       <header className={style.header}>
         <span>스터디 선택</span>
       </header>
-      <div className={style.search_container}>
-        <div className={style.search_wrapper}>
-          <img src={search} alt="search" />
-          <input
-            className={style.search_input}
-            type="text"
-            placeholder="검색어 입력"
-          />
-        </div>
-      </div>
+
       <div className={style.filter_study}>
         {datas &&
           datas.map(data => (
