@@ -57,6 +57,7 @@ const Btn = styled.button`
   position: relative;
   border: none;
   cursor: pointer;
+  color: ${COLORS.font1};
 
   &::after {
     content: '';

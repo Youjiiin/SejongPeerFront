@@ -14,6 +14,7 @@ const useTimeTableStore = create(set => ({
     set({
       tableInfos: [],
       showData: [],
+      filteredInfos:[],
       subjectName: '',
     }),
 }));

@@ -11,7 +11,7 @@ export const SubHeader = ({ text }) => {
 
   const handleUserClick = () => {
     if (token) {
-      navigate('/my-page'); // 유저 아이콘 클릭 시 /my-page로 이동
+      navigate('/mypage'); // 유저 아이콘 클릭 시 /my-page로 이동
     } else {
       navigate('/login'); // 로그인 텍스트 클릭 시 /login-page로 이동
     }
@@ -29,7 +29,7 @@ export const SubHeader = ({ text }) => {
       </Container2>
       <Login src={user} onClick={handleUserClick} alt="User Icon" />
     </Container>
-  );
+  ); 
 };
 
 const Container = styled.div`
