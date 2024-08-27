@@ -10,14 +10,15 @@ import useMypostStore from './myPostStore/useMypostStore';
 import { fetchMyPost } from './api/fetchMyPost';
 import { applicantSelection } from './api/applicantSelection';
 import { earlyClose } from './api/earlyClose';
-
+import { toast } from 'sonner';
 const StudyMyPost = () => {
   const searchParams = new URLSearchParams(location.search);
   const type = searchParams.get('type');
-  const [isLectures, setIsLectures] = useState(type || 'lecture');
+  const [postType, setPostType] = useState(type || 'lecture');
   const [externals, setExternals] = useState([]);
   const [lectures, setLectures] = useState([]);
   const [isEndBtnClick, setIsEndBtnClick] = useState(false);
+  const [isClickBtn, setIsClickBtn] = useState(false);
   const { state } = useMypostStore();
   const {
     isPopupVisible,
@@ -43,7 +44,7 @@ const StudyMyPost = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const type = searchParams.get('type');
-    setIsLectures(type || 'lecture');
+    setPostType(type || 'lecture');
   }, [state]);
 
   useEffect(() => {
@@ -61,7 +62,46 @@ const StudyMyPost = () => {
     loadPosts();
   }, []);
 
-  const AcceptHandle = async (studyId, nickname, value) => {
+  const updateStudyMatchingStatus = (
+    externalIndex,
+    applicantIndex,
+    newStatus
+  ) => {
+    const updateState = setStateFunction => {
+      setStateFunction(prevState => {
+        const newState = [...prevState];
+        console.log(newState[externalIndex].applicants);
+
+        const updatedApplicants = [...newState[externalIndex].applicants]; // applicant 배열의 얕은 복사본 생성
+
+        updatedApplicants[applicantIndex] = {
+          ...updatedApplicants[applicantIndex],
+          studyMatchingStatus: newStatus,
+        };
+
+        newState[externalIndex] = {
+          ...newState[externalIndex],
+          applicants: updatedApplicants,
+        };
+
+        return newState;
+      });
+    };
+
+    if (postType === 'lecture') {
+      updateState(setLectures);
+    } else {
+      updateState(setExternals);
+    }
+  };
+
+  const AcceptHandle = async (
+    studyIndex,
+    appIndex,
+    studyId,
+    nickname,
+    value
+  ) => {
     const patchData = {
       studyId: studyId,
       applicantNickname: nickname,
@@ -69,10 +109,12 @@ const StudyMyPost = () => {
     };
     try {
       const response = await applicantSelection(patchData);
-      console.log('Response:', response);
+      console.log(index);
     } catch (error) {
       console.log(error);
     }
+    const state = value === true ? 'ACCEPT' : 'REJECT';
+    updateStudyMatchingStatus(studyIndex, appIndex, state);
     const msg = value === true ? '수락' : '거절';
     toast.info(`${msg}되었습니다`);
   };
@@ -94,7 +136,7 @@ const StudyMyPost = () => {
 
   return (
     <Container>
-      {(isLectures === 'lecture' ? lectures : externals).map((post, index) => (
+      {(postType === 'lecture' ? lectures : externals).map((post, index) => (
         <OuterBox key={index} status={post.recruitmentStatus}>
           <HeaderStyle>
             <Title status={post.recruitmentStatus}>
@@ -148,7 +190,13 @@ const StudyMyPost = () => {
                       <BtnBox>
                         <AcceptBtn
                           onClick={() =>
-                            AcceptHandle(post.studyId, applicant.nickname, true)
+                            AcceptHandle(
+                              index,
+                              appIndex,
+                              post.studyId,
+                              applicant.nickname,
+                              true
+                            )
                           }
                         >
                           수락
@@ -156,6 +204,8 @@ const StudyMyPost = () => {
                         <RefuseBtn
                           onClick={() =>
                             AcceptHandle(
+                              index,
+                              appIndex,
                               post.studyId,
                               applicant.nickname,
                               false
@@ -184,7 +234,7 @@ const Container = styled.div`
   overflow: auto;
   width: 100%;
   height: 87%;
-  background-color: #fbe4e4;
+  background-color: #fff7f7;
   display: flex;
   flex-direction: column;
   gap: 0.8%;
@@ -193,6 +243,7 @@ const Container = styled.div`
 const OuterBox = styled.div`
   background-color: ${props =>
     props.status === 'RECRUITING' ? `${COLORS.back2}` : `${COLORS.back1}`};
+  margin-bottom: 3px;
 `;
 const HeaderStyle = styled.div`
   height: 9vh;
@@ -257,7 +308,7 @@ const BottomStyle = styled.div`
   padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 `;
 const ApplicantBox = styled.div`
   height: 35px;

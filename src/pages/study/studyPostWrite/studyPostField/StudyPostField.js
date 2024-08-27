@@ -7,39 +7,43 @@ import useTimeTableStore from '../../timeTable/useTimeTableStore';
 import usePostStore from '../usePostStore';
 import { MyContext } from '../../../../App';
 
-import getTimeTable from '../../timeTable/getTimeTable';
-import back from "../../../../assets/image/back_black.png";
+import back from '../../../../assets/image/back_black.png';
 const StudyPostField = () => {
-  const { tableInfos, setTableInfos,setFilteredInfos, showData, setShowData, setSubjectName } =
-    useTimeTableStore();
+  const {
+    tableInfos,
+    setTableInfos,
+    setFilteredInfos,
+    showData,
+    setShowData,
+    setSubjectName,
+  } = useTimeTableStore();
   const { setCategory } = usePostStore();
   const [selectingState, setSelectingState] = useState(0); //0->단과대,1->학과,2->과목이 띄워짐
-  const [college,setCollege]=useState(null);
-  const [department,setDepartment]=useState(null);
+  const [college, setCollege] = useState(null);
+  const [department, setDepartment] = useState(null);
 
   //모달 닫기
   const { setModalOpen } = useContext(MyContext);
-  
+
   //이전 값으로 초기화
-  const filteringBefore=(state)=>{
-    if(state===0){
+  const filteringBefore = state => {
+    if (state === 0) {
       setFilteredInfos(tableInfos);
       setShowData(
         Array.from(new Set(tableInfos.map(row => row[1]).filter(Boolean)))
       );
-    }
-    else if(state===1){
+    } else if (state === 1) {
       const newTableInfo = tableInfos.filter(row => {
-        if(row[1]===college){
+        if (row[1] === college) {
           return row;
         }
       });
       setFilteredInfos(newTableInfo);
       setShowData(
-          Array.from(new Set(newTableInfo.map(row => row[2]).filter(Boolean)))
+        Array.from(new Set(newTableInfo.map(row => row[2]).filter(Boolean)))
       );
     }
-  }
+  };
 
   //다음 데이터 갱신
   const selectHandle = (item, state) => {
@@ -50,10 +54,10 @@ const StudyPostField = () => {
         Array.from(new Set(newTableInfo.map(row => row[2]).filter(Boolean)))
       );
       setCollege(item);
-      setSelectingState(s=>s+1);
+      setSelectingState(s => s + 1);
     } else if (state === 1) {
       const newTableInfo = tableInfos.filter(row => {
-        if(row[1]===college && row[2] === item){
+        if (row[1] === college && row[2] === item) {
           return row;
         }
       });
@@ -64,10 +68,15 @@ const StudyPostField = () => {
         )
       );
       setDepartment(item);
-      setSelectingState(s=>s+1);
+      setSelectingState(s => s + 1);
     } else if (state === 2) {
       const newTableInfo = tableInfos.filter(row => {
-        if (row[1]===college && row[2]===department && row[3] === item[0] && row[4] === item[1] ) {
+        if (
+          row[1] === college &&
+          row[2] === department &&
+          row[3] === item[0] &&
+          row[4] === item[1]
+        ) {
           return row;
         }
       });
@@ -76,13 +85,12 @@ const StudyPostField = () => {
       setCategory(newTableInfo[0][0]);
       setSubjectName(item[0]);
 
-
       //다시 초기화
       setFilteredInfos([...tableInfos]);
       setShowData(
         Array.from(new Set(tableInfos.map(row => row[1]).filter(Boolean)))
       );
-      
+
       setSelectingState(0);
 
       //모달 닫기
@@ -90,30 +98,35 @@ const StudyPostField = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(selectingState);
-  },[selectingState]);
+  }, [selectingState]);
 
-  const clickBack=()=>{
+  const clickBack = () => {
     //다음값 데이터 초기화
-    filteringBefore(selectingState-1);
+    filteringBefore(selectingState - 1);
 
     //상태 값 초기화
-    if(selectingState===1){
+    if (selectingState === 1) {
       setCollege(null);
-    }
-    else if(selectingState){
+    } else if (selectingState) {
       setDepartment(null);
     }
-    
+
     //이전 단계로 돌아가기
-    setSelectingState(s=>s-1);
-  }
+    setSelectingState(s => s - 1);
+  };
   return (
     <div className={style.container}>
       <header className={style.header}>
-        {selectingState > 0 ? <img className={style.backImg} src={back} alt="back" onClick={clickBack}/>
-        :null}
+        {selectingState > 0 ? (
+          <img
+            className={style.backImg}
+            src={back}
+            alt="back"
+            onClick={clickBack}
+          />
+        ) : null}
         <span>학교수업 스터디</span>
       </header>
       <div className={style.search_container}>
@@ -122,7 +135,7 @@ const StudyPostField = () => {
           <input
             className={style.search_input}
             type="text"
-            placeholder="검색어 입력"
+            placeholder="검색어 입력 (과목명 또는 교수명)"
           />
         </div>
       </div>

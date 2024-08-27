@@ -39,6 +39,7 @@ import { useNavigate } from 'react-router-dom';
 //강의 시간표
 import getTimeTable from '../timeTable/getTimeTable';
 import { toast } from 'sonner';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 const StudyPostWrite = props => {
   const {
     title,
@@ -195,14 +196,13 @@ const StudyPostWrite = props => {
         }
       );
 
-      console.log("error???????????????" + response.status);
+      console.log('error???????????????' + response.status);
       if (response.status === 413) {
         return 'imgError';
       }
 
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
-
 
       console.log(data);
 
@@ -253,7 +253,7 @@ const StudyPostWrite = props => {
     }
 
     if (imgFiles.length > 0) {
-      console.log('11111111111111111111111111111111')
+      console.log('11111111111111111111111111111111');
       try {
         await imgUpload(studyId);
         console.log(await imgUpload(studyId));
@@ -430,6 +430,7 @@ const StudyPostWrite = props => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종스터디" />
       <div className={style.innerConatiner}>
         <PostHeader onOpenConfirmModal={openConfirmModal} />
         <div className={style.contentContainer}>
