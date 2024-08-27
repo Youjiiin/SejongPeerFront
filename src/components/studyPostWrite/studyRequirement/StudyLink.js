@@ -7,7 +7,7 @@ const StudyLink = () => {
   };
   return (
     <div className={style.openChatBox}>
-      <p>신청 수락 시, 오픈채팅 링크(카카오ID)가 신청자에게 전달됩니다.</p>
+      <p>모집 마감 시, 오픈채팅 링크(카카오ID)가 신청자에게 전달됩니다.</p>
       <input
         onChange={handleLinkChange}
         value={studyLink}
