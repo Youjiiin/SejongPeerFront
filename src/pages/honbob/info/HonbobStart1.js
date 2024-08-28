@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import style from './HonbobStart.module.css';
 import { SubHeader } from '../../../components/headerRefactor/SubHeader';
+import COLORS from 'theme';
 
 const HonbobStart1 = () => {
   const [countHonbab, setCountHonbab] = useState(0);
@@ -58,10 +58,11 @@ const HonbobStart1 = () => {
           <div className={style.honbobLogo}></div>
           <div className={style.informContext}>
             <div className={style.context1}>
-              '혼축탈출'는 대동제 기간(5월 29일~5월 31일)동안
+              혼밥탈출은 혼자 밥을 먹어야하는
             </div>
             <div className={style.context1}>
-              <b>함께 다닐 수 있는 학우를 구할 수 있는 프로그램입니다.</b>
+              상황에 <span style={{ color: `${COLORS.main}` }}>밥짝꿍</span>을
+              찾는 서비스입니다.
             </div>
           </div>
           <div className={style.findContext}>
@@ -69,12 +70,12 @@ const HonbobStart1 = () => {
             <div>
               <b>
                 <span style={{ fontWeight: '700' }}>{countHonbab}</span>명의
-                학생들이 대동지를 찾고있어요!
+                학생들이 밥짝꿍을 찾고있어요!
               </b>
             </div>
           </div>
           <button className={style.submitBtn} onClick={HonbobHandler}>
-            혼축탈출 신청하기
+            혼밥탈출 신청하기
           </button>
         </div>
       </div>

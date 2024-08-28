@@ -233,13 +233,11 @@ const StudyContainer = styled.div`
 
 const StudyButton = styled.img`
   width: 152px;
-  height: 136px;
-  background-image: url(${props => props.backgroundImage});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-color: white;
+  height: auto;
   border: none;
+  @media (max-width: 768px) {
+    width: 41vw;
+  }
 `;
 
 const KakaoButton = styled.button`
@@ -264,7 +262,9 @@ const KakaoImage = styled.img`
 `;
 
 const KakaoText = styled.p`
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   color: ${COLORS.font2};
+  @media (max-width: 768px) {
+  }
 `;
