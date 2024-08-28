@@ -9,6 +9,7 @@ import ProgressBar from '../../progressBar/ProgressBar_Honbob.js';
 
 import style from '../css/Honbob_Matching.module.css';
 import { toast } from 'sonner';
+import { SubHeader } from '../../../../components/headerRefactor/SubHeader.js';
 
 const Honbob_Matching = () => {
   const [slide, setSlide] = useState(0);
@@ -146,6 +147,7 @@ const Honbob_Matching = () => {
 
   return (
     <div className={style.wrapper} style={mediaWidth}>
+      <SubHeader text="혼밥탈출" />
       <div className={style.formWrapper} style={Slide}>
         <H_Gender
           sendChoiceGenderData={GenderChoiceData}

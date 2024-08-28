@@ -472,6 +472,7 @@ const Content = styled.div`
   line-height: 24px;
   letter-spacing: -0.333px;
   text-align: left;
+  word-break: break-all;
 `;
 
 const TagContainer = styled.div`
