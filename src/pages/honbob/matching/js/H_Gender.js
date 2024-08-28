@@ -38,7 +38,7 @@ const H_Gender = props => {
           className={clickDontCareBtnColor}
           onClick={clickDontCareBtnHandler}
         >
-          이성
+          상관없음
         </button>
       </div>
       {/* <div className={con.fightImg}></div> */}
