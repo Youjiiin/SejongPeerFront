@@ -23,7 +23,6 @@ html {
   flex-direction: column;
   align-items: center;
   position: relative;
-  margin-top: 100px;
   background-color: #fff7f7;
 }
 
@@ -37,7 +36,6 @@ html {
 }
 
 .title {
-  margin: 1vh 0px 1vh 0px;
   font-size: 0.8em;
   font-weight: 600;
   text-align: center;
@@ -98,7 +96,6 @@ html {
     flex-direction: column;
     align-items: center;
     position: relative;
-    margin-top: 84px;
     overflow-y: hidden;
   }
 
@@ -112,9 +109,9 @@ html {
   }
 
   .title {
-    margin: 1vh 0px 1vh 0px;
     font-size: 1.1em;
     font-weight: bold;
+    margin-top: 40px;
   }
 
   .finaltitle {
