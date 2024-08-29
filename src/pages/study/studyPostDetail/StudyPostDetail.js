@@ -76,17 +76,14 @@ const StudyListPostDetail = () => {
         const data = await fetchStudyData(studyId);
         setStudyData(data);
 
+        // 서버에서 지원 여부 상태 가져오기
+        setApplied(data.data.isApplied); // 서버 응답의 isApplied 상태로 설정
+
         // 스크랩 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
         const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
         setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
 
-        // 지원 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
-        const appliedStatus = localStorage.getItem(`isApplied_${studyId}`);
-        setApplied(
-          appliedStatus ? JSON.parse(appliedStatus) : data.data.isApplied
-        );
-
-        // 스크랩 카운트 설정
+        // 서버에서 스크랩 카운트 가져오기
         const scrapData = await fetchScrapCount(studyId);
         setScrapCount(scrapData.data);
       } catch (error) {
@@ -121,8 +118,7 @@ const StudyListPostDetail = () => {
         const response = await cancelStudyApplication(studyId);
         if (response.status === 200) {
           toast.success('지원 취소 완료');
-          setApplied(false);
-          localStorage.setItem(`isApplied_${studyId}`, JSON.stringify(false));
+          setApplied(false); // 지원 취소 응답에 따라 상태 업데이트
         } else {
           console.error('Failed to cancel study application:', response);
         }
@@ -130,8 +126,7 @@ const StudyListPostDetail = () => {
         const response = await applyForStudy(studyId);
         if (response.status === 201) {
           toast.success('지원 완료!');
-          setApplied(true);
-          localStorage.setItem(`isApplied_${studyId}`, JSON.stringify(true));
+          setApplied(true); // 지원 완료 응답에 따라 상태 업데이트
         } else {
           console.error('Failed to apply for study:', response);
         }
@@ -139,8 +134,7 @@ const StudyListPostDetail = () => {
     } catch (error) {
       if (error.response && error.response.status === 409) {
         toast.error('이미 신청한 스터디입니다!');
-        setApplied(true);
-        localStorage.setItem(`isApplied_${studyId}`, JSON.stringify(true));
+        setApplied(true); // 이미 신청한 상태로 설정
       } else if (error.response.status === 403) {
         toast.error('1시간 패널티 부과 중입니다!');
       } else {

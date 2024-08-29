@@ -26,6 +26,7 @@ export const fetchStudyData = async studyId => {
       headers: getAuthHeaders(),
     }
   );
+  console.log(response.data);
   return response.data;
 };
 

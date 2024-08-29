@@ -29,7 +29,7 @@ export const SubHeader = ({ text }) => {
       </Container2>
       <Login src={user} onClick={handleUserClick} alt="User Icon" />
     </Container>
-  ); 
+  );
 };
 
 const Container = styled.div`
