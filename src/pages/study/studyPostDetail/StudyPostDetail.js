@@ -76,17 +76,11 @@ const StudyListPostDetail = () => {
         const data = await fetchStudyData(studyId);
         setStudyData(data);
 
-<<<<<<< Updated upstream
-        // 스크랩 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
-        const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
-        setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
-=======
         // 서버에서 지원 여부 상태 가져오기
         setApplied(data.data.isApplied);
 
         // 서버에서 스크랩 여부 상태 가져오기
         setScrapped(data.data.isScrapped); // 서버 데이터의 isScrapped 사용
->>>>>>> Stashed changes
 
         // 지원 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
         const appliedStatus = localStorage.getItem(`isApplied_${studyId}`);
