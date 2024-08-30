@@ -76,9 +76,17 @@ const StudyListPostDetail = () => {
         const data = await fetchStudyData(studyId);
         setStudyData(data);
 
+<<<<<<< Updated upstream
         // 스크랩 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
         const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
         setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
+=======
+        // 서버에서 지원 여부 상태 가져오기
+        setApplied(data.data.isApplied);
+
+        // 서버에서 스크랩 여부 상태 가져오기
+        setScrapped(data.data.isScrapped); // 서버 데이터의 isScrapped 사용
+>>>>>>> Stashed changes
 
         // 지원 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
         const appliedStatus = localStorage.getItem(`isApplied_${studyId}`);
@@ -151,23 +159,18 @@ const StudyListPostDetail = () => {
 
   const toggleScrapHandler = async () => {
     try {
+      // 서버와 통신하여 스크랩 상태를 토글
       const response = await toggleScrap(studyId, isScrapped);
       if (response.status === 200) {
         const newScrappedStatus = !isScrapped;
-        setScrapped(newScrappedStatus);
-        localStorage.setItem(
-          `isScrapped_${studyId}`,
-          JSON.stringify(newScrappedStatus)
-        );
+        setScrapped(newScrappedStatus); // 서버 응답에 따라 스크랩 상태 업데이트
 
         if (newScrappedStatus) {
           toast.success('스크랩에 추가합니다!');
-          localStorage.setItem(`scrapId_${studyId}`, response.data.data);
-          setScrapCount(scrapCount + 1);
+          setScrapCount(scrapCount + 1); // 스크랩 카운트 증가
         } else {
           toast.error('스크랩에서 제거합니다!');
-          localStorage.removeItem(`scrapId_${studyId}`);
-          setScrapCount(scrapCount - 1);
+          setScrapCount(scrapCount - 1); // 스크랩 카운트 감소
         }
       } else {
         console.error('Failed to toggle scrap:', response);
@@ -177,6 +180,7 @@ const StudyListPostDetail = () => {
         toast.error('권한이 없음.');
       } else {
         console.error('Failed to toggle scrap:', error);
+        toast.error('스크랩 상태 변경 중 오류가 발생했습니다.');
       }
     }
   };
@@ -318,6 +322,7 @@ const StudyListPostDetail = () => {
             </ApplyButton>
           )}
         </CommentContainer>
+
         {isPopupVisible && (
           <Popup
             title={popupTitle}
