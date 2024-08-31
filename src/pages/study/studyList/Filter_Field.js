@@ -122,28 +122,22 @@ const Filter_Field = ({ deleteHandler }) => {
       const filterValues = { category, member, recruiting };
       const data = await searchHandler(filterValues);
       setPosts(data[0].data);
-
     } catch (error) {
       console.error('Error during submit:', error);
     }
   };
-
+  const searchText = () => {};
   return (
     <div className={style.container}>
       <header className={style.header}>
         {selectingState > 0 ? (
-          <img
-            className={style.backImg}
-            src={back}
-            alt="back"
-            onClick={clickBack}
-          />
+          <img className={style.backImg} src={back} alt="back" />
         ) : null}
         <span>학교수업 스터디</span>
       </header>
       <div className={style.search_container}>
         <div className={style.search_wrapper}>
-          <img src={search} alt="search" />
+          <img src={search} alt="search" onClick={searchText} />
           <input
             className={style.search_input}
             type="text"
