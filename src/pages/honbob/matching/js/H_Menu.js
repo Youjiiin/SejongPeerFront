@@ -31,7 +31,7 @@ const H_Menu = props => {
 
   return (
     <div className={con.container}>
-      <p className={con.title}>원하는 축제 액티비티를 선택해주세요!</p>
+      <p className={con.title}>원하는 식사 종류를 선택해주세요!</p>
       <div className={style.menuContainer}>
         {menu.map((val, index) => (
           <button

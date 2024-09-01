@@ -99,7 +99,7 @@ const HonbobWaiting = () => {
       <SubHeader text="혼밥탈출" />
       <div className={style.TextBox}>
         <img src={honbobWaitingLogo} className={style.honbobWaitingImg} />
-        <p className={style.Text1}>밥짝꿍 동지 찾는 중{dots}</p>
+        <p className={style.Text1}>밥짝꿍 찾는 중{dots}</p>
         <p className={style.Text2}>
           <span className={style.Text2_span1}>*</span>
           <span className={style.Text2_span2}>
