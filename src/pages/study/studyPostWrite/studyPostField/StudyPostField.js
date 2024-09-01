@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import style from './StudyPostField.module.css';
 import search from '../../../../assets/image/search_gray.png';
 
@@ -8,6 +8,7 @@ import usePostStore from '../usePostStore';
 import { MyContext } from '../../../../App';
 
 import back from '../../../../assets/image/back_black.png';
+import { type } from '@testing-library/user-event/dist/type';
 const StudyPostField = () => {
   const {
     tableInfos,
@@ -21,6 +22,7 @@ const StudyPostField = () => {
   const [selectingState, setSelectingState] = useState(0); //0->단과대,1->학과,2->과목이 띄워짐
   const [college, setCollege] = useState(null);
   const [department, setDepartment] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
 
   //모달 닫기
   const { setModalOpen } = useContext(MyContext);
@@ -63,15 +65,23 @@ const StudyPostField = () => {
       });
       setFilteredInfos(newTableInfo);
       setShowData(
-        Array.from(
-          new Set(newTableInfo.map(row => [row[3], row[4]]).filter(Boolean))
+        Array.from(new Set(newTableInfo.map(row => [row[3], row[4]]))).filter(
+          Boolean
         )
       );
+
       setDepartment(item);
       setSelectingState(s => s + 1);
     } else if (state === 2) {
       const newTableInfo = tableInfos.filter(row => {
         if (
+          college === null &&
+          department === null &&
+          row[3] === item[0] &&
+          row[4] === item[1]
+        ) {
+          return row;
+        } else if (
           row[1] === college &&
           row[2] === department &&
           row[3] === item[0] &&
@@ -98,9 +108,9 @@ const StudyPostField = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(selectingState);
-  }, [selectingState]);
+  // useEffect(() => {
+  //   console.log(selectingState);
+  // }, [selectingState]);
 
   const clickBack = () => {
     //다음값 데이터 초기화
@@ -115,6 +125,46 @@ const StudyPostField = () => {
 
     //이전 단계로 돌아가기
     setSelectingState(s => s - 1);
+    if (isSearch) {
+      filteringBefore(0);
+      console.log('selectingState:', selectingState);
+      setSelectingState(0);
+    }
+  };
+
+  const inputRef = useRef(null);
+
+  const handleSearchClick = () => {
+    if (inputRef.current) {
+      setCollege(null);
+      setDepartment(null);
+      const item = inputRef.current.value + '';
+      if (item) {
+        const newTableInfo = tableInfos.filter(row => {
+          return (
+            (row[3] && row[3].includes(item)) ||
+            (row[4] && row[4].includes(item))
+          );
+        });
+        setFilteredInfos(newTableInfo);
+        setShowData(
+          Array.from(
+            new Set(newTableInfo.map(row => [row[3], row[4]]).filter(Boolean))
+          )
+        );
+
+        const filteredArray = Array.from(
+          new Set(
+            newTableInfo
+              .map(row => [row[3], row[4]])
+              .filter(([value1, value2]) => value1 !== '' && value2 !== '')
+          )
+        );
+
+        setSelectingState(2);
+        setIsSearch(true);
+      }
+    }
   };
   return (
     <div className={style.container}>
@@ -131,11 +181,12 @@ const StudyPostField = () => {
       </header>
       <div className={style.search_container}>
         <div className={style.search_wrapper}>
-          <img src={search} alt="search" />
+          <img src={search} alt="search" onClick={handleSearchClick} />
           <input
             className={style.search_input}
             type="text"
             placeholder="검색어 입력 (과목명 또는 교수명)"
+            ref={inputRef}
           />
         </div>
       </div>

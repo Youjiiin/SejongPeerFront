@@ -18,8 +18,8 @@ const StudyMyPost = () => {
   const [externals, setExternals] = useState([]);
   const [lectures, setLectures] = useState([]);
   const [isEndBtnClick, setIsEndBtnClick] = useState(false);
-  const [isClickBtn, setIsClickBtn] = useState(false);
   const { state } = useMypostStore();
+  const [clickType, setClickType] = useState(null);
   const {
     isPopupVisible,
     popupMessage,
@@ -29,6 +29,22 @@ const StudyMyPost = () => {
     setPopupTitle,
   } = usePopupStroe();
 
+  //데이터 로드
+  const loadPosts = async () => {
+    try {
+      const fetchedPosts = await fetchMyPost();
+      console.log(fetchedPosts);
+      setExternals(fetchedPosts.external);
+      setLectures(fetchedPosts.lecture);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  //토글 handling
   const togglePopup = ({ message, title }) => {
     setPopupTitle(title);
     setPopupMessage(message);
@@ -38,7 +54,12 @@ const StudyMyPost = () => {
   const closePopup = () => {
     setPopupVisible(false);
     setIsEndBtnClick(false);
+    if (clickType === 'error') {
+      console.log('state:', clickType);
+      loadPosts();
+    }
   };
+
   useEffect(() => {}, [isEndBtnClick]);
 
   useEffect(() => {
@@ -46,21 +67,6 @@ const StudyMyPost = () => {
     const type = searchParams.get('type');
     setPostType(type || 'lecture');
   }, [state]);
-
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const fetchedPosts = await fetchMyPost();
-        console.log(fetchedPosts);
-        setExternals(fetchedPosts.external);
-        setLectures(fetchedPosts.lecture);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
-    };
-
-    loadPosts();
-  }, []);
 
   const updateStudyMatchingStatus = (
     externalIndex,
@@ -70,17 +76,22 @@ const StudyMyPost = () => {
     const updateState = setStateFunction => {
       setStateFunction(prevState => {
         const newState = [...prevState];
+
         console.log(newState[externalIndex].applicants);
 
-        const updatedApplicants = [...newState[externalIndex].applicants]; // applicant 배열의 얕은 복사본 생성
+        const updatedApplicants = [...newState[externalIndex].applicants];
 
         updatedApplicants[applicantIndex] = {
           ...updatedApplicants[applicantIndex],
           studyMatchingStatus: newStatus,
         };
-
+        console.log(newState[externalIndex]);
         newState[externalIndex] = {
           ...newState[externalIndex],
+          participantsCount:
+            newStatus === 'ACCEPT'
+              ? newState[externalIndex].participantsCount + 1
+              : newState[externalIndex].participantsCount,
           applicants: updatedApplicants,
         };
 
@@ -102,6 +113,7 @@ const StudyMyPost = () => {
     nickname,
     value
   ) => {
+    setClickType('error');
     const patchData = {
       studyId: studyId,
       applicantNickname: nickname,
@@ -109,12 +121,30 @@ const StudyMyPost = () => {
     };
     try {
       const response = await applicantSelection(patchData);
-      console.log(index);
+      console.log(response);
+      const accState = value === true ? 'ACCEPT' : 'REJECT';
+      updateStudyMatchingStatus(studyIndex, appIndex, accState);
     } catch (error) {
-      console.log(error);
+      const errClass = error.response.data.data.errorClassName;
+
+      if (errClass === 'INVALID_STUDY_MATHCING_STATUS_UPDATE_CONDITION') {
+        setIsEndBtnClick(true);
+        const popUpData = {
+          title: '',
+          message: '지원을 취소한 지원자입니다.',
+        };
+        togglePopup(popUpData);
+      } else if (errClass === 'STUDY_APPLICANT_CANNOT_BE_ACCEPTED') {
+        setIsEndBtnClick(true);
+        const popUpData = {
+          title: '',
+          message: '모집이 완료 되었습니다.',
+        };
+        togglePopup(popUpData);
+      }
+      console.log(error.response.data.data);
     }
-    const state = value === true ? 'ACCEPT' : 'REJECT';
-    updateStudyMatchingStatus(studyIndex, appIndex, state);
+
     const msg = value === true ? '수락' : '거절';
     toast.info(`${msg}되었습니다`);
   };
@@ -128,6 +158,7 @@ const StudyMyPost = () => {
         title: '스터디 마감 완료',
         message: '수락한 지원자들에겐 오픈채팅방 링크가 전달됩니다.',
       };
+
       togglePopup(popUpData);
     } catch (error) {
       console.log(error);

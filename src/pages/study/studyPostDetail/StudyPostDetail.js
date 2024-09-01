@@ -145,23 +145,18 @@ const StudyListPostDetail = () => {
 
   const toggleScrapHandler = async () => {
     try {
+      // 서버와 통신하여 스크랩 상태를 토글
       const response = await toggleScrap(studyId, isScrapped);
       if (response.status === 200) {
         const newScrappedStatus = !isScrapped;
-        setScrapped(newScrappedStatus);
-        localStorage.setItem(
-          `isScrapped_${studyId}`,
-          JSON.stringify(newScrappedStatus)
-        );
+        setScrapped(newScrappedStatus); // 서버 응답에 따라 스크랩 상태 업데이트
 
         if (newScrappedStatus) {
           toast.success('스크랩에 추가합니다!');
-          localStorage.setItem(`scrapId_${studyId}`, response.data.data);
-          setScrapCount(scrapCount + 1);
+          setScrapCount(scrapCount + 1); // 스크랩 카운트 증가
         } else {
           toast.error('스크랩에서 제거합니다!');
-          localStorage.removeItem(`scrapId_${studyId}`);
-          setScrapCount(scrapCount - 1);
+          setScrapCount(scrapCount - 1); // 스크랩 카운트 감소
         }
       } else {
         console.error('Failed to toggle scrap:', response);
@@ -171,6 +166,7 @@ const StudyListPostDetail = () => {
         toast.error('권한이 없음.');
       } else {
         console.error('Failed to toggle scrap:', error);
+        toast.error('스크랩 상태 변경 중 오류가 발생했습니다.');
       }
     }
   };
@@ -312,6 +308,7 @@ const StudyListPostDetail = () => {
             </ApplyButton>
           )}
         </CommentContainer>
+
         {isPopupVisible && (
           <Popup
             title={popupTitle}
