@@ -61,7 +61,8 @@ const BuddyAccept = () => {
       isAccept: accept,
     };
 
-    fetch(process.env.REACT_APP_BACK_SERVER + '/buddyMatching/status', {
+
+    fetch(process.env.REACT_APP_BACK_SERVER + '/buddy/matching/status', {
       method: 'POST',
       body: JSON.stringify(acceptInfo),
       headers: {
@@ -72,6 +73,7 @@ const BuddyAccept = () => {
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data)
         if (accept) {
           toast.success(
             '매칭이 수락되었습니다! \n상대방이 매칭을 수락할 때까지 기다려주세요.'

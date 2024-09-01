@@ -21,6 +21,7 @@ import {
   fetchScrapCount,
   deletePostHandler,
 } from './api';
+
 const StudyListPostDetail = () => {
   const {
     studyData,
@@ -32,6 +33,7 @@ const StudyListPostDetail = () => {
     setScrapped,
     setScrapCount,
   } = useStore();
+
   const {
     isPopupVisible,
     popupMessage,
@@ -42,76 +44,67 @@ const StudyListPostDetail = () => {
   } = usePopupStroe();
 
   const { studyId } = useParams();
-
   const navigate = useNavigate();
+
+  const [isImgOpen, setImgOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isWriter, setIsWriter] = useState(false);
+  const [ismodalOpen, setIsmodalOpen] = useState(false);
+
   const modifyHandler = () => {
     navigate(`/study/modify/${studyId}`);
   };
-
-  const [isImgOpen, setImgOpen] = useState();
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageClick = image => {
     setSelectedImage(image);
     setImgOpen(true);
   };
 
-  // 게시글 삭제
   const deleteHandler = async () => {
     try {
-      const data = await deletePostHandler(studyId);
-      console.log(data);
+      await deletePostHandler(studyId);
       toast.success('게시글이 삭제되었습니다!');
       navigate('/study');
     } catch (error) {
-      console.error('Error fetching study data:', error);
+      toast.error('게시글 삭제 실패!', error);
     }
   };
 
-  const [ismodalOpen, setIsmodalOpen] = useState(false);
-
-  // 스크랩
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchStudyData(studyId);
         setStudyData(data);
 
+        // 스크랩 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
         const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
         setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
 
+        // 지원 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
         const appliedStatus = localStorage.getItem(`isApplied_${studyId}`);
-        if (appliedStatus) {
-          setApplied(JSON.parse(appliedStatus));
-        }
+        setApplied(
+          appliedStatus ? JSON.parse(appliedStatus) : data.data.isApplied
+        );
 
-        // fetchScrapCount 함수에서 올바른 데이터를 받고 있는지 확인합니다.
+        // 스크랩 카운트 설정
         const scrapData = await fetchScrapCount(studyId);
-        console.log('scrapData:', scrapData); // 콘솔에 스크랩 데이터 출력
         setScrapCount(scrapData.data);
       } catch (error) {
-        console.error(error);
+        toast.error('스터디 데이터를 가져오는데 실패했습니다!', error);
       }
     };
 
     fetchData();
   }, [studyId, setStudyData, setScrapped, setApplied, setScrapCount]);
 
-  // 작성자 확인
-  const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
     const getNick = localStorage.getItem('nickname');
-
     if (studyData && getNick === studyData.data.writerNickname) {
       setIsWriter(true);
     } else {
       setIsWriter(false);
     }
   }, [studyData]);
-
-  if (!studyData) {
-    return <div>Loading..</div>;
-  }
 
   const togglePopup = message => {
     setPopupMessage(message);
@@ -122,7 +115,6 @@ const StudyListPostDetail = () => {
     setPopupVisible(false);
   };
 
-  // 지원하기
   const applyForStudyHandler = async () => {
     try {
       if (isApplied) {
@@ -130,18 +122,16 @@ const StudyListPostDetail = () => {
         if (response.status === 200) {
           toast.success('지원 취소 완료');
           setApplied(false);
-          localStorage.setItem(`isApplied_${studyId}`, false);
+          localStorage.setItem(`isApplied_${studyId}`, JSON.stringify(false));
         } else {
           console.error('Failed to cancel study application:', response);
         }
       } else {
         const response = await applyForStudy(studyId);
         if (response.status === 201) {
-          toast.success(
-            '지원 완료! 모집자가 수락 후, 모집인원이 다 차거나 마감일이 되면 메시지로 오픈채팅 링크가 전달됩니다.'
-          );
+          toast.success('지원 완료!');
           setApplied(true);
-          localStorage.setItem(`isApplied_${studyId}`, true);
+          localStorage.setItem(`isApplied_${studyId}`, JSON.stringify(true));
         } else {
           console.error('Failed to apply for study:', response);
         }
@@ -149,15 +139,12 @@ const StudyListPostDetail = () => {
     } catch (error) {
       if (error.response && error.response.status === 409) {
         toast.error('이미 신청한 스터디입니다!');
-
         setApplied(true);
-        localStorage.setItem(`isApplied_${studyId}`, true);
+        localStorage.setItem(`isApplied_${studyId}`, JSON.stringify(true));
+      } else if (error.response.status === 403) {
+        toast.error('1시간 패널티 부과 중입니다!');
       } else {
         console.error('Error applying for study:', error);
-      }
-
-      if (error.response.status === 403) {
-        toast.error('1시간 패널티 부과 중입니다!');
       }
     }
   };
@@ -168,7 +155,10 @@ const StudyListPostDetail = () => {
       if (response.status === 200) {
         const newScrappedStatus = !isScrapped;
         setScrapped(newScrappedStatus);
-        localStorage.setItem(`isScrapped_${studyId}`, newScrappedStatus);
+        localStorage.setItem(
+          `isScrapped_${studyId}`,
+          JSON.stringify(newScrappedStatus)
+        );
 
         if (newScrappedStatus) {
           toast.success('스크랩에 추가합니다!');
@@ -180,16 +170,20 @@ const StudyListPostDetail = () => {
           setScrapCount(scrapCount - 1);
         }
       } else {
-        console.error('스크랩 실패:', response);
+        console.error('Failed to toggle scrap:', response);
       }
     } catch (error) {
       if (error.response && error.response.status === 403) {
         toast.error('권한이 없음.');
       } else {
-        console.error('스크랩 실패:', error);
+        console.error('Failed to toggle scrap:', error);
       }
     }
   };
+
+  if (!studyData) {
+    return <div>Loading..</div>;
+  }
 
   return (
     <Container>
@@ -197,23 +191,16 @@ const StudyListPostDetail = () => {
       <Wrapper>
         <Title>
           {studyData.data.title}
-          {isWriter ? (
+          {isWriter && (
             <img
               src={more}
-              style={{
-                width: '24px',
-                height: '24px',
-              }}
+              style={{ width: '24px', height: '24px' }}
               alt="more"
-              onClick={() => {
-                setIsmodalOpen(!ismodalOpen);
-              }}
+              onClick={() => setIsmodalOpen(!ismodalOpen)}
             />
-          ) : (
-            <></>
           )}
         </Title>
-        {ismodalOpen ? (
+        {ismodalOpen && (
           <MoreModal>
             <div
               style={{
@@ -247,8 +234,6 @@ const StudyListPostDetail = () => {
               삭제하기
             </p>
           </MoreModal>
-        ) : (
-          <></>
         )}
         <FlexContainer>
           <Title2>{studyData.data.writerMajor}</Title2>
@@ -258,7 +243,7 @@ const StudyListPostDetail = () => {
           <ApplicationPeriod>지원기간</ApplicationPeriod>
           <ApplicationPeriod2>
             {studyData.data.recruitmentStart}
-          </ApplicationPeriod2>
+          </ApplicationPeriod2>{' '}
           ~
           <ApplicationPeriod3>
             {studyData.data.recruitmentEnd}
@@ -278,7 +263,6 @@ const StudyListPostDetail = () => {
           <Tag>
             <TagText>{studyData.data.categoryName}</TagText>
           </Tag>
-
           {studyData.data.tags.map((tag, index) => (
             <Tag2 key={index}>
               <TagText2>{tag}</TagText2>
@@ -291,11 +275,7 @@ const StudyListPostDetail = () => {
           {studyData.data.imgUrlList &&
             studyData.data.imgUrlList.map(image => (
               <img
-                style={{
-                  width: '100px',
-                  height: '100px',
-                  borderRadius: '8px',
-                }}
+                style={{ width: '100px', height: '100px', borderRadius: '8px' }}
                 key={image.imageId}
                 src={image.imgUrl}
                 alt={`Image ${image.imageId}`}
@@ -331,10 +311,7 @@ const StudyListPostDetail = () => {
               {`신청현황 보기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
             </ApplyButton>
           ) : (
-            <ApplyButton 
-              onClick={applyForStudyHandler} 
-              // isApplied={isApplied}
-            >
+            <ApplyButton onClick={applyForStudyHandler}>
               {isApplied
                 ? '지원취소'
                 : `지원하기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
@@ -345,9 +322,7 @@ const StudyListPostDetail = () => {
           <Popup
             title={popupTitle}
             message={popupMessage}
-            message2={
-              '*스터디 신청 후 취소할 시, 취소한 스터디의 지원에 1시간 제한이 생깁니다.'
-            }
+            message2="*스터디 신청 후 취소할 시, 취소한 스터디의 지원에 1시간 제한이 생깁니다."
             onClose={closePopup}
           />
         )}

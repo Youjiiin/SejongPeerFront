@@ -134,7 +134,7 @@ const StudyList = () => {
           {category === 0 ? (
             <p style={{
               fontSize: '14px',
-            }}>스터디</p>
+            }}>카테고리</p>
           ) : (
             <p
               style={{
