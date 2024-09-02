@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { searchHandler } from './api';
 
 //zustand
 import useTimeTableStore from './useTimetableStore';
 import useFilterStore from './useFilterStore';
 import useStudyStore from './useStudyStore';
+import { MyContext } from 'App';
 
 import style from './Filter_Field.module.css';
 import search from '../../../assets/image/search_gray.png';
@@ -13,6 +14,7 @@ import back from '../../../assets/image/back_black.png';
 const Filter_Field = ({ deleteHandler }) => {
   const {
     tableInfos,
+    setTableInfos,
     setFilteredInfos,
     showData,
     setShowData,
@@ -21,10 +23,14 @@ const Filter_Field = ({ deleteHandler }) => {
 
   const { setPosts } = useStudyStore();
 
-  const { category, setCategory } = useFilterStore();
+  const { setCategory } = useFilterStore();
   const [selectingState, setSelectingState] = useState(0); //0->단과대,1->학과,2->과목이 띄워짐
   const [college, setCollege] = useState(null);
   const [department, setDepartment] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
+
+  //모달 닫기
+  const { setModalOpen } = useContext(MyContext);
 
   //이전 값으로 초기화
   const filteringBefore = state => {
@@ -73,6 +79,13 @@ const Filter_Field = ({ deleteHandler }) => {
     } else if (state === 2) {
       const newTableInfo = tableInfos.filter(row => {
         if (
+          college === null &&
+          department === null &&
+          row[3] === item[0] &&
+          row[4] === item[1]
+        ) {
+          return row;
+        } else if (
           row[1] === college &&
           row[2] === department &&
           row[3] === item[0] &&
@@ -113,6 +126,11 @@ const Filter_Field = ({ deleteHandler }) => {
 
     //이전 단계로 돌아가기
     setSelectingState(s => s - 1);
+    if (isSearch) {
+      filteringBefore(0);
+      console.log('selectingState:', selectingState);
+      setSelectingState(0);
+    }
   };
 
   // 검색 핸들러
@@ -126,22 +144,61 @@ const Filter_Field = ({ deleteHandler }) => {
       console.error('Error during submit:', error);
     }
   };
-  const searchText = () => {};
+
+  const inputRef = useRef(null);
+
+  const handleSearchClick = () => {
+    if (inputRef.current) {
+      setCollege(null);
+      setDepartment(null);
+      const item = inputRef.current.value + '';
+      if (item) {
+        const newTableInfo = tableInfos.filter(row => {
+          return (
+            (row[3] && row[3].includes(item)) ||
+            (row[4] && row[4].includes(item))
+          );
+        });
+        setFilteredInfos(newTableInfo);
+        setShowData(
+          Array.from(
+            new Set(newTableInfo.map(row => [row[3], row[4]]).filter(Boolean))
+          )
+        );
+
+        const filteredArray = Array.from(
+          new Set(
+            newTableInfo
+              .map(row => [row[3], row[4]])
+              .filter(([value1, value2]) => value1 !== '' && value2 !== '')
+          )
+        );
+
+        setSelectingState(2);
+        setIsSearch(true);
+      }
+    }
+  };
   return (
     <div className={style.container}>
       <header className={style.header}>
         {selectingState > 0 ? (
-          <img className={style.backImg} src={back} alt="back" />
+          <img 
+          className={style.backImg} 
+          src={back} 
+          alt="back" 
+          onClick={clickBack}/>
         ) : null}
         <span>학교수업 스터디</span>
       </header>
       <div className={style.search_container}>
         <div className={style.search_wrapper}>
-          <img src={search} alt="search" onClick={searchText} />
+          <img src={search} alt="search" onClick={handleSearchClick} />
           <input
             className={style.search_input}
             type="text"
-            placeholder="과목명 입력"
+            placeholder="과목명 입력 (과목명 또는 교수명)"
+            ref={inputRef}
           />
         </div>
       </div>

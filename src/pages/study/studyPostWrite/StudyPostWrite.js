@@ -196,7 +196,6 @@ const StudyPostWrite = props => {
         }
       );
 
-      console.log('error???????????????' + response.status);
       if (response.status === 413) {
         return 'imgError';
       }
@@ -319,7 +318,7 @@ const StudyPostWrite = props => {
           return;
         }
       }
-      
+
       toast.success('게시글 작성 완료');
 
       setTimeout(() => {
