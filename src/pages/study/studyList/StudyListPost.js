@@ -8,7 +8,6 @@ import COLORS from '../../../theme';
 const StudyListPost = ({ post }) => {
   const {
     title,
-    createdAt,
     hasImage,
     categoryName,
     id,
