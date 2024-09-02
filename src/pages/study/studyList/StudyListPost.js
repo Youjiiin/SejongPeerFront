@@ -15,7 +15,8 @@ const StudyListPost = ({ post }) => {
     tags,
     totalRecruitmentCount,
     participantCount,
-    recruitmentStatus
+    recruitmentStatus,
+    recruitmentEndAt
   } = post;
   const isScrapped = localStorage.getItem(`isScrapped_${id}`) === 'true'; // 스크랩 상태 확인
 
@@ -44,7 +45,7 @@ const StudyListPost = ({ post }) => {
             <TagText1 key={index}>{tag}</TagText1>
           ))}
         </PostTop>
-        <DateText>~{formatDate(createdAt)}</DateText>
+        <DateText>~{formatDate(recruitmentEndAt)}</DateText>
       </div>
       <div
         style={{

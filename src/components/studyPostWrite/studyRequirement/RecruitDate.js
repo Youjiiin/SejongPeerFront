@@ -23,13 +23,6 @@ const ReucruitDate = ({ handleDatePickerFocus }) => {
     // console.log(start, ',', end);
   };
 
-  useEffect(() => {
-    console.log('Start: ', startDate);
-  }, [startDate]);
-  useEffect(() => {
-    console.log('EndDate: ', endDate);
-  }, [endDate]);
-
   const [dateRange, setDateRange] = useState({
     startDate: startDate,
     endDate: endDate,
