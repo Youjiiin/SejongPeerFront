@@ -4,6 +4,7 @@ import COLORS from 'theme';
 
 import backArrow from '../../assets/image/backArrow.png';
 import user from '../../assets/image/user.png';
+import searchWhite from 'assets/image/searchWhite.png';
 
 export const SubHeader = ({ text }) => {
   const token = localStorage.getItem('accessToken');
@@ -27,7 +28,10 @@ export const SubHeader = ({ text }) => {
         <GoBack src={backArrow} onClick={handleGoBack} alt="Go Back" />
         <Text>{text}</Text>
       </Container2>
-      <Login src={user} onClick={handleUserClick} alt="User Icon" />
+      <RightContainer>
+        <Search src={searchWhite} />
+        {/* <Login src={user} onClick={handleUserClick} alt="User Icon" /> */}
+      </RightContainer>
     </Container>
   );
 };
@@ -63,6 +67,16 @@ const Text = styled.p`
 `;
 
 const Login = styled.img`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const RightContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+const Search = styled.img`
   width: 24px;
   height: 24px;
   cursor: pointer;

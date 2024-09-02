@@ -17,9 +17,9 @@ import {
   fetchStudyData,
   applyForStudy,
   cancelStudyApplication,
-  toggleScrap,
-  fetchScrapCount,
   deletePostHandler,
+  addScrap,
+  deleteScrap, // 추가: 스크랩 삭제 함수 가져오기
 } from './api';
 
 const StudyListPostDetail = () => {
@@ -40,7 +40,6 @@ const StudyListPostDetail = () => {
     popupTitle,
     setPopupVisible,
     setPopupMessage,
-    setPopupTitle,
   } = usePopupStroe();
 
   const { studyId } = useParams();
@@ -74,18 +73,13 @@ const StudyListPostDetail = () => {
     const fetchData = async () => {
       try {
         const data = await fetchStudyData(studyId);
-        setStudyData(data);
+        console.log(data.data.isScraped);
+        setStudyData(data.data);
 
         // 서버에서 지원 여부 상태 가져오기
         setApplied(data.data.isApplied); // 서버 응답의 isApplied 상태로 설정
-
-        // 스크랩 여부 로컬 스토리지에서 불러오기 또는 서버 데이터 사용
-        const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
-        setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
-
-        // 서버에서 스크랩 카운트 가져오기
-        const scrapData = await fetchScrapCount(studyId);
-        setScrapCount(scrapData.data);
+        setScrapped(data.data.isScraped); // 서버에서 받은 isScrapped 상태로 설정
+        setScrapCount(data.data.scrapCount); // 서버에서 받은 scrapCount 설정
       } catch (error) {
         toast.error('스터디 데이터를 가져오는데 실패했습니다!', error);
       }
@@ -96,7 +90,7 @@ const StudyListPostDetail = () => {
 
   useEffect(() => {
     const getNick = localStorage.getItem('nickname');
-    if (studyData && getNick === studyData.data.writerNickname) {
+    if (studyData && getNick === studyData.writerNickname) {
       setIsWriter(true);
     } else {
       setIsWriter(false);
@@ -143,31 +137,33 @@ const StudyListPostDetail = () => {
     }
   };
 
-  const toggleScrapHandler = async () => {
+  const handleScrapToggle = async () => {
     try {
-      // 서버와 통신하여 스크랩 상태를 토글
-      const response = await toggleScrap(studyId, isScrapped);
-      if (response.status === 200) {
-        const newScrappedStatus = !isScrapped;
-        setScrapped(newScrappedStatus); // 서버 응답에 따라 스크랩 상태 업데이트
-
-        if (newScrappedStatus) {
-          toast.success('스크랩에 추가합니다!');
-          setScrapCount(scrapCount + 1); // 스크랩 카운트 증가
+      if (isScrapped) {
+        // 스크랩 삭제 로직
+        const response = await deleteScrap(studyId);
+        if (response.status === 200) {
+          toast.success('스크랩에서 제거되었습니다!');
+          setScrapped(false); // 스크랩 삭제 후 상태 업데이트
+          setScrapCount(scrapCount - 1);
         } else {
-          toast.error('스크랩에서 제거합니다!');
-          setScrapCount(scrapCount - 1); // 스크랩 카운트 감소
+          toast.error('스크랩에 실패했습니다!', response);
         }
       } else {
-        console.error('Failed to toggle scrap:', response);
+        // 스크랩 추가 로직
+        const response = await addScrap(studyId);
+        if (response.data.status === 201) {
+          const newScrapId = response.data.data.scrapId; // scrapId를 서버 응답에서 받아옴
+          toast.success('스크랩에 추가되었습니다!');
+          setScrapped(true); // 스크랩 추가 후 상태 업데이트
+          setScrapCount(scrapCount + 1);
+        } else {
+          toast.error('스크랩에 실패했습니다!', response);
+        }
       }
     } catch (error) {
-      if (error.response && error.response.status === 403) {
-        toast.error('권한이 없음.');
-      } else {
-        console.error('Failed to toggle scrap:', error);
-        toast.error('스크랩 상태 변경 중 오류가 발생했습니다.');
-      }
+      console.error(error);
+      toast.error('스크랩 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -180,7 +176,7 @@ const StudyListPostDetail = () => {
       <SubHeader text="세종스터디" />
       <Wrapper>
         <Title>
-          {studyData.data.title}
+          {studyData.title}
           {isWriter && (
             <img
               src={more}
@@ -226,44 +222,41 @@ const StudyListPostDetail = () => {
           </MoreModal>
         )}
         <FlexContainer>
-          <Title2>{studyData.data.writerMajor}</Title2>
-          <Nickname>{studyData.data.writerNickname}</Nickname>
+          <Title2>{studyData.writerMajor}</Title2>
+          <Nickname>{studyData.writerNickname}</Nickname>
         </FlexContainer>
         <FlexContainer>
           <ApplicationPeriod>지원기간</ApplicationPeriod>
           <ApplicationPeriod2>
-            {studyData.data.recruitmentStart}
+            {studyData.recruitmentStart}
           </ApplicationPeriod2>{' '}
-          ~
-          <ApplicationPeriod3>
-            {studyData.data.recruitmentEnd}
-          </ApplicationPeriod3>
+          ~<ApplicationPeriod3>{studyData.recruitmentEnd}</ApplicationPeriod3>
         </FlexContainer>
         <FlexContainer>
           <Title2>방식</Title2>
           <StudyMethod>
-            {studyData.data.studyFrequency} • {studyData.data.studyMethod}
+            {studyData.studyFrequency} • {studyData.studyMethod}
           </StudyMethod>
         </FlexContainer>
         <FlexContainer>
           <Title2>문의</Title2>
-          <StudyMethod>{studyData.data.questionKakaoLink}</StudyMethod>
+          <StudyMethod>{studyData.questionKakaoLink}</StudyMethod>
         </FlexContainer>
         <FlexContainer2>
           <Tag>
-            <TagText>{studyData.data.categoryName}</TagText>
+            <TagText>{studyData.categoryName}</TagText>
           </Tag>
-          {studyData.data.tags.map((tag, index) => (
+          {studyData.tags.map((tag, index) => (
             <Tag2 key={index}>
               <TagText2>{tag}</TagText2>
             </Tag2>
           ))}
         </FlexContainer2>
         <Line />
-        <Content>{studyData.data.content}</Content>
+        <Content>{studyData.content}</Content>
         <TagContainer>
-          {studyData.data.imgUrlList &&
-            studyData.data.imgUrlList.map(image => (
+          {studyData.imgUrlList &&
+            studyData.imgUrlList.map(image => (
               <img
                 style={{ width: '100px', height: '100px', borderRadius: '8px' }}
                 key={image.imageId}
@@ -292,19 +285,19 @@ const StudyListPostDetail = () => {
         </Modal>
 
         <CommentContainer>
-          <ScrapButton onClick={toggleScrapHandler}>
+          <ScrapButton onClick={handleScrapToggle}>
             <ScrapImage src={isScrapped ? filledHeart : heart} alt="heart" />
             <ScrapCount>{scrapCount}</ScrapCount>
           </ScrapButton>
           {isWriter ? (
             <ApplyButton onClick={() => navigate('/mypost')}>
-              {`신청현황 보기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
+              {`신청현황 보기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
             </ApplyButton>
           ) : (
             <ApplyButton onClick={applyForStudyHandler}>
               {isApplied
                 ? '지원취소'
-                : `지원하기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
+                : `지원하기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
             </ApplyButton>
           )}
         </CommentContainer>

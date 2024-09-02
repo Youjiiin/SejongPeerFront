@@ -48,7 +48,7 @@ import AppliedStudy from './pages/myPage/mypage/AppliedStudy';
 
 // 스터디
 import StudyList from '../src/pages/study/studyList/StudyList.js';
-import StudyPostDeatil from '../src/pages/study/studyPostDetail/StudyPostDetail.js';
+import StudyPostDetail from '../src/pages/study/studyPostDetail/StudyPostDetail.js';
 import StudyPostWrite from './pages/study/studyPostWrite/StudyPostWrite.js';
 import StudyFilter from '../src/pages/study/studyFilterPage/StudyFIlterPage.js';
 import StudyModify from './pages/study/studyModify/studyModify.js';
@@ -212,7 +212,7 @@ const App = () => {
               <Route path="/study" element={<StudyList />} />
               <Route
                 path="/study/post/:studyId"
-                element={<StudyPostDeatil />}
+                element={<StudyPostDetail />}
               />
               <Route path="/study/post" element={<StudyPostWrite />} />
               <Route path="/study/filter" element={<StudyFilter />} />
