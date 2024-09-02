@@ -8,7 +8,6 @@ const getAuthHeaders = () => {
 
   if (!accessToken || !refreshToken) {
     toast.error('재로그인 해야합니다!');
-    toast.error('재로그인 해야합니다!');
     throw new Error('토큰이 없음!');
   }
 
@@ -51,43 +50,30 @@ export const cancelStudyApplication = async studyId => {
   return response;
 };
 
-export const toggleScrap = async (studyId, isScrapped) => {
-  const scrapId = localStorage.getItem(`scrapId_${studyId}`);
-
-  if (isScrapped) {
-    if (!scrapId) {
-      throw new Error('스크랩 ID가 없음!');
-    }
-    const response = await axios.delete(
-      `${process.env.REACT_APP_BACK_SERVER}/scraps/${scrapId}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response;
-  } else {
-    const response = await axios.post(
-      `${process.env.REACT_APP_BACK_SERVER}/scraps/study/${studyId}`,
-      {},
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response;
-  }
-};
-
-export const fetchScrapCount = async studyId => {
-  const response = await axios.get(
+// 스터디 스크랩 추가 함수
+export const addScrap = async studyId => {
+  const response = await axios.post(
     `${process.env.REACT_APP_BACK_SERVER}/scraps/study/${studyId}`,
+    {},
     {
       headers: getAuthHeaders(),
     }
   );
-  return response.data;
+  return response;
 };
 
-//게시글 삭제 함수
+// 스터디 스크랩 삭제 함수
+export const deleteScrap = async scrapId => {
+  const response = await axios.delete(
+    `${process.env.REACT_APP_BACK_SERVER}/scraps/${scrapId}`,
+    {
+      headers: getAuthHeaders(),
+    }
+  );
+  return response;
+};
+
+// 게시글 삭제 함수
 // 단건 게시물 별 스크랩 수 조회
 export const deletePostHandler = async studyId => {
   const accessToken = localStorage.getItem('accessToken');

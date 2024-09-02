@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { toggleScrap } from '../../study/studyPostDetail/api';
+import { addScrap, deleteScrap } from '../../study/studyPostDetail/api';
 import { fetchAppliedStudies } from './api';
 import styled from 'styled-components';
 import COLORS from '../../../theme';
@@ -45,21 +45,44 @@ const AppliedStudy = () => {
 
   const handleScrapToggle = async (studyId, currentStatus, index) => {
     try {
-      const response = await toggleScrap(studyId, currentStatus);
-      if (response.status === 200) {
-        const newScrappedStatus = !currentStatus;
-        const updatedStudies = [...appliedStudies];
-        updatedStudies[index] = {
-          ...updatedStudies[index],
-          isScrapped: newScrappedStatus,
-          scrapCount: newScrappedStatus
-            ? updatedStudies[index].scrapCount + 1
-            : updatedStudies[index].scrapCount - 1,
-        };
-        setAppliedStudies(updatedStudies);
-        localStorage.setItem(`isScrapped_${studyId}`, newScrappedStatus);
+      if (currentStatus) {
+        // 스크랩 삭제 로직
+        const scrapId = localStorage.getItem(`scrapId_${studyId}`);
+        if (!scrapId) {
+          throw new Error('스크랩 ID가 없음!');
+        }
+
+        const response = await deleteScrap(scrapId);
+        if (response.status === 200) {
+          const updatedStudies = [...appliedStudies];
+          updatedStudies[index] = {
+            ...updatedStudies[index],
+            isScrapped: false,
+            scrapCount: updatedStudies[index].scrapCount - 1,
+          };
+          setAppliedStudies(updatedStudies);
+          localStorage.removeItem(`isScrapped_${studyId}`);
+          localStorage.removeItem(`scrapId_${studyId}`);
+        } else {
+          console.error('Failed to delete scrap:', response);
+        }
       } else {
-        console.error('Failed to toggle scrap status:', response);
+        // 스크랩 추가 로직
+        const response = await addScrap(studyId);
+        if (response.status === 200) {
+          const newScrapId = response.data.scrapId; // scrapId를 서버 응답에서 받아옴
+          const updatedStudies = [...appliedStudies];
+          updatedStudies[index] = {
+            ...updatedStudies[index],
+            isScrapped: true,
+            scrapCount: updatedStudies[index].scrapCount + 1,
+          };
+          setAppliedStudies(updatedStudies);
+          localStorage.setItem(`isScrapped_${studyId}`, 'true');
+          localStorage.setItem(`scrapId_${studyId}`, newScrapId);
+        } else {
+          console.error('Failed to add scrap:', response);
+        }
       }
     } catch (error) {
       console.error('Error toggling scrap status:', error);
