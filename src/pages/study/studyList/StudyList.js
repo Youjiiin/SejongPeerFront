@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchPosts } from './api';
+
 import StudyListPost from './StudyListPost';
 import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from './Filter_now';

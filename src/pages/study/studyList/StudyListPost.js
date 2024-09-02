@@ -15,6 +15,7 @@ const StudyListPost = ({ post }) => {
     tags,
     totalRecruitmentCount,
     participantCount,
+    recruitmentStatus
   } = post;
   const isScrapped = localStorage.getItem(`isScrapped_${id}`) === 'true'; // 스크랩 상태 확인
 
@@ -57,9 +58,13 @@ const StudyListPost = ({ post }) => {
           <Title>{title}</Title>
           {hasImage && <ImageIcon src={picture} alt="hasImage" />}
         </PostMiddle>
+        {recruitmentStatus === '모집 중'? 
         <Count>
           {participantCount} / {totalRecruitmentCount}
         </Count>
+        :
+        <Finish>모집완료</Finish>
+        }
       </div>
 
       <PostBottom>
@@ -137,6 +142,14 @@ const Count = styled.div`
   display: flex;
   align-items: center;
   color: ${COLORS.main};
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0px;
+`;
+const Finish = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${COLORS.font4};
   font-weight: 600;
   font-size: 16px;
   margin: 0px;

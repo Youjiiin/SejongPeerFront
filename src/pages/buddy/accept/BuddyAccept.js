@@ -5,6 +5,7 @@ import findBuddy from '../../../assets/image/findBuddy.png';
 
 import style from './BuddyAccept.module.css';
 import { toast } from 'sonner';
+import { SubHeader } from 'components/headerRefactor/SubHeader';
 
 const BuddyAccept = () => {
   const [isAccept, setIsAccept] = useState('');
@@ -108,6 +109,7 @@ const BuddyAccept = () => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종버디" />
       <p className={style.title}>버디를 찾았습니다!</p>
       <img className={style.find_buddy} src={findBuddy} alt="findBuddy" />
 

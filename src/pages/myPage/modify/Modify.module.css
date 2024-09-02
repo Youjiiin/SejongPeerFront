@@ -170,7 +170,6 @@
 
   .ContainerBox {
     width: 100vw;
-    /* margin-top: 7.3vh; */
     padding: 1vw 2vw 0 2vw;
     background-color: #fbe4e4;
     border: 1px solid #e5e5e5;
@@ -178,7 +177,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 100vh;
   }
 
   .container {

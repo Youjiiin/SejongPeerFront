@@ -75,19 +75,19 @@ const StudyPostWrite = props => {
   } = usePopupStroe();
   const studyType = localStorage.getItem('studyType');
   const { setTableInfos, setFilteredInfos, setShowData } = useTimeTableStore();
-  console.log(
-    title,
-    category,
-    startDate,
-    endDate,
-    memberNum,
-    selectedWay,
-    selectedFrequency,
-    questionLink,
-    content,
-    studyLink,
-    tags
-  );
+  // console.log(
+  //   title,
+  //   category,
+  //   startDate,
+  //   endDate,
+  //   memberNum,
+  //   selectedWay,
+  //   selectedFrequency,
+  //   questionLink,
+  //   content,
+  //   studyLink,
+  //   tags
+  // );
   // 게시글 초기화
   const reset = usePostStore(state => state.reset);
   const resetCategory = useTimeTableStore(state => state.reset);
@@ -253,14 +253,11 @@ const StudyPostWrite = props => {
     }
 
     if (imgFiles.length > 0) {
-      console.log('11111111111111111111111111111111');
-      try {
-        await imgUpload(studyId);
-        console.log(await imgUpload(studyId));
-      } catch (err) {
-        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
-        return;
-      }
+        const result = await imgUpload(props.studyId);
+        if (result === 'imgError') {
+          togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+          return;
+        }
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');

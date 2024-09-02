@@ -17,7 +17,7 @@ const BuddyWaiting = () => {
     }
   }, []);
   const moveToMain = () => {
-    navigate('/buddy/accept');
+    navigate('/main');
   };
   const countBuddyHandler = async () => {
     try {

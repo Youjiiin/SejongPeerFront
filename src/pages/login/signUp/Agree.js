@@ -97,7 +97,7 @@ const Agree = () => {
           <div className={box.flex}>
             <div className={box.left}>
               <p className={box.essential}>[필수]</p>
-              <Link to={'/personalinfo2'} className={box.link} target="_blank">
+              <Link to={'/personalinfo'} className={box.link} target="_blank">
                 개인정보 수집 동의 &gt;
               </Link>
             </div>
@@ -113,7 +113,7 @@ const Agree = () => {
           <div className={box.flex}>
             <div className={box.left}>
               <p className={box.essential}>[필수]</p>
-              <Link to={'/useinfo'} className={box.link} target="_blank">
+              <Link to={'/personalinfo2'} className={box.link} target="_blank">
                 이용약관 동의 &gt;
               </Link>
             </div>
