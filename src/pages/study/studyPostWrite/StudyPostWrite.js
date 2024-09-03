@@ -227,9 +227,35 @@ const StudyPostWrite = props => {
     setPopupVisible(false);
   };
 
+  const calculateFileSize = (base64String) => {
+    // Base64 인코딩된 데이터만 추출 (data:image/png;base64, 이 부분 제거)
+    let base64Data = base64String.split(',')[1];
+    
+    // Base64 문자열 길이
+    let base64Length = base64Data.length;
+    
+    // 패딩 수 계산 (= 기호의 수)
+    let padding = (base64Data.match(/=*$/) || [''])[0].length;
+    
+    // 원본 바이트 수 계산
+    let fileSizeInBytes = (base64Length * 3) / 4 - padding;
+    
+    return fileSizeInBytes; // 파일 크기 (바이트)
+  }
+
   const [isFilled, setIsFilled] = useState(true);
   //게시글 작성 통신
   const submitHandler = async e => {
+    // 이미지 크기 확인
+    const imgs = [...imgFiles];
+    for (let i = 0; i < imgs.length; i++) {
+      const fileSize = calculateFileSize(imgs[i])
+      if (fileSize > 700000) {
+        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+        return;
+      }
+    }
+
     //제목/모집기간/모집인원/내용/오픈채팅 링크/카테고리
     const validation = (name, text) => {
       if (text === '' || text === null) {
@@ -251,9 +277,9 @@ const StudyPostWrite = props => {
       togglePopup(errorMessage);
       return;
     }
-
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
+
     const tagSplit =
       tags.length === 0
         ? []
@@ -276,6 +302,7 @@ const StudyPostWrite = props => {
             recruitmentEndAt: formEndDate,
             tags: tagSplit,
             images: null,
+            base64ImagesList: imgs,
           }
         : {
             title: title,
@@ -290,6 +317,7 @@ const StudyPostWrite = props => {
             recruitmentEndAt: formEndDate,
             tags: tagSplit,
             images: null,
+            base64ImagesList: imgs,
           };
     console.log(studyData);
     const studyTypeM =
@@ -309,18 +337,10 @@ const StudyPostWrite = props => {
       );
 
       const text = await response.text();
+      console.log(text)
+      console.log(response)
       const data = text ? JSON.parse(text) : {};
       const studyId = data.data.id;
-
-      if (imgFiles.length > 0) {
-        try {
-          await imgUpload(studyId);
-        } catch (error) {
-          togglePopup(
-            `이미지 용량 혹은 형식이 맞지 않아 이미지를 제외하고 업로드 되었습니다.`
-          );
-        }
-      }
 
       toast.success('게시글 작성 완료');
 
@@ -369,7 +389,7 @@ const StudyPostWrite = props => {
         .split('#')
         .filter(e => e !== '');
     }
-    
+
     const studyData = {
       title: title,
       content: content,
