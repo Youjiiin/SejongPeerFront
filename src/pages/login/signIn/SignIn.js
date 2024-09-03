@@ -80,7 +80,7 @@ const SignIn = () => {
 
   return (
     <div className={style.entire_Container}>
-      <SubHeader text="로그인" />
+      <SubHeader text="로그인" customBackLink="/login" />
       <div className={style.container}>
         <SignInBox inputID={inputID} name="아이디" />
         <SignInBox inputPwd={inputPwd} name="비밀번호" id="pwd" />

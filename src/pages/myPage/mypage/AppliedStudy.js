@@ -99,7 +99,7 @@ const AppliedStudy = () => {
 
   return (
     <Container>
-      <SubHeader text="마이페이지" />
+      <SubHeader text="마이페이지" customBackLink="/mypage" />
       {appliedStudies.map((study, index) => (
         <PostWrapper
           key={study.studyId}

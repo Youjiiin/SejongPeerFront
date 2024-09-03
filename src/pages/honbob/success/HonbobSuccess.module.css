@@ -1,6 +1,5 @@
 @media (min-width: 768px) {
   .container {
-    margin-top: 8vh;
     display: flex;
     flex-direction: column;
     height: 85%;
@@ -93,7 +92,6 @@
 /* 모바일 */
 @media (max-width: 768px) {
   .container {
-    margin-top: 10vh;
     display: flex;
     flex-direction: column;
     height: 85%;

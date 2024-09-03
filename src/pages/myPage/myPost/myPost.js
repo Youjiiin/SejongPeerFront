@@ -8,7 +8,7 @@ import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 const MyPost = () => {
   return (
     <Container>
-      <SubHeader text="세종스터디" />
+      <SubHeader text="세종스터디" customBackLink="/mypage" />
       <InnerContainer>
         <NavBar />
         <Notice>

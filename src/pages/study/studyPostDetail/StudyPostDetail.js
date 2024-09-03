@@ -58,7 +58,7 @@ const StudyListPostDetail = () => {
         setIsFinished(true);
       }
     }
-  }, [studyData])
+  }, [studyData]);
 
   const modifyHandler = () => {
     navigate(`/study/modify/${studyId}`);
@@ -183,7 +183,7 @@ const StudyListPostDetail = () => {
 
   return (
     <Container>
-      <SubHeader text="세종스터디" />
+      <SubHeader text="세종스터디" customBackLink="/study" />
       <Wrapper>
         <Title>
           {studyData.title}
@@ -299,10 +299,9 @@ const StudyListPostDetail = () => {
             <ScrapImage src={isScrapped ? filledHeart : heart} alt="heart" />
             <ScrapCount>{scrapCount}</ScrapCount>
           </ScrapButton>
-          {isFinished ? 
-          <FinishedButon>모집완료</FinishedButon>
-          :
-          (isWriter ? (
+          {isFinished ? (
+            <FinishedButon>모집완료</FinishedButon>
+          ) : isWriter ? (
             <ApplyButton onClick={() => navigate('/mypost')}>
               {`신청현황 보기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
             </ApplyButton>
@@ -312,8 +311,7 @@ const StudyListPostDetail = () => {
                 ? '지원취소'
                 : `지원하기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
             </ApplyButton>
-          ))
-          }
+          )}
         </CommentContainer>
 
         {isPopupVisible && (
@@ -554,7 +552,7 @@ const FinishedButon = styled.button`
   flex-shrink: 0;
   border-radius: 28px;
   background-color: ${COLORS.line2};
-  color: #FFF;
+  color: #fff;
   text-align: center;
   font-size: 18px;
   font-style: normal;

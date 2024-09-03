@@ -29,10 +29,17 @@ const StudyList = () => {
   const modalRef = useRef();
   const { setTableInfos, setFilteredInfos, setShowData, subjectName } =
     useTimeTableStore();
-  const { category, member, recruiting, setRecruiting, setMember, setCategory } = useFilterStore();
+  const {
+    category,
+    member,
+    recruiting,
+    setRecruiting,
+    setMember,
+    setCategory,
+  } = useFilterStore();
   const studyType = localStorage.getItem('studyType');
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState('로딩중...')
+  const [loadingMessage, setLoadingMessage] = useState('로딩중...');
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -130,76 +137,77 @@ const StudyList = () => {
     resetCategory();
   }, []);
 
-  const handleDeleteFilter = async(filterType) => {
-      try {
-        if (filterType === 'category') await setCategory(0);
-        if (filterType === 'member') await setMember(0);
-        if (filterType === 'recruiting') await setRecruiting(null);
+  const handleDeleteFilter = async filterType => {
+    try {
+      if (filterType === 'category') await setCategory(0);
+      if (filterType === 'member') await setMember(0);
+      if (filterType === 'recruiting') await setRecruiting(null);
 
-        const { category, member, recruiting } = useFilterStore.getState();
-        const filterValues = { category, member, recruiting };
-  
-        const data = await searchHandler(filterValues);
-        setPosts(data[0].data);
+      const { category, member, recruiting } = useFilterStore.getState();
+      const filterValues = { category, member, recruiting };
 
-      } catch (error) {
-        console.error('Error during submit:', error);
-      }
+      const data = await searchHandler(filterValues);
+      setPosts(data[0].data);
+    } catch (error) {
+      console.error('Error during submit:', error);
+    }
   };
 
   return (
     <Container>
-      <SubHeader text="세종스터디" />
+      <SubHeader text="세종스터디" customBackLink="/mypage" />
       <FilterBox>
-        
-          {category === 0 ? (
-            <Filter
-              onClick={() => {
-                setIsClickedStudy(true);
-                setModalOpen(modalOpen === 'study' ? null : 'study');
-              }}
-            >
-              <p style={{
+        {category === 0 ? (
+          <Filter
+            onClick={() => {
+              setIsClickedStudy(true);
+              setModalOpen(modalOpen === 'study' ? null : 'study');
+            }}
+          >
+            <p
+              style={{
                 fontSize: '14px',
-              }}>카테고리</p>
-              <SelectImage src={select} alt="select" />
-            </Filter> 
-          ) : (
-            <Filter
-              onClick={() => handleDeleteFilter('category')}
-            >
-              <p
-                style={{
-                  color: `${COLORS.main}`,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  fontSize: '14px',
-                }}
-              >
-                {subjectName}
-              </p>
-              <SelectImage2 src={close} alt="close" />
-            </Filter>
-          )}
-
-        
-          {member === 0 ? (
-            <Filter
-              onClick={() => {
-                setIsClickedStudy(true);
-                setModalOpen(modalOpen === 'members' ? null : 'members');
               }}
             >
-            <p style={{
-              fontSize: '14px',
-            }}>모집인원</p>
+              카테고리
+            </p>
             <SelectImage src={select} alt="select" />
           </Filter>
-          ) : (
-            <Filter
-              onClick={() => handleDeleteFilter('member')}
+        ) : (
+          <Filter onClick={() => handleDeleteFilter('category')}>
+            <p
+              style={{
+                color: `${COLORS.main}`,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: '14px',
+              }}
             >
+              {subjectName}
+            </p>
+            <SelectImage2 src={close} alt="close" />
+          </Filter>
+        )}
+
+        {member === 0 ? (
+          <Filter
+            onClick={() => {
+              setIsClickedStudy(true);
+              setModalOpen(modalOpen === 'members' ? null : 'members');
+            }}
+          >
+            <p
+              style={{
+                fontSize: '14px',
+              }}
+            >
+              모집인원
+            </p>
+            <SelectImage src={select} alt="select" />
+          </Filter>
+        ) : (
+          <Filter onClick={() => handleDeleteFilter('member')}>
             <p
               style={{
                 color: `${COLORS.main}`,
@@ -212,24 +220,26 @@ const StudyList = () => {
               {member}명
             </p>
             <SelectImage2 src={close} alt="close" />
-            </Filter>
-          )}
-          
+          </Filter>
+        )}
 
-
-          {recruiting === null ? (
-            <Filter
-              onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
-            >
-              <p style={{
+        {recruiting === null ? (
+          <Filter
+            onClick={() =>
+              setModalOpen(modalOpen === 'status' ? null : 'status')
+            }
+          >
+            <p
+              style={{
                 fontSize: '14px',
-              }}>모집여부</p>
-              <SelectImage src={select} alt="select" />
-            </Filter>
-          ) : (
-            <Filter
-              onClick={() => handleDeleteFilter('recruiting')}
+              }}
             >
+              모집여부
+            </p>
+            <SelectImage src={select} alt="select" />
+          </Filter>
+        ) : (
+          <Filter onClick={() => handleDeleteFilter('recruiting')}>
             <p
               style={{
                 color: `${COLORS.main}`,
@@ -243,21 +253,18 @@ const StudyList = () => {
             </p>
             <SelectImage2 src={close} alt="close" />
           </Filter>
-          )}
-
+        )}
       </FilterBox>
       <ListWrapper>
-        {isLoading ?
-        <Loading 
-          text={loadingMessage}
-        />
-        :
-        (posts.map(post => (
-          <div key={post.id} onClick={() => goPostDetail(post.id)}>
-            <StudyListPost post={post} />
-          </div>
-        )))
-        }
+        {isLoading ? (
+          <Loading text={loadingMessage} />
+        ) : (
+          posts.map(post => (
+            <div key={post.id} onClick={() => goPostDetail(post.id)}>
+              <StudyListPost post={post} />
+            </div>
+          ))
+        )}
       </ListWrapper>
       <WriteButton onClick={goPost}>모집글 작성</WriteButton>
       {modalOpen && (
