@@ -12,7 +12,7 @@ const PostInput = () => {
   };
 
   return (
-    <div className={style.textContainer}>
+    <div className={`${style.textContainer} ${content ? style.hasContent : ''}`}>
       <textarea
         onChange={handleContentChange}
         placeholder="내용을 입력하세요"

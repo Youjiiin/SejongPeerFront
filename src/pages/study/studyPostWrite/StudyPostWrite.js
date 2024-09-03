@@ -196,15 +196,17 @@ const StudyPostWrite = props => {
         }
       );
 
-      if (response.status === 413) {
-        return 'imgError';
-      }
-
+      
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
-
+      
       console.log(data);
-
+      
+      if (response.status === 413) {
+        console.log(`이미지 용량 혹은 형식을 확인하세요`);
+        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+        return 'imgError';
+      }
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
@@ -312,10 +314,10 @@ const StudyPostWrite = props => {
       const studyId = data.data.id;
 
       if (imgFiles.length > 0) {
-        const result = await imgUpload(studyId);
-        if (result === 'imgError') {
-          togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
-          return;
+        try{
+          await imgUpload(studyId);
+        } catch (error) {
+          togglePopup(`이미지 용량 혹은 형식이 맞지 않아 이미지를 제외하고 업로드 되었습니다.`);
         }
       }
 
