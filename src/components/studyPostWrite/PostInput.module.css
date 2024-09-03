@@ -49,6 +49,28 @@
     flex-direction: column;
     background-color: #ffffff;
     border-bottom: 1px #e5e5e5 solid;
+    position: relative;
+  }
+  .textContainer::before {
+    content: '*작성팁';
+    font-size: 15px;
+    color: #FF7474;
+    position: absolute;
+    top: 25%;
+    left: 16px;
+  }
+  .textContainer::after {
+    content: '스터디의 세부 카테고리, 시간, 장소, 진행방식등의 정보를 작성해 주세요';
+    font-size: 15px;
+    color: #777777;
+    position: absolute;
+    top: 33%;
+    left: 16px;
+    width: 70%;
+  }
+  .hasContent::before,
+  .hasContent::after {
+    content: none;
   }
 
   .contentArea {

@@ -2,21 +2,25 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchPosts } from './api';
 
+import useStudyStore from './useStudyStore';
+import useTimeTableStore from './useTimetableStore';
+import useFilterStore from './useFilterStore';
+import getTimeTable from '../timeTable/getTimeTable';
+import { searchHandler } from './api';
+
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 import StudyListPost from './StudyListPost';
 import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from './Filter_now';
-import select from '../../../assets/image/select.png';
-import useStudyStore from './useStudyStore';
-import useTimeTableStore from './useTimetableStore';
 import Filter_Member from './Filter_Member';
-import useFilterStore from './useFilterStore';
 import Filter_Field from './Filter_Field';
-import getTimeTable from '../timeTable/getTimeTable';
-
-import styled from 'styled-components';
-import COLORS from '../../../theme';
 import Filter_Field2 from './Filter_Field2';
-import { SubHeader } from '../../../components/headerRefactor/SubHeader';
+import Loading from './Loading';
+
+import COLORS from '../../../theme';
+import select from '../../../assets/image/select.png';
+import close from '../../../assets/image/close_red.png';
+import styled from 'styled-components';
 
 const StudyList = () => {
   const { posts, setPosts } = useStudyStore();
@@ -25,15 +29,19 @@ const StudyList = () => {
   const modalRef = useRef();
   const { setTableInfos, setFilteredInfos, setShowData, subjectName } =
     useTimeTableStore();
-  const { category, member, recruiting } = useFilterStore();
+  const { category, member, recruiting, setRecruiting, setMember, setCategory } = useFilterStore();
   const studyType = localStorage.getItem('studyType');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('로딩중...')
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
+        setIsLoading(true);
+        setLoadingMessage('로딩중...');
         const fetchedPosts = await fetchPosts();
-        //console.log(fetchedPosts);
         setPosts(fetchedPosts);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
@@ -122,46 +130,76 @@ const StudyList = () => {
     resetCategory();
   }, []);
 
+  const handleDeleteFilter = async(filterType) => {
+      try {
+        if (filterType === 'category') await setCategory(0);
+        if (filterType === 'member') await setMember(0);
+        if (filterType === 'recruiting') await setRecruiting(null);
+
+        const { category, member, recruiting } = useFilterStore.getState();
+        const filterValues = { category, member, recruiting };
+  
+        const data = await searchHandler(filterValues);
+        setPosts(data[0].data);
+
+      } catch (error) {
+        console.error('Error during submit:', error);
+      }
+  };
+
   return (
     <Container>
       <SubHeader text="세종스터디" />
       <FilterBox>
-        <Filter
-          onClick={() => {
-            setIsClickedStudy(true);
-            setModalOpen(modalOpen === 'study' ? null : 'study');
-          }}
-        >
+        
           {category === 0 ? (
-            <p style={{
-              fontSize: '14px',
-            }}>카테고리</p>
-          ) : (
-            <p
-              style={{
-                color: `${COLORS.main}`,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                fontSize: '14px',
+            <Filter
+              onClick={() => {
+                setIsClickedStudy(true);
+                setModalOpen(modalOpen === 'study' ? null : 'study');
               }}
             >
-              {subjectName}
-            </p>
+              <p style={{
+                fontSize: '14px',
+              }}>카테고리</p>
+              <SelectImage src={select} alt="select" />
+            </Filter> 
+          ) : (
+            <Filter
+              onClick={() => handleDeleteFilter('category')}
+            >
+              <p
+                style={{
+                  color: `${COLORS.main}`,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  fontSize: '14px',
+                }}
+              >
+                {subjectName}
+              </p>
+              <SelectImage2 src={close} alt="close" />
+            </Filter>
           )}
-          <SelectImage src={select} alt="select" />
-        </Filter>
-        <Filter
-          onClick={() => {
-            setIsClickedStudy(true);
-            setModalOpen(modalOpen === 'members' ? null : 'members');
-          }}
-        >
+
+        
           {member === 0 ? (
+            <Filter
+              onClick={() => {
+                setIsClickedStudy(true);
+                setModalOpen(modalOpen === 'members' ? null : 'members');
+              }}
+            >
             <p style={{
               fontSize: '14px',
             }}>모집인원</p>
+            <SelectImage src={select} alt="select" />
+          </Filter>
           ) : (
+            <Filter
+              onClick={() => handleDeleteFilter('member')}
+            >
             <p
               style={{
                 color: `${COLORS.main}`,
@@ -173,18 +211,25 @@ const StudyList = () => {
             >
               {member}명
             </p>
+            <SelectImage2 src={close} alt="close" />
+            </Filter>
           )}
-          <SelectImage src={select} alt="select" />
-        </Filter>
+          
 
-        <Filter
-          onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
-        >
+
           {recruiting === null ? (
-            <p style={{
-              fontSize: '14px',
-            }}>모집여부</p>
+            <Filter
+              onClick={() => setModalOpen(modalOpen === 'status' ? null : 'status')}
+            >
+              <p style={{
+                fontSize: '14px',
+              }}>모집여부</p>
+              <SelectImage src={select} alt="select" />
+            </Filter>
           ) : (
+            <Filter
+              onClick={() => handleDeleteFilter('recruiting')}
+            >
             <p
               style={{
                 color: `${COLORS.main}`,
@@ -196,16 +241,23 @@ const StudyList = () => {
             >
               {recruiting === true ? '모집 중' : '모집 마감'}
             </p>
+            <SelectImage2 src={close} alt="close" />
+          </Filter>
           )}
-          <SelectImage src={select} alt="select" />
-        </Filter>
+
       </FilterBox>
       <ListWrapper>
-        {posts.map(post => (
+        {isLoading ?
+        <Loading 
+          text={loadingMessage}
+        />
+        :
+        (posts.map(post => (
           <div key={post.id} onClick={() => goPostDetail(post.id)}>
             <StudyListPost post={post} />
           </div>
-        ))}
+        )))
+        }
       </ListWrapper>
       <WriteButton onClick={goPost}>모집글 작성</WriteButton>
       {modalOpen && (
@@ -298,6 +350,11 @@ const SelectImage = styled.img`
   height: 6px;
   margin-left: 4%;
 `;
+const SelectImage2 = styled.img`
+  width: 10px;
+  height: 10px;
+  margin-left: 4%;
+`;
 
 const ListWrapper = styled.div`
   width: 100vw;
@@ -320,7 +377,7 @@ const WriteButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: sticky;
+  position: fixed;
   margin: 0 auto;
   left: 0;
   right: 0;
