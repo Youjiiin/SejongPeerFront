@@ -225,7 +225,7 @@ const SignUp = props => {
 
   return (
     <div className={style.entire_Container}>
-      <SubHeader text="회원가입" />
+      <SubHeader text="회원가입" customBackLink="/login/auth" />
       <div className={style.container}>
         <h2 className={style.h2}>기본정보</h2>
         <div className={`${style.form} ${fadeEffect}`}>

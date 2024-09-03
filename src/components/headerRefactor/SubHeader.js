@@ -19,7 +19,7 @@ export const SubHeader = ({ text, customBackLink }) => {
     }
   };
 
-  const handleGoBack = () => {
+ const handleGoBack = () => {
     // 커스텀 링크가 제공된 경우 해당 링크로 이동
     if (customBackLink) {
       navigate(customBackLink);

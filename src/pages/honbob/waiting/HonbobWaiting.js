@@ -96,7 +96,7 @@ const HonbobWaiting = () => {
 
   return (
     <div className={style.container}>
-      <SubHeader text="혼밥탈출" />
+      <SubHeader text="혼밥탈출" customBackLink="/main" />
       <div className={style.TextBox}>
         <img src={honbobWaitingLogo} className={style.honbobWaitingImg} />
         <p className={style.Text1}>밥짝꿍 찾는 중{dots}</p>

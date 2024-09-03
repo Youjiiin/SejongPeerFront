@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import styles from './Modify.module.css';
 import { SubHeader } from '../../../components/headerRefactor/SubHeader';
+import { toast } from 'sonner';
 
 const Modify = () => {
   const [focusedDiv, setFocusedDiv] = useState(null);
@@ -124,7 +125,7 @@ const Modify = () => {
 
   return (
     <div className={styles.Container}>
-      <SubHeader text="마이페이지" />
+      <SubHeader text="마이페이지" customBackLink="/mypage" />
       <div className={styles.ContainerBox}>
         {myPageData && (
           <div className={styles.outerContainer}>

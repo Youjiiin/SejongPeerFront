@@ -61,7 +61,7 @@ const Auth = () => {
   };
   return (
     <div className={style.entire_Container}>
-      <SubHeader text="회원가입" />
+      <SubHeader text="회원가입" customBackLink="/login/agree" />
       <div className={style.container}>
         <div className={style.innerBox}>
           <div className={style.auto}>

@@ -6,6 +6,7 @@ import SignInBox from '../../signIn/SignInBox.js';
 import style from '../../signIn/SignIn.module.css';
 import css from './ResetPwd.module.css';
 import { toast } from 'sonner';
+import { SubHeader } from 'components/headerRefactor/SubHeader.js';
 
 const ResetPwd = () => {
   const [inputPwd, setInputPwd] = useState('');
@@ -49,6 +50,7 @@ const ResetPwd = () => {
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="마이페이지" customBackLink="/mypage" />
       <div className={style.container}>
         <div className={css.explain_box}>
           <p className={css.explain}>회원님의 ID는</p>

@@ -47,7 +47,7 @@ const HonbobStart1 = () => {
 
   return (
     <div className={style.Container}>
-      <SubHeader text="혼밥탈출" />
+      <SubHeader text="혼밥탈출" customBackLink="/main" />
       <div className={style.InnerContainer}>
         <div className={style.top}>
           <button onClick={infoHandler} className={style.informBtn}>

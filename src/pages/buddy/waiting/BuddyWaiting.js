@@ -111,7 +111,7 @@ const BuddyWaiting = () => {
 
   return (
     <div className={style.container}>
-      <SubHeader text="세종버디" />
+      <SubHeader text="세종버디" customBackLink="/buddy/matching" />
       <div className={style.TextBox}>
         <p className={style.title}>세종버디</p>
         <p className={style.text1}>

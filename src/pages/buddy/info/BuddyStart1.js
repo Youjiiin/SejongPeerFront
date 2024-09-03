@@ -42,7 +42,7 @@ const BuddyStart1 = () => {
 
   return (
     <>
-      <SubHeader text="세종버디" />
+      <SubHeader text="세종버디" customBackLink="/main" />
       <div className={style.container}>
         {/* <SubHeader /> */}
         <div className={style.top}>
