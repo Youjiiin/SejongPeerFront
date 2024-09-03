@@ -54,9 +54,9 @@ const StudyMyPost = () => {
   const closePopup = () => {
     setPopupVisible(false);
     setIsEndBtnClick(false);
-    if (clickType === 'error') {
-      console.log('state:', clickType);
+    if (clickType === 'error' || clickType === 'cancel') {
       loadPosts();
+      setClickType(null);
     }
   };
 
@@ -76,9 +76,6 @@ const StudyMyPost = () => {
     const updateState = setStateFunction => {
       setStateFunction(prevState => {
         const newState = [...prevState];
-
-        console.log(newState[externalIndex].applicants);
-
         const updatedApplicants = [...newState[externalIndex].applicants];
 
         updatedApplicants[applicantIndex] = {
@@ -121,9 +118,18 @@ const StudyMyPost = () => {
     };
     try {
       const response = await applicantSelection(patchData);
-      console.log(response);
+      const isFull = response.data.data.isFull;
+
       const accState = value === true ? 'ACCEPT' : 'REJECT';
       updateStudyMatchingStatus(studyIndex, appIndex, accState);
+      if (isFull) {
+        setIsEndBtnClick(true);
+        const popUpData = {
+          title: '',
+          message: '모집이 마감 되었습니다.',
+        };
+        togglePopup(popUpData);
+      }
     } catch (error) {
       const errClass = error.response.data.data.errorClassName;
 
@@ -134,22 +140,14 @@ const StudyMyPost = () => {
           message: '지원을 취소한 지원자입니다.',
         };
         togglePopup(popUpData);
-      } else if (errClass === 'STUDY_APPLICANT_CANNOT_BE_ACCEPTED') {
-        setIsEndBtnClick(true);
-        const popUpData = {
-          title: '',
-          message: '모집이 완료 되었습니다.',
-        };
-        togglePopup(popUpData);
       }
-      console.log(error.response.data.data);
     }
-
     const msg = value === true ? '수락' : '거절';
     toast.info(`${msg}되었습니다`);
   };
 
   const CancelHandle = async studyId => {
+    setClickType('cancel');
     try {
       const response = await earlyClose(studyId);
       console.log('Response:', response);
@@ -158,7 +156,7 @@ const StudyMyPost = () => {
         title: '스터디 마감 완료',
         message: '수락한 지원자들에겐 오픈채팅방 링크가 전달됩니다.',
       };
-
+      console.log(clickType);
       togglePopup(popUpData);
     } catch (error) {
       console.log(error);
@@ -180,11 +178,10 @@ const StudyMyPost = () => {
             </Title>
             {post.recruitmentStatus === 'RECRUITING' ? (
               <HeaderBottom>
-                <EndBtn
-                  status={post.recruitmentStatus}
-                  onClick={() => CancelHandle(post.studyId)}
-                >
-                  모집마감하기
+                <EndBtn status={post.recruitmentStatus}>
+                  <span onClick={() => CancelHandle(post.studyId)}>
+                    모집마감하기
+                  </span>
                 </EndBtn>
               </HeaderBottom>
             ) : (
