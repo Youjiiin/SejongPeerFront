@@ -28,7 +28,7 @@ const StudyListPost = ({ post }) => {
   };
 
   return (
-    <PostWrapper recruitmentStatus={recruitmentStatus}>
+    <PostWrapper $recruitmentStatus={recruitmentStatus}>
       <div
         style={{
           display: 'flex',
@@ -85,8 +85,8 @@ const PostWrapper = styled.div`
   flex-direction: column;
   border-bottom: 1px solid ${COLORS.line2};
   padding: 12px 16px;
-  background-color: ${({ recruitmentStatus }) => 
-    recruitmentStatus === '모집 중' ? '#FFF' : '#EEEEEE'};
+  background-color: ${({ $recruitmentStatus }) => 
+    $recruitmentStatus === '모집 중' ? '#FFF' : '#EEEEEE'};
 `;
 
 const PostTop = styled.div`

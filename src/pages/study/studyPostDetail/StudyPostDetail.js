@@ -285,6 +285,7 @@ const StudyListPostDetail = () => {
                 borderRadius: '8px',
                 margin: 'auto',
                 display: 'block',
+                objectFit: 'contain',
               }}
               src={selectedImage.imgUrl}
               alt={`Image ${selectedImage.imageId}`}

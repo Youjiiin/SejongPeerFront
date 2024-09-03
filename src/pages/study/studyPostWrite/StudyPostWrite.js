@@ -360,10 +360,13 @@ const StudyPostWrite = props => {
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
-    const tagSplit = tags
-      .replace(/(\s*)/g, '')
-      .split('#')
-      .filter(e => e !== '');
+    let tagSplit;
+    if (typeof tags === 'string') {
+      tagSplit = tags
+        .replace(/(\s*)/g, '')
+        .split('#')
+        .filter(e => e !== '');
+    }
     const studyData = {
       title: title,
       content: content,
