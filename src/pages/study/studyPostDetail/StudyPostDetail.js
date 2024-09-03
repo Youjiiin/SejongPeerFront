@@ -49,6 +49,16 @@ const StudyListPostDetail = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isWriter, setIsWriter] = useState(false);
   const [ismodalOpen, setIsmodalOpen] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (studyData) {
+      console.log(studyData.recruitmentStatus);
+      if (studyData.recruitmentStatus === '마감') {
+        setIsFinished(true);
+      }
+    }
+  }, [studyData])
 
   const modifyHandler = () => {
     navigate(`/study/modify/${studyId}`);
@@ -289,7 +299,10 @@ const StudyListPostDetail = () => {
             <ScrapImage src={isScrapped ? filledHeart : heart} alt="heart" />
             <ScrapCount>{scrapCount}</ScrapCount>
           </ScrapButton>
-          {isWriter ? (
+          {isFinished ? 
+          <FinishedButon>모집완료</FinishedButon>
+          :
+          (isWriter ? (
             <ApplyButton onClick={() => navigate('/mypost')}>
               {`신청현황 보기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
             </ApplyButton>
@@ -299,7 +312,8 @@ const StudyListPostDetail = () => {
                 ? '지원취소'
                 : `지원하기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
             </ApplyButton>
-          )}
+          ))
+          }
         </CommentContainer>
 
         {isPopupVisible && (
@@ -534,13 +548,31 @@ const ApplyButton = styled.button`
   border: none;
 `;
 
+const FinishedButon = styled.button`
+  width: 287px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 28px;
+  background-color: ${COLORS.line2};
+  color: #FFF;
+  text-align: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.333px;
+  margin-top: 15px;
+  cursor: pointer;
+  border: none;
+`;
+
 const MoreModal = styled.div`
   width: 84px;
   height: 72px;
   border-radius: 12px;
   position: absolute;
   right: 16px;
-  top: 20px;
+  top: 85px;
   display: flex;
   flex-direction: column;
   align-items: center;

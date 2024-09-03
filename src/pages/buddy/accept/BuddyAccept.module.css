@@ -1,8 +1,6 @@
 .container {
-  margin-top: 8vh;
   display: flex;
   flex-direction: column;
-  height: 90%;
   background-color: #fafafa;
   align-items: center;
   justify-content: center;

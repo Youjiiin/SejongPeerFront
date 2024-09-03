@@ -1,10 +1,16 @@
 import style from './PostInput.module.css';
 import usePostStore from '../../pages/study/studyPostWrite/usePostStore';
+
 const PostInput = () => {
   const { content, setContent } = usePostStore();
+
   const handleContentChange = e => {
-    setContent(e.target.value);
+    const newValue = e.target.value;
+    if (newValue.length <= 1000) {
+      setContent(newValue);
+    }
   };
+
   return (
     <div className={style.textContainer}>
       <textarea

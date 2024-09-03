@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchPosts } from './api';
+
 import StudyListPost from './StudyListPost';
 import BottomModal from '../../../components/modal/BottomModal';
 import Filter_now from './Filter_now';
@@ -134,7 +135,7 @@ const StudyList = () => {
           {category === 0 ? (
             <p style={{
               fontSize: '14px',
-            }}>스터디</p>
+            }}>카테고리</p>
           ) : (
             <p
               style={{

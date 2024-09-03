@@ -196,7 +196,6 @@ const StudyPostWrite = props => {
         }
       );
 
-      console.log('error???????????????' + response.status);
       if (response.status === 413) {
         return 'imgError';
       }
@@ -252,16 +251,6 @@ const StudyPostWrite = props => {
       return;
     }
 
-    if (imgFiles.length > 0) {
-      console.log('11111111111111111111111111111111');
-      try {
-        await imgUpload(studyId);
-        console.log(await imgUpload(studyId));
-      } catch (err) {
-        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
-        return;
-      }
-    }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
     const tagSplit =
@@ -321,6 +310,15 @@ const StudyPostWrite = props => {
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
       const studyId = data.data.id;
+
+      if (imgFiles.length > 0) {
+        const result = await imgUpload(studyId);
+        if (result === 'imgError') {
+          togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+          return;
+        }
+      }
+
       toast.success('게시글 작성 완료');
 
       setTimeout(() => {

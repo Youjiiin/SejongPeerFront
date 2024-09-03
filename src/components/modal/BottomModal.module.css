@@ -1,13 +1,13 @@
 @media (min-width: 768px) {
   .modal {
-    width: 100vw;
+    max-width: 400px;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
   }
   .container {
-    width: 100vw;
+    width: 400px;
     max-height: 100px;
     background-color: #ffffff;
     border-radius: 16px 16px 0px 0px;
@@ -26,7 +26,7 @@
 
   .backdrop {
     position: fixed;
-    width: 100vw;
+    width: 400px;
     height: 100%;
     z-index: 10;
     background: rgba(0, 0, 0, 0.35);
