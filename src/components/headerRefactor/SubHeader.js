@@ -19,13 +19,10 @@ export const SubHeader = ({ text, customBackLink }) => {
     }
   };
 
-  const handleGoBack = () => {
+ const handleGoBack = () => {
     // 커스텀 링크가 제공된 경우 해당 링크로 이동
     if (customBackLink) {
       navigate(customBackLink);
-    } else if (location.state?.from) {
-      // location.state에 이전 페이지 정보가 있는 경우 해당 경로로 이동
-      navigate(-1);
     } else {
       // 기본적으로 홈으로 이동하거나 다른 기본 경로 설정 가능
       navigate('/');
