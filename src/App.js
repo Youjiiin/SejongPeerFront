@@ -3,10 +3,6 @@ import { useState, createContext, useEffect } from 'react';
 import './App.css';
 import { jwtDecode } from 'jwt-decode';
 import { toast, Toaster } from 'sonner';
-import { useLocation } from 'react-router-dom';
-
-import { MainHeader } from './components/headerRefactor/MainHeader';
-import { SubHeader } from './components/headerRefactor/SubHeader';
 
 // 메인 컴포넌트
 import StartLoading from './pages/main/landing/StartLoading.js';

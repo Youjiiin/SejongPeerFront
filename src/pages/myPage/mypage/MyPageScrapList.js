@@ -35,7 +35,7 @@ const MyPageScrapList = () => {
 
   return (
     <Container>
-      <SubHeader text="마이페이지" />
+      <SubHeader text="마이페이지" customBackLink="/mypage" />
       <ListWrapper>
         {posts &&
           posts.map(post => (

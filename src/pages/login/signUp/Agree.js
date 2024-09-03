@@ -80,7 +80,7 @@ const Agree = () => {
 
   return (
     <div className={box.entire_Container}>
-      <SubHeader text="회원가입" />
+      <SubHeader text="회원가입" customBackLink="/main" />
       <div className={box.container}>
         <div className={box.auto}>
           <div className={box.inputText}>

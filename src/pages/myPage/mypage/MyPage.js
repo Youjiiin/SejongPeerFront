@@ -234,7 +234,7 @@ const MyPage = () => {
 
   return (
     <div className={styles.Container}>
-      <SubHeader text="마이페이지" />
+      <SubHeader text="마이페이지" customBackLink="/main" />
       <div className={styles.container}>
         {myPageData && (
           <>

@@ -1,11 +1,10 @@
 .container {
-  margin-top: 8vh;
   display: flex;
   flex-direction: column;
   height: 90%;
   background-color: #fafafa;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 10px;
   /* overflow: hidden; */
 }
 .title {
@@ -21,13 +20,13 @@
   max-height: 320px;
 }
 
-.info_container{
+.info_container {
   width: 90%;
   height: 23vh;
   position: relative;
   overflow: hidden;
 }
-.prev{
+.prev {
   position: fixed;
   width: 5%;
   height: 7%;
@@ -37,7 +36,7 @@
   z-index: 2;
   cursor: pointer;
 }
-.next{
+.next {
   position: fixed;
   width: 5%;
   height: 7%;
@@ -47,8 +46,8 @@
   z-index: 2;
   cursor: pointer;
 }
-@media (min-width: 450px){
-  .prev{
+@media (min-width: 450px) {
+  .prev {
     position: fixed;
     width: 3%;
     height: 7%;
@@ -57,7 +56,7 @@
     z-index: 2;
     cursor: pointer;
   }
-  .next{
+  .next {
     position: fixed;
     width: 3%;
     height: 7%;
@@ -66,28 +65,27 @@
     z-index: 2;
     cursor: pointer;
   }
-  .info_container{
+  .info_container {
     width: 62%;
     height: 23vh;
     position: relative;
     overflow: hidden;
   }
-  .go_home{
+  .go_home {
     width: 40vw;
     height: 8.5vh;
     max-height: 56px;
     max-width: 380px;
-    background-color: #FF4B4B;
+    background-color: #ff4b4b;
     border-radius: 28px;
-    color: #FFFFFF;
+    color: #ffffff;
     font-size: 1.3rem;
     font-weight: 700;
     margin-top: 4%;
     cursor: pointer;
+  }
 }
-
-}
-.inner_container{
+.inner_container {
   width: 300%;
   height: 100%;
   display: flex;
@@ -135,31 +133,30 @@
   padding: 0 5%;
 }
 .kakao_title {
-    font-weight: 700;
-    color: #111111;
+  font-weight: 700;
+  color: #111111;
 }
 .kakao_id {
-    color: #777777;
+  color: #777777;
 }
 
-
-.tip{
+.tip {
   color: #111111;
   margin: 1% 0;
   font-weight: 700;
 }
-.go_home{
-    width: 90%;
-    height: 8.5vh;
-    max-height: 56px;
-    max-width: 380px;
-    background-color: #FF4B4B;
-    border-radius: 28px;
-    color: #FFFFFF;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 1% 0;
-    cursor: pointer;
+.go_home {
+  width: 90%;
+  height: 8.5vh;
+  max-height: 56px;
+  max-width: 380px;
+  background-color: #ff4b4b;
+  border-radius: 28px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 1% 0;
+  cursor: pointer;
 }
 .cancelBtn {
   font-size: 1.1rem;

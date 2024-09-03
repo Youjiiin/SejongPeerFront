@@ -196,12 +196,11 @@ const StudyPostWrite = props => {
         }
       );
 
-      
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
-      
+
       console.log(data);
-      
+
       if (response.status === 413) {
         console.log(`이미지 용량 혹은 형식을 확인하세요`);
         togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
@@ -314,10 +313,12 @@ const StudyPostWrite = props => {
       const studyId = data.data.id;
 
       if (imgFiles.length > 0) {
-        try{
+        try {
           await imgUpload(studyId);
         } catch (error) {
-          togglePopup(`이미지 용량 혹은 형식이 맞지 않아 이미지를 제외하고 업로드 되었습니다.`);
+          togglePopup(
+            `이미지 용량 혹은 형식이 맞지 않아 이미지를 제외하고 업로드 되었습니다.`
+          );
         }
       }
 
@@ -433,7 +434,7 @@ const StudyPostWrite = props => {
 
   return (
     <div className={style.container}>
-      <SubHeader text="세종스터디" />
+      <SubHeader text="세종스터디" customBackLink="/study" />
       <div className={style.innerConatiner}>
         <PostHeader onOpenConfirmModal={openConfirmModal} />
         <div className={style.contentContainer}>

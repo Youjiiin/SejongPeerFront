@@ -16,7 +16,7 @@ const BuddyStart2 = () => {
 
   return (
     <div className={style.container}>
-      <SubHeader text="세종버디" />
+      <SubHeader text="세종버디" customBackLink="/buddy/start1" />
       <div className={style.top}>
         {/* <div className={style.imgBack}> */}
         <img className={style.buddyImg2} src={BuddyStart} alt="BuddyStart" />
