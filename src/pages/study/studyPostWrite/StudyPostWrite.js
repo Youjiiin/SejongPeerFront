@@ -361,6 +361,7 @@ const StudyPostWrite = props => {
     }
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
+
     let tagSplit;
     if (typeof tags === 'string') {
       tagSplit = tags
@@ -368,6 +369,7 @@ const StudyPostWrite = props => {
         .split('#')
         .filter(e => e !== '');
     }
+    
     const studyData = {
       title: title,
       content: content,
