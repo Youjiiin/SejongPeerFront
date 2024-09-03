@@ -337,26 +337,27 @@
     font-size: 16px;
     color: #ff4b4b;
     height: 2vh;
-    width: 30vw;
+    /* width: 30vw; */
   }
 
   .checkWord {
-    width: 65vw; /* 너비를 넓혔습니다 */
     text-align: left;
   }
 
   .buddyImg,
   .honbobImg {
-    width: 7vh;
-    height: 7vh;
+    width: 64px;
+    height: 48px;
     margin-right: 0.2vw;
+    border: none;
   }
 
   .buddyImg {
     background-image: url('../../../assets/image/sejongBuddycat.png');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover;
+    background-size: contain;
+    border: none;
   }
 
   .honbobImg {

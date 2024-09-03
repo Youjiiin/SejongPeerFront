@@ -155,7 +155,7 @@ const StudyList = () => {
 
   return (
     <Container>
-      <SubHeader text="세종스터디" customBackLink="/mypage" />
+      <SubHeader text="세종스터디" customBackLink="/main" />
       <FilterBox>
         {category === 0 ? (
           <Filter

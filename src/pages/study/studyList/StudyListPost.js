@@ -15,9 +15,9 @@ const StudyListPost = ({ post }) => {
     totalRecruitmentCount,
     participantCount,
     recruitmentStatus,
-    recruitmentEndAt
+    recruitmentEndAt,
+    isScraped,
   } = post;
-  const isScrapped = localStorage.getItem(`isScrapped_${id}`) === 'true'; // 스크랩 상태 확인
 
   const formatDate = dateString => {
     const date = new Date(dateString);
@@ -58,18 +58,18 @@ const StudyListPost = ({ post }) => {
           <Title>{title}</Title>
           {hasImage && <ImageIcon src={picture} alt="hasImage" />}
         </PostMiddle>
-        {recruitmentStatus === '모집 중'? 
-        <Count>
-          {participantCount} / {totalRecruitmentCount}
-        </Count>
-        :
-        <Finish>모집완료</Finish>
-        }
+        {recruitmentStatus === '모집 중' ? (
+          <Count>
+            {participantCount} / {totalRecruitmentCount}
+          </Count>
+        ) : (
+          <Finish>모집완료</Finish>
+        )}
       </div>
 
       <PostBottom>
         <Like>
-          <LikeIcon src={isScrapped ? filledHeart : heart} alt="like" />
+          <LikeIcon src={isScraped ? filledHeart : heart} alt="like" />
           <LikeNumber>{post.scrapCount}</LikeNumber>
         </Like>
       </PostBottom>
@@ -85,7 +85,7 @@ const PostWrapper = styled.div`
   flex-direction: column;
   border-bottom: 1px solid ${COLORS.line2};
   padding: 12px 16px;
-  background-color: ${({ $recruitmentStatus }) => 
+  background-color: ${({ $recruitmentStatus }) =>
     $recruitmentStatus === '모집 중' ? '#FFF' : '#EEEEEE'};
 `;
 
@@ -173,7 +173,7 @@ const PostBottom = styled.div`
   display: flex;
   align-items: center;
   margin-tozzzzzzzzp: 6px;
-  display: inline-block
+  display: inline-block;
 `;
 
 const Like = styled.div`
