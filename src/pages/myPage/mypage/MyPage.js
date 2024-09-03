@@ -250,12 +250,12 @@ const MyPage = () => {
                   </p>
                 </div>
                 <div className={styles.matchingBox}>
-                  <button className={styles.matchingButton}>
+                  <button
+                    className={styles.matchingButton}
+                    onClick={handleAppliedStudy}
+                  >
                     <div className={styles.leftBox}>
-                      <div
-                        className={`${styles.redWord} ${styles.checkWord}`}
-                        onClick={handleAppliedStudy}
-                      >
+                      <div className={`${styles.redWord} ${styles.checkWord}`}>
                         지원한 스터디 확인
                       </div>
                       <div

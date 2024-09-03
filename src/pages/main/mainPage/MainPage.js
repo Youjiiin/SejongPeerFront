@@ -54,7 +54,7 @@ const MainPage = () => {
   const urls = [
     'https://sejonghonbab.simple.ink/', // 혼밥 이용방법
     'https://sejongbuddy.simple.ink/', // 세종버디 이용방법
-    'https://sejongpeer.simple.ink/', // FAQ
+    'https://sejongpeer.notion.site/bd0e00cbc146400ab78e0e2ee34c8edf?pvs=4/', // FAQ
   ];
 
   // 이미지 클릭 이벤트 핸들러, 인덱스에 해당하는 URL로 이동

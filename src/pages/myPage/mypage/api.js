@@ -46,7 +46,7 @@ export const fetchAppliedStudies = async () => {
       withCredentials: true,
     }
   );
-  // console.log(response);
+  console.log(response.data.data);
   return response.data;
 };
 
