@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import StudyMyPost from '../../../components/studyMyPost/studyMyPost';
 import NavBar from '../../../components/studyMyPost/navBar';
 import COLORS from '../../../theme';
-import { useState } from 'react';
 import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 const MyPost = () => {
   return (
