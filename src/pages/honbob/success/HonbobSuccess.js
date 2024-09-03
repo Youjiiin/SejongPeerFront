@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { SubHeader } from 'components/headerRefactor/SubHeader';
 import style from './HonbobSuccess.module.css';
 
 const HonbobSuccess = () => {
@@ -53,6 +53,7 @@ const HonbobSuccess = () => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="혼밥탈출" customBackLink="/main" />
       <div className={style.Text}>밥짝꿍 매칭 성공!</div>
       <div className={style.imgBox} />
       <div className={style.informBox}>

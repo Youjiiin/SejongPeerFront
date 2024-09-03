@@ -94,7 +94,7 @@ const FindId = () => {
 
   return (
     <div className={style.entire_Container}>
-      <SubHeader text="아이디/비밀번호 찾기" />
+      <SubHeader text="아이디/비밀번호 찾기" customBackLink="/login" />
       <div className={style.container}>
         <div className={style.explain_box2}>
           <p className={style.explain_title}>아이디/비밀번호 찾기</p>

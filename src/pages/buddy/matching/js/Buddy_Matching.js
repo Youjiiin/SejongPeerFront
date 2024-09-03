@@ -96,7 +96,7 @@ const Buddy_Matching = () => {
 
   return (
     <div className={style.wrapper} style={mediaWidth}>
-      <SubHeader text="세종버디" />
+      <SubHeader text="세종버디" customBackLink="/buddy/start2" />
       <div className={style.formWrapper} style={Slide}>
         <ChoiceGender sendChoiceGenderData={GenderChoiceData} />
         <Major sendMajorData={MajorData} sendSubMajorData={subMajorData} />

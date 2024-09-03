@@ -62,7 +62,6 @@ const BuddyAccept = () => {
       isAccept: accept,
     };
 
-
     fetch(process.env.REACT_APP_BACK_SERVER + '/buddy/matching/status', {
       method: 'POST',
       body: JSON.stringify(acceptInfo),
@@ -74,7 +73,7 @@ const BuddyAccept = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        console.log(data);
         if (accept) {
           toast.success(
             '매칭이 수락되었습니다! \n상대방이 매칭을 수락할 때까지 기다려주세요.'
@@ -109,7 +108,7 @@ const BuddyAccept = () => {
 
   return (
     <div className={style.container}>
-      <SubHeader text="세종버디" />
+      <SubHeader text="세종버디" customBackLink="/main" />
       <p className={style.title}>버디를 찾았습니다!</p>
       <img className={style.find_buddy} src={findBuddy} alt="findBuddy" />
 
