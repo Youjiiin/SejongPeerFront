@@ -22,8 +22,7 @@ const AppliedStudy = () => {
         setAppliedStudies(
           data.data.map(study => ({
             ...study,
-            isScrapped:
-              localStorage.getItem(`isScrapped_${study.studyId}`) === 'true',
+            isScrapped: study.isScrappedStudy,
           }))
         );
       } catch (err) {
