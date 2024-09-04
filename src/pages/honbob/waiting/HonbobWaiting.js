@@ -103,7 +103,7 @@ const HonbobWaiting = () => {
         <p className={style.Text2}>
           <span className={style.Text2_span1}>*</span>
           <span className={style.Text2_span2}>
-            15분동안 매칭이 되며,
+            60분동안 매칭이 되며,
             <br />
             매칭 실패 시 다시 신청할 수 있습니다.
           </span>
@@ -112,7 +112,7 @@ const HonbobWaiting = () => {
 
       <div className={style.BtnBox}>
         <p className={style.Text3}>
-          매칭 시 밥짝꿍의 카카오톡ID와 선호액티비티가 전달됩니다.
+          매칭 시 밥짝꿍의 카카오톡ID와 선호메뉴가 전달됩니다.
         </p>
         <button className={style.moveToHomeBtn} onClick={moveToMain}>
           홈페이지로 이동
