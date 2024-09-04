@@ -114,7 +114,7 @@ const AppliedStudy = () => {
           >
             <PostTop>
               <TagWrapper>
-                <TagText>{study.type}</TagText>
+                <TagText>{study.studyType}</TagText>
               </TagWrapper>
               {study.tags.map((tag, index) => (
                 <TagText1 key={index}>{tag}</TagText1>
