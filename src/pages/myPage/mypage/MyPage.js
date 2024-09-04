@@ -232,6 +232,10 @@ const MyPage = () => {
   const buddyInfoHandler = () => {
     window.open('https://sejongbuddy.simple.ink/', '_blank');
   };
+  //버디 사용방법
+  const studyInfoHandler = () => {
+    window.open('https://sejongpeer.notion.site/bd0e00cbc146400ab78e0e2ee34c8edf?pvs=4/', '_blank');
+  };
 
   return (
     <div className={styles.Container}>
@@ -387,7 +391,10 @@ const MyPage = () => {
                   <p style={{ fontWeight: '800' }}>사용방법</p>
                 </div>
                 <div className={styles.useInformBox}>
-                  <button className={styles.useInformBtn}>
+                  <button 
+                  className={styles.useInformBtn}
+                  onClick={studyInfoHandler}
+                  >
                     <div
                       className={styles.redWord2}
                       style={{ fontWeight: '400', fontFamily: 'jalnan' }}
