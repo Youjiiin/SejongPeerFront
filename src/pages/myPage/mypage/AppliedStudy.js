@@ -142,6 +142,7 @@ const AppliedStudy = () => {
             <Like
               onClick={e => {
                 e.stopPropagation(); // 스크랩 버튼 클릭 시 상세 페이지로 이동 방지
+                e.preventDefault();
                 handleScrapToggle(study.studyId, study.isScrapped, index);
               }}
             >
