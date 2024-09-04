@@ -105,7 +105,13 @@ const SignUpElement = props => {
           />
         )}
 
-      {isError && <p className={style.error}>{isError}</p>}
+      {isError && <div style={{
+        display: 'flex',
+        gap: '5px',
+      }}>
+      <p className={style.error}>* </p>
+      <p className={style.error}>{isError}</p>  
+      </div>}
     </div>
   );
 };
