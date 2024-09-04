@@ -23,6 +23,7 @@ export const BuddyHandler = async (navigate, setBuddyCount) => {
         }
       );
       const data = await response.json();
+      console.log(data)
 
       if (data.data !== null) {
         setBuddyCount(data.data.matchingCompletedCount);
@@ -104,6 +105,7 @@ export const HonbobHandler = async navigate => {
       }
 
       const data = await response.json();
+      console.log(data)
 
       if (data.data) {
         switch (data.data.status) {
