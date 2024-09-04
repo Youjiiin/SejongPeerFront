@@ -9,7 +9,7 @@ const InputTextBox = props => {
   const isPhone = props.id === 'phoneNum';
 
   const inputHandler = event => {
-    const regex = /^[a-zA-Z0-9]{10,}$/;
+    const regex = /^[a-zA-Z0-9!@#$%^&*?]{10,}$/;
 
     let inputValue = event.target.value;
     //아이디
@@ -34,7 +34,7 @@ const InputTextBox = props => {
           );
         }
       } else {
-        props.errorHandler('* 비밀번호는 10자이상으로 작성해주세요');
+        props.errorHandler('* 비밀번호는 10자이상으로 작성해주세요(특수문자 !@#$%^&*?만 가능)');
       }
       //패스워드 확인
     } else if (props.id === 'pwdCheck') {
