@@ -131,6 +131,7 @@ const MyPage = () => {
         }
       );
       const data = await response.json();
+      console.log(data);
       //상태 관리
       if (data.data === null) {
         toast.error('아직 신청한 내역이 없습니다!');

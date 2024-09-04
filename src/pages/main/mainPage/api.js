@@ -24,14 +24,19 @@ export const BuddyHandler = async (navigate, setBuddyCount) => {
       );
       const data = await response.json();
 
-      if (data.data !== null) setBuddyCount(data.data.matchingCompletedCount);
-      else setBuddyCount(0);
+      if (data.data !== null) {
+        setBuddyCount(data.data.matchingCompletedCount);
+        statusHandler(
+          data.data.status,
+          data.data.matchingCompletedCount,
+          navigate
+        );
+      } else {
+        setBuddyCount(0);
+        navigate('/buddy/start1');
+      }
 
-      statusHandler(
-        data.data.status,
-        data.data.matchingCompletedCount,
-        navigate
-      );
+
     } catch (error) {
       toast.error('에러가 발생했습니다.');
       console.log(error.message);
@@ -100,23 +105,28 @@ export const HonbobHandler = async navigate => {
 
       const data = await response.json();
 
-      switch (data.data.status) {
-        case 'CANCEL':
-        case 'TIME_OUT':
-        case 'EXPIRED':
-          navigate('/honbob/start1');
-          break;
-        case 'IN_PROGRESS':
-          toast.info('매칭 중입니다!');
-          navigate('/honbob/waiting');
-          break;
-        case 'MATCHING_COMPLETED':
-          toast.info('매칭에 성공했습니다!');
-          navigate('/honbob/success');
-          break;
-        default:
-          break;
-      }
+      if (data.data) {
+        switch (data.data.status) {
+          case 'CANCEL':
+          case 'TIME_OUT':
+          case 'EXPIRED':
+            navigate('/honbob/start1');
+            break;
+          case 'IN_PROGRESS':
+            toast.info('매칭 중입니다!');
+            navigate('/honbob/waiting');
+            break;
+          case 'MATCHING_COMPLETED':
+            toast.info('매칭에 성공했습니다!');
+            navigate('/honbob/success');
+            break;
+          default:
+            break;
+        }
+    } else {
+      navigate('/honbob/start1')
+    }
+
     } catch (error) {
       console.error('에러 체크:', error);
       toast.error('매칭 체크 실패!');

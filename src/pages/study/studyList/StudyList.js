@@ -98,8 +98,6 @@ const StudyList = () => {
   const [isMember, setIsMember] = useState(false);
   const [isNow, setIsNow] = useState(false);
 
-  const tagStyle = 1;
-
   useEffect(() => {
     if (isCategory !== '') {
       setIsCategory(true);
@@ -111,11 +109,6 @@ const StudyList = () => {
       setIsNow(true);
     }
   }, [isCategory, isMember, isNow]);
-
-  const handleClick = () => {
-    setModalOpen(modalOpen === 'study' ? null : 'study');
-    studyFilterHandler();
-  };
 
   //강의 시간표 get
   useEffect(() => {
@@ -193,7 +186,6 @@ const StudyList = () => {
         {member === 0 ? (
           <Filter
             onClick={() => {
-              setIsClickedStudy(true);
               setModalOpen(modalOpen === 'members' ? null : 'members');
             }}
           >
@@ -271,11 +263,11 @@ const StudyList = () => {
         <BottomModal
           ref={modalRef}
           setModalOpen={setModalOpen}
-          deleteHandler={deleteHandler}
+          // deleteHandler={deleteHandler}
         >
           {modalOpen === 'study' ? (
             studyType === 'lecture' ? (
-              <Filter_Field deleteHandler={deleteHandler} />
+              <Filter_Field deleteHandler={deleteHandler}/>
             ) : (
               <Filter_Field2 deleteHandler={deleteHandler} />
             )
