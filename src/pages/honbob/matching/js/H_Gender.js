@@ -18,7 +18,7 @@ const H_Gender = props => {
     setIsSameClicked(false);
     setIsDontCareClicked(true);
     const choiceGender = 'NO_MATTER';
-    props.setChoiceGenderKorean('이성');
+    props.setChoiceGenderKorean('상관없음');
     props.sendChoiceGenderData(choiceGender);
   };
 
