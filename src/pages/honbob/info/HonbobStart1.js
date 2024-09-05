@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import style from './HonbobStart.module.css';
 import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 import COLORS from 'theme';
+import { toast } from 'sonner';
 
 const HonbobStart1 = () => {
   const [countHonbab, setCountHonbab] = useState(0);
@@ -14,9 +15,13 @@ const HonbobStart1 = () => {
       countHonbabHandler();
     }
   }, []);
-
+  const refreshToken = localStorage.getItem('refreshToken');
+  const accessToken = localStorage.getItem('accessToken');
   const HonbobHandler = async () => {
-    navigate('/honbob/matching');
+    if (refreshToken === null || accessToken === null) {
+      toast.error('로그인 후 이용 가능한 서비스입니다!');
+      navigate('/login');
+    } else navigate('/honbob/matching');
   };
 
   const infoHandler = () => {
