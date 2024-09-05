@@ -60,7 +60,7 @@ const BuddyStart1 = () => {
 
         <div className={style.bottom}>
           <p className={style.text}>
-            {countBuddy}명의 학생들이 버디를 찾고 있어요
+            {countBuddy + 15}명의 학생들이 버디를 찾고 있어요
           </p>
           <button onClick={BuddyHandler} className={style.btn1}>
             세종버디 신청하기
