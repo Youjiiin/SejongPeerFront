@@ -23,7 +23,7 @@ export const BuddyHandler = async (navigate, setBuddyCount) => {
         }
       );
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       if (data.data !== null) {
         setBuddyCount(data.data.matchingCompletedCount);
@@ -36,8 +36,6 @@ export const BuddyHandler = async (navigate, setBuddyCount) => {
         setBuddyCount(0);
         navigate('/buddy/start1');
       }
-
-
     } catch (error) {
       toast.error('에러가 발생했습니다.');
       console.log(error.message);
@@ -85,7 +83,7 @@ export const HonbobHandler = async navigate => {
   const accessToken = localStorage.getItem('accessToken');
 
   if (refreshToken === null || accessToken === null) {
-    toast.info('로그인 후 이용 가능한 서비스입니다!');
+    toast.error('로그인 후 이용 가능한 서비스입니다!');
     navigate('/login');
   } else {
     try {
@@ -105,7 +103,7 @@ export const HonbobHandler = async navigate => {
       }
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       if (data.data) {
         switch (data.data.status) {
@@ -125,10 +123,9 @@ export const HonbobHandler = async navigate => {
           default:
             break;
         }
-    } else {
-      navigate('/honbob/start1')
-    }
-
+      } else {
+        navigate('/honbob/start1');
+      }
     } catch (error) {
       console.error('에러 체크:', error);
       toast.error('매칭 체크 실패!');
