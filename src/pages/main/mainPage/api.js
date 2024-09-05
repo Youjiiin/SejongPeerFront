@@ -8,8 +8,9 @@ export const BuddyHandler = async (navigate, setBuddyCount) => {
   const accessToken = localStorage.getItem('accessToken');
 
   if (refreshToken === null || accessToken === null) {
-    toast.error('로그인 후 이용 가능한 서비스입니다!');
-    navigate('/login');
+    // toast.error('로그인 후 이용 가능한 서비스입니다!');
+    // navigate('/login');
+    navigate('/buddy');
   } else {
     try {
       const response = await fetch(
@@ -83,8 +84,8 @@ export const HonbobHandler = async navigate => {
   const accessToken = localStorage.getItem('accessToken');
 
   if (refreshToken === null || accessToken === null) {
-    toast.error('로그인 후 이용 가능한 서비스입니다!');
-    navigate('/login');
+    // toast.error('로그인 후 이용 가능한 서비스입니다!');
+    navigate('/honbob/start1');
   } else {
     try {
       const response = await fetch(

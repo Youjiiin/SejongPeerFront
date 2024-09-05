@@ -2,12 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import BuddyStart from '../../../assets/image/buddyStart2.png';
 import style from './BuddyStart.module.css';
 import { SubHeader } from '../../../components/headerRefactor/SubHeader';
+import { toast } from 'sonner';
 
 const BuddyStart2 = () => {
   const navigate = useNavigate();
+  const refreshToken = localStorage.getItem('refreshToken');
+  const accessToken = localStorage.getItem('accessToken');
 
   const BuddyHandler = async () => {
-    navigate('/buddy/matching');
+    if (refreshToken === null || accessToken === null) {
+      toast.error('로그인 후 이용 가능한 서비스입니다!');
+      navigate('/login');
+    } else navigate('/buddy/matching');
   };
 
   const BackHandler = () => {
