@@ -442,8 +442,9 @@ const Content = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
-  letter-spacing: -0.333px;
+  letter-spacing: -0.3333px;
   text-align: left;
+  white-space: pre-wrap;
 `;
 
 const TagContainer = styled.div`
