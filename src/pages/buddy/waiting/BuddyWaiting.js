@@ -115,7 +115,7 @@ const BuddyWaiting = () => {
       <div className={style.TextBox}>
         <p className={style.title}>세종버디</p>
         <p className={style.text1}>
-          {countBuddy}명의 학생들이 버디를 찾고 있어요!
+          {countBuddy + 15}명의 학생들이 버디를 찾고 있어요!
         </p>
         <img
           src={waitingCat}
