@@ -74,8 +74,8 @@ const HonbobStart1 = () => {
             <div className={style.raccoon}></div>{' '}
             <div>
               <b>
-                <span style={{ fontWeight: '700' }}>{countHonbab}</span>명의
-                학생들이 밥짝꿍을 찾고있어요!
+                <span style={{ fontWeight: '700' }}>{countHonbab + 15}</span>
+                명의 학생들이 밥짝꿍을 찾고있어요!
               </b>
             </div>
           </div>
