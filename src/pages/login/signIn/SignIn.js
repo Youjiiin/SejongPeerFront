@@ -2,8 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { MyContext } from '../../../App';
 import SignInBox from './SignInBox';
-
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 import style from './SignIn.module.css';
+import { toast } from 'sonner';
 
 const SignIn = () => {
   const { setLogoutTimer } = useContext(MyContext);
@@ -46,13 +47,13 @@ const SignIn = () => {
       );
 
       if (!response.ok) {
-        alert('아이디나 비밀번호가 일치하지 않습니다.');
+        toast.error('아이디나 비밀번호가 일치하지 않습니다.');
         const errorData = await response.json(); // 오류 응답을 처리합니다.
         throw new Error(errorData.message);
       }
 
       const data = await response.json(); // data 변수를 await로 초기화
-
+      toast.success('로그인에 성공했습니다. 메인화면으로 이동합니다!');
       // 로그인 성공 후, 로컬 스토리지에 저장
       localStorage.setItem('kakaoAccount', data.data.kakaoAccount);
       localStorage.setItem('name', data.data.name);
@@ -73,12 +74,13 @@ const SignIn = () => {
       navigate('/main');
     } catch (error) {
       console.error(error.message);
-      alert('로그인에 실패했습니다. 다시 시도해주세요.');
+      // toast.error('로그인에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
   return (
     <div className={style.entire_Container}>
+      <SubHeader text="로그인" customBackLink="/main" />
       <div className={style.container}>
         <SignInBox inputID={inputID} name="아이디" />
         <SignInBox inputPwd={inputPwd} name="비밀번호" id="pwd" />

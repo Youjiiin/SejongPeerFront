@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import buddyStart1 from '../../../assets/image/buddyStart1.png';
 import style from './BuddyStart.module.css';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const BuddyStart1 = () => {
   const [countBuddy, setCountBuddy] = useState(0);
@@ -40,28 +41,33 @@ const BuddyStart1 = () => {
   };
 
   return (
-    <div className={style.container}>
-      <div className={style.top}>
-        <div className={style.inform_con}>
-          <button onClick={infoHandler} className={style.informBtn}>
-            이용방법 확인 <div className={style.informImg}></div>
-          </button>
+    <>
+      <SubHeader text="세종버디" customBackLink="/main" />
+      <div className={style.container}>
+        {/* <SubHeader /> */}
+        <div className={style.top}>
+          <div className={style.inform_con}>
+            <button onClick={infoHandler} className={style.informBtn}>
+              <p>이용방법 확인</p>
+              <div className={style.informImg}></div>
+            </button>
+          </div>
+
+          <img className={style.buddyImg} src={buddyStart1} alt="buddyStart1" />
+          <p className={style.explain}>캠퍼스 짝꿍이 필요할 땐?</p>
+          <p className={style.sejongbuddy}>세종버디</p>
         </div>
 
-        <img className={style.buddyImg} src={buddyStart1} alt="buddyStart1" />
-        <p className={style.explain}>캠퍼스 짝꿍이 필요할 땐?</p>
-        <p className={style.sejongbuddy}>세종버디</p>
+        <div className={style.bottom}>
+          <p className={style.text}>
+            {countBuddy + 15}명의 학생들이 버디를 찾고 있어요
+          </p>
+          <button onClick={BuddyHandler} className={style.btn1}>
+            세종버디 신청하기
+          </button>
+        </div>
       </div>
-
-      <div className={style.bottom}>
-        <p className={style.text}>
-          {countBuddy}명의 학생들이 버디를 찾고 있어요
-        </p>
-        <button onClick={BuddyHandler} className={style.btn1}>
-          세종버디 시작
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

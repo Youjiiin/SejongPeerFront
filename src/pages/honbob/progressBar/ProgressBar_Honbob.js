@@ -72,7 +72,7 @@ const ProgressBar = props => {
       updateStep[1] = true;
       updateStep[2] = false;
       prev = true;
-      console.log("chiceMenu:", props.choiceMenu);
+      console.log('chiceMenu:', props.choiceMenu);
       if (props.choiceMenu !== '') {
         next = true;
         if (!clickedPrev) {
@@ -108,18 +108,13 @@ const ProgressBar = props => {
       if (props.choiceMenu !== '') {
         next = true;
       }
-    }
-    else {
+    } else {
       setIsLastPage(false);
     }
     setStep(updateStep);
     setCanMoveNext(next);
     setCanMovePrev(prev);
-  }, [
-    props.choiceGenderHonbob,
-    props.choiceMenu,
-    props.slide,
-  ]);
+  }, [props.choiceGenderHonbob, props.choiceMenu, props.slide]);
 
   const nextClass = canMoveNext
     ? styles.nextController

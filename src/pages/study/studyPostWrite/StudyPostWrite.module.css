@@ -3,6 +3,7 @@
   .container {
     width: 100vw;
     height: auto;
+    margin-top: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,7 +71,6 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-top: 60px;
   }
 
   .contentContainer {

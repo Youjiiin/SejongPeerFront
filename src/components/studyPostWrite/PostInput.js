@@ -1,12 +1,18 @@
 import style from './PostInput.module.css';
 import usePostStore from '../../pages/study/studyPostWrite/usePostStore';
+
 const PostInput = () => {
   const { content, setContent } = usePostStore();
+
   const handleContentChange = e => {
-    setContent(e.target.value);
+    const newValue = e.target.value;
+    if (newValue.length <= 1000) {
+      setContent(newValue);
+    }
   };
+
   return (
-    <div className={style.textContainer}>
+    <div className={`${style.textContainer} ${content ? style.hasContent : ''}`}>
       <textarea
         onChange={handleContentChange}
         placeholder="내용을 입력하세요"

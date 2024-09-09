@@ -8,16 +8,16 @@ import COLORS from '../../../theme';
 const StudyListPost = ({ post }) => {
   const {
     title,
-    createdAt,
     hasImage,
     categoryName,
     id,
     tags,
-    scrapCount,
     totalRecruitmentCount,
     participantCount,
+    recruitmentStatus,
+    recruitmentEndAt,
+    isScraped,
   } = post;
-  const isScrapped = localStorage.getItem(`isScrapped_${id}`) === 'true'; // 스크랩 상태 확인
 
   const formatDate = dateString => {
     const date = new Date(dateString);
@@ -28,7 +28,7 @@ const StudyListPost = ({ post }) => {
   };
 
   return (
-    <PostWrapper>
+    <PostWrapper $recruitmentStatus={recruitmentStatus}>
       <div
         style={{
           display: 'flex',
@@ -44,27 +44,32 @@ const StudyListPost = ({ post }) => {
             <TagText1 key={index}>{tag}</TagText1>
           ))}
         </PostTop>
-        <DateText>{formatDate(createdAt)}</DateText>
+        <DateText>~{formatDate(recruitmentEndAt)}</DateText>
       </div>
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          margin: '6px 0',
         }}
       >
         <PostMiddle>
           <Title>{title}</Title>
           {hasImage && <ImageIcon src={picture} alt="hasImage" />}
         </PostMiddle>
-        <Count>
-          {participantCount} / {totalRecruitmentCount}
-        </Count>
+        {recruitmentStatus === '모집 중' ? (
+          <Count>
+            {participantCount} / {totalRecruitmentCount}
+          </Count>
+        ) : (
+          <Finish>모집완료</Finish>
+        )}
       </div>
 
       <PostBottom>
         <Like>
-          <LikeIcon src={isScrapped ? filledHeart : heart} alt="like" />
+          <LikeIcon src={isScraped ? filledHeart : heart} alt="like" />
           <LikeNumber>{post.scrapCount}</LikeNumber>
         </Like>
       </PostBottom>
@@ -76,20 +81,19 @@ export default StudyListPost;
 
 const PostWrapper = styled.div`
   width: 100%;
-  height: 12vh;
-  /* display: flex; */
+  display: flex;
   flex-direction: column;
   border-bottom: 1px solid ${COLORS.line2};
-  padding: 1% 3%;
+  padding: 12px 16px;
+  background-color: ${({ $recruitmentStatus }) =>
+    $recruitmentStatus === '모집 중' ? '#FFF' : '#EEEEEE'};
 `;
 
 const PostTop = styled.div`
   width: 100%;
-  height: 20%;
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: 1.5%;
 `;
 
 const TagWrapper = styled.div`
@@ -100,39 +104,40 @@ const TagWrapper = styled.div`
 `;
 
 const TagText = styled.p`
-  margin: 0px;
+  margin: 0;
   color: ${COLORS.main};
-  display: flex;
-  align-items: center;
-  gap: 5%;
+  text-align: 20px;
   border-radius: 15px;
-  border: 1px solid ${COLORS.main};
+  border: 1px solid ${COLORS.sub};
   padding: 2px 8px;
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
 `;
 
 const TagText1 = styled.p`
-  margin: 0px;
+  margin: 0;
   color: ${COLORS.font3};
-  display: flex;
-  align-items: center;
-  gap: 5%;
   border-radius: 15px;
   border: 1px solid ${COLORS.line1};
   padding: 2px 8px;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
 `;
 
 const DateText = styled.div`
-  font-size: 1rem;
   color: ${COLORS.font4};
-  margin-top: 1.5%;
 `;
 
 const PostMiddle = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 0 1.2%;
-  margin-top: 6px;
 `;
 
 const Count = styled.div`
@@ -143,12 +148,19 @@ const Count = styled.div`
   font-size: 16px;
   margin: 0px;
 `;
+const Finish = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${COLORS.font4};
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0px;
+`;
 
 const Title = styled.p`
-  font-size: 1rem;
   font-weight: 600;
   color: ${COLORS.font1};
-  margin: 2.1% 0;
+  margin: 0;
 `;
 
 const ImageIcon = styled.img`
@@ -158,17 +170,16 @@ const ImageIcon = styled.img`
 
 const PostBottom = styled.div`
   width: 100%;
-  height: 30%;
   display: flex;
   align-items: center;
-  gap: 5%;
-  padding: 0 1.2%;
+  margin-tozzzzzzzzp: 6px;
+  display: inline-block;
 `;
 
 const Like = styled.div`
   display: flex;
   align-items: center;
-  gap: 8%;
+  gap: 4px;
 `;
 
 const LikeIcon = styled.img`
@@ -178,4 +189,6 @@ const LikeIcon = styled.img`
 
 const LikeNumber = styled.p`
   color: ${COLORS.font3};
+  margin: 0;
+  margin-bottom: 0.6px;
 `;

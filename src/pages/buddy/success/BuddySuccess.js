@@ -8,6 +8,7 @@ import buddySucces from '../../../assets/image/buddySuccess.png';
 import prev from '../../../assets/image/back_gray.png';
 import next from '../../../assets/image/next_gray.png';
 import style from './BuddySuccess.module.css';
+import { SubHeader } from 'components/headerRefactor/SubHeader';
 
 const BuddySuccess = () => {
   const [major, setMajor] = useState('');
@@ -72,7 +73,7 @@ const BuddySuccess = () => {
 
   const getBuddyInfoHandler = () => {
     fetch(
-      process.env.REACT_APP_BACK_SERVER + '/buddy/matched/partner/details',
+      process.env.REACT_APP_BACK_SERVER + '/buddy/matched-partner/details',
       {
         method: 'GET',
         headers: {
@@ -105,6 +106,7 @@ const BuddySuccess = () => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종버디" customBackLink="/main" />
       <p className={style.title}>버디를 찾았습니다!</p>
       <img className={style.buddy_succes} src={buddySucces} alt="buddySucces" />
 

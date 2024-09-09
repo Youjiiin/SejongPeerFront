@@ -23,5 +23,19 @@ const usePostStore = create(set => ({
   setStudyLink: studyLink => set({ studyLink }),
   setQuestionLink: questionLink => set({ questionLink }),
   setTags: tags => set({ tags }),
+  reset: () =>
+    set({
+      title: '',
+      category: null,
+      startDate: '',
+      endDate: '',
+      memberNum: 1,
+      selectedWay: 'FACE_TO_FACE',
+      selectedFrequency: 'ONCE_OR_TWICE_A_WEEK',
+      content: '',
+      questionLink: '',
+      studyLink: '',
+      tags: [],
+    }),
 }));
 export default usePostStore;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const fetchMyPost = async () => {
+export const fetchData = async () => {
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
 
@@ -9,7 +9,7 @@ export const fetchMyPost = async () => {
   }
 
   const response = await axios.get(
-    'https://www.api-sejongpeer.shop/api/v1/study/relations/applicants',
+    'https://www.api-sejongpeer.shop/api/v1/external-activity',
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -19,6 +19,7 @@ export const fetchMyPost = async () => {
       withCredentials: true,
     }
   );
-  //   console.log(response.data.data);
+  //   console.log(response.data);
+
   return response.data.data;
 };

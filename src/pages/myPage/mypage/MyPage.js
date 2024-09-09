@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import styles from './MyPage.module.css';
+import { toast } from 'sonner';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const MyPage = () => {
   const [myPageData, setMyPageData] = useState({});
@@ -10,6 +12,10 @@ const MyPage = () => {
   const navigate = useNavigate();
   const goModify = () => {
     navigate('/mypage/modify');
+  };
+
+  const handleAppliedStudy = () => {
+    navigate('/mypage/appliedStudy');
   };
   // 탈퇴하기
   const handleDeleteAccount = async () => {
@@ -29,7 +35,7 @@ const MyPage = () => {
         );
         if (response.status === 200) {
           // 성공적으로 탈퇴 처리됨
-          alert('계정이 성공적으로 삭제되었습니다.');
+          toast.success('계정이 성공적으로 삭제되었습니다.');
           // 로컬 스토리지에서 사용자 정보 제거
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
@@ -38,7 +44,7 @@ const MyPage = () => {
         }
       } catch (error) {
         console.error('탈퇴 처리 중 오류 발생:', error);
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
+        toast.error('오류가 발생했습니다. 다시 시도해주세요.');
       }
     }
   };
@@ -59,7 +65,7 @@ const MyPage = () => {
     localStorage.removeItem('pwd');
     localStorage.removeItem('userId');
     console.log('로그아웃 성공');
-    alert('로그아웃 되었습니다');
+    toast.success('로그아웃 되었습니다');
     navigate('/main');
   };
 
@@ -115,7 +121,7 @@ const MyPage = () => {
   const BuddyHandler = async () => {
     try {
       const response = await fetch(
-        process.env.REACT_APP_BACK_SERVER + '/buddy/check-matching-status',
+        process.env.REACT_APP_BACK_SERVER + '/buddy/matching-status',
         {
           method: 'GET',
           headers: {
@@ -125,15 +131,16 @@ const MyPage = () => {
         }
       );
       const data = await response.json();
+      console.log(data);
       //상태 관리
       if (data.data === null) {
-        alert('아직 신청한 내역이 없습니다!');
+        toast.error('아직 신청한 내역이 없습니다!');
         navigate('/buddy/start1');
       } else {
         statusHandler(data.data.status, data.data.matchingCompletedCount);
       }
     } catch (error) {
-      alert('에러가 발생했습니다.');
+      toast.warning('에러가 발생했습니다.');
       console.log(error.message);
     }
   };
@@ -149,7 +156,7 @@ const MyPage = () => {
       }
       // 거절 당함
     } else if (status === 'DENIED') {
-      alert('상대방이 거절했습니다. 다시 신청해 주세요.');
+      toast.error('상대방이 거절했습니다. 다시 신청해 주세요.');
       if (count > 0) {
         navigate('/buddy/success');
       } else {
@@ -157,23 +164,25 @@ const MyPage = () => {
       }
       //매칭 최종 완료
     } else if (status === 'MATCHING_COMPLETED') {
-      alert('매칭에 성공했습니다. 정보를 확인해주세요!');
+      toast.success('매칭에 성공했습니다. 정보를 확인해주세요!');
       navigate('/buddy/success');
       //매칭 수락
     } else if (status === 'ACCEPT') {
-      alert('신청 수락을 했습니다. 상대방이 수락할때까지 기다려 주세요.');
+      toast.success(
+        '신청 수락을 했습니다. 상대방이 수락할때까지 기다려 주세요.'
+      );
       //매칭 거절
     } else if (status === 'REJECT') {
-      alert(
+      toast.error(
         '거절 패널티 1시간이 부과되었습니다. 1시간 이후에 다시 신청해 주세요.'
       );
       //매칭 중
     } else if (status === 'IN_PROGRESS') {
-      alert('매칭중입니다!');
+      toast.info('매칭중입니다!');
       navigate('/buddy/waiting');
       //매칭 완료
     } else if (status === 'FOUND_BUDDY') {
-      alert('버디를 찾았습니다!');
+      toast.success('버디를 찾았습니다!');
       navigate('/buddy/accept');
     }
   };
@@ -203,15 +212,15 @@ const MyPage = () => {
       ) {
         navigate('/honbob/start1');
       } else if (data.data.status === 'IN_PROGRESS') {
-        alert('매칭 중입니다!');
+        toast.info('매칭 중입니다!');
         navigate('/honbob/waiting');
       } else if (data.data.status === 'MATCHING_COMPLETED') {
-        alert('매칭에 성공했습니다!');
+        toast.success('매칭에 성공했습니다!');
         navigate('/honbob/success');
       }
     } catch (error) {
       console.error('에러 체크:', error);
-      alert('매칭 체크 실패!');
+      toast.error('매칭 체크 실패!');
     }
   };
 
@@ -223,16 +232,14 @@ const MyPage = () => {
   const buddyInfoHandler = () => {
     window.open('https://sejongbuddy.simple.ink/', '_blank');
   };
-
-  const agree1 = () => {
-    navigate('/personalinfo');
-  };
-  const agree2 = () => {
-    navigate('/useinfo');
+  //버디 사용방법
+  const studyInfoHandler = () => {
+    window.open('https://sejongpeer.notion.site/bd0e00cbc146400ab78e0e2ee34c8edf?pvs=4/', '_blank');
   };
 
   return (
     <div className={styles.Container}>
+      <SubHeader text="마이페이지" customBackLink="/main" />
       <div className={styles.container}>
         {myPageData && (
           <>
@@ -241,35 +248,41 @@ const MyPage = () => {
                 <div className={styles.informTitleBox}>
                   <span className={styles.br}></span>
                   <p
-                    style={{ fontWeight: '700', marginBottom: '0px' }}
+                    style={{ fontWeight: '800', marginBottom: '0px' }}
                     className={styles.informTitle}
                   >
                     매칭정보
                   </p>
                 </div>
                 <div className={styles.matchingBox}>
-                  <button className={styles.matchingButton}>
+                  <button
+                    className={styles.matchingButton}
+                    onClick={handleAppliedStudy}
+                  >
                     <div className={styles.leftBox}>
                       <div className={`${styles.redWord} ${styles.checkWord}`}>
                         지원한 스터디 확인
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         내가 지원한 스터디 현황 확인하기
                       </div>
                     </div>
                     <div className={styles.rightImg}></div>
                   </button>
-                  <button className={styles.matchingButton}>
+                  <button
+                    className={styles.matchingButton}
+                    onClick={() => navigate('/mypost')}
+                  >
                     <div className={styles.leftBox}>
                       <div className={`${styles.redWord} ${styles.checkWord}`}>
                         내 스터디 게시글 관리
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         내가 업로드한 게시글, 신청자 관리하기
                       </div>
@@ -287,7 +300,7 @@ const MyPage = () => {
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         매칭 상대 확인
                       </div>
@@ -304,7 +317,7 @@ const MyPage = () => {
                       </div>
                       <div
                         className={`${styles.blackWord} ${styles.checkWord}`}
-                        style={{ fontWeight: '700' }}
+                        style={{ fontWeight: '800' }}
                       >
                         밥짝꿍 확인
                       </div>
@@ -318,7 +331,7 @@ const MyPage = () => {
                 <div className={styles.informTitleBox}>
                   <span className={styles.br}></span>
                   <p
-                    style={{ fontWeight: '700', marginBottom: '0px' }}
+                    style={{ fontWeight: '800', marginBottom: '0px' }}
                     className={styles.informTitle}
                   >
                     세종스터디
@@ -326,10 +339,12 @@ const MyPage = () => {
                 </div>
 
                 <div className={styles.matchingBox}>
-                <button
+                  <button
                     className={styles.matchingButton}
                     onClick={() => navigate('/mypage/scraplist')}
-                  >                    <div className={styles.leftBox}>
+                  >
+                    {' '}
+                    <div className={styles.leftBox}>
                       <div className={`${styles.redWord} ${styles.checkWord}`}>
                         스크랩 한 글
                       </div>
@@ -349,9 +364,7 @@ const MyPage = () => {
               </div>
               <div className={styles.container2}>
                 <div className={styles.informTitleBox}>
-                  <p style={{ fontWeight: '700', marginBottom: '0px' }}>
-                    내 정보
-                  </p>
+                  <p style={{ fontWeight: '800' }}>내 정보</p>
                 </div>
 
                 <div className={styles.myInformBox}>
@@ -359,7 +372,7 @@ const MyPage = () => {
                     <div className={styles.leftBox}>
                       <div
                         className={`${styles.blackWord} ${styles.myInformWord}`}
-                        style={{ fontWeight: '700', fontSize: '1.8vh' }}
+                        style={{ fontWeight: '800', fontSize: '1.8vh' }}
                       >
                         {myPageData.name}
                       </div>
@@ -375,15 +388,16 @@ const MyPage = () => {
               </div>
               <div className={styles.container3}>
                 <div className={styles.informTitleBox}>
-                  <p style={{ fontWeight: '700', marginBottom: '0px' }}>
-                    사용방법
-                  </p>
+                  <p style={{ fontWeight: '800' }}>사용방법</p>
                 </div>
                 <div className={styles.useInformBox}>
-                  <button className={styles.useInformBtn}>
+                  <button 
+                  className={styles.useInformBtn}
+                  onClick={studyInfoHandler}
+                  >
                     <div
                       className={styles.redWord2}
-                      style={{ fontWeight: '900' }}
+                      style={{ fontWeight: '400', fontFamily: 'jalnan' }}
                     >
                       세종스터디
                     </div>
@@ -395,7 +409,7 @@ const MyPage = () => {
                   >
                     <div
                       className={styles.redWord2}
-                      style={{ fontWeight: '900' }}
+                      style={{ fontWeight: '400', fontFamily: 'jalnan' }}
                     >
                       세종버디
                     </div>
@@ -407,7 +421,7 @@ const MyPage = () => {
                   >
                     <div
                       className={styles.redWord2}
-                      style={{ fontWeight: '900' }}
+                      style={{ fontWeight: '400', fontFamily: 'jalnan' }}
                     >
                       혼밥탈출
                     </div>
@@ -417,7 +431,7 @@ const MyPage = () => {
               </div>
               <div className={styles.container4}>
                 <div className={styles.informTitleBox}>
-                  <p style={{ fontWeight: '700', marginBottom: '0px' }}>
+                  <p style={{ fontWeight: '800', marginBottom: '0px' }}>
                     이용안내
                   </p>
                 </div>
@@ -454,7 +468,7 @@ const MyPage = () => {
               >
                 <p
                   style={{
-                    fontWeight: '700',
+                    fontWeight: '800',
                     fontSize: '1.3em',
                   }}
                 >

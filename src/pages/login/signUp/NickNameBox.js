@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import style from './InputTextBox.module.css';
+import { toast } from 'sonner';
 
 const NickNameBox = props => {
   const [nickname, setNickname] = useState('');
@@ -29,7 +30,7 @@ const NickNameBox = props => {
 
     //닉네임 최소 2자, 8자 이하
     if (!isValidNickname(nickname)) {
-      alert(validateNicknameMsg);
+      toast.error(validateNicknameMsg);
     } else {
       try {
         const response = await fetch(
@@ -43,16 +44,16 @@ const NickNameBox = props => {
 
         // 서버로부터 받은 응답을 바탕으로 중복 여부
         if (data.data.isExist) {
-          alert(existNicknameMsg);
+          toast.error(existNicknameMsg);
           props.errorHandler(existNicknameMsg);
           props.nicknameExistHandler(true);
         } else {
-          alert('사용 가능한 닉네임입니다.');
+          toast.success('사용 가능한 닉네임입니다.');
           props.nicknameExistHandler(false);
         }
       } catch (error) {
         console.error('There was an error!', error);
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
+        toast.error('오류가 발생했습니다. 다시 시도해주세요.');
       }
     }
   };

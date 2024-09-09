@@ -4,6 +4,7 @@ import check from '../../../assets/image/check2.png';
 import check2 from '../../../assets/image/check3.png';
 import box from './Agree.module.css';
 import sub from './SignUp.module.css';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 
 const Agree = () => {
   const [agree, setAgree] = useState(false);
@@ -64,7 +65,7 @@ const Agree = () => {
   // };
   const moveToAuth = () => {
     if (agree !== true) {
-      alert('모두 동의를 해야 회원가입이 가능합니다.');
+      toast.error('모두 동의를 해야 회원가입이 가능합니다.');
     } else {
       navigate('/login/auth');
       // navigate("/checksejong");
@@ -79,6 +80,7 @@ const Agree = () => {
 
   return (
     <div className={box.entire_Container}>
+      <SubHeader text="회원가입" customBackLink="/main" />
       <div className={box.container}>
         <div className={box.auto}>
           <div className={box.inputText}>
@@ -95,7 +97,7 @@ const Agree = () => {
           <div className={box.flex}>
             <div className={box.left}>
               <p className={box.essential}>[필수]</p>
-              <Link to={'/personalinfo2'} className={box.link} target="_blank">
+              <Link to={'/personalinfo'} className={box.link} target="_blank">
                 개인정보 수집 동의 &gt;
               </Link>
             </div>
@@ -111,7 +113,7 @@ const Agree = () => {
           <div className={box.flex}>
             <div className={box.left}>
               <p className={box.essential}>[필수]</p>
-              <Link to={'/useinfo'} className={box.link} target="_blank">
+              <Link to={'/personalinfo2'} className={box.link} target="_blank">
                 이용약관 동의 &gt;
               </Link>
             </div>

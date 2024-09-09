@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router';
 import findBuddy from '../../../assets/image/findBuddy.png';
 
 import style from './BuddyAccept.module.css';
+import { toast } from 'sonner';
+import { SubHeader } from 'components/headerRefactor/SubHeader';
 
 const BuddyAccept = () => {
   const [isAccept, setIsAccept] = useState('');
@@ -60,7 +62,7 @@ const BuddyAccept = () => {
       isAccept: accept,
     };
 
-    fetch(process.env.REACT_APP_BACK_SERVER + '/buddyMatching/status', {
+    fetch(process.env.REACT_APP_BACK_SERVER + '/buddy/matching/status', {
       method: 'POST',
       body: JSON.stringify(acceptInfo),
       headers: {
@@ -71,13 +73,14 @@ const BuddyAccept = () => {
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         if (accept) {
-          alert(
+          toast.success(
             '매칭이 수락되었습니다! \n상대방이 매칭을 수락할 때까지 기다려주세요.'
           );
           navigate('/main');
         } else {
-          alert(
+          toast.error(
             '매칭이 거절되었습니다. \n거절 패널티로 1시간동안 매칭을 등록할 수 없습니다.'
           );
           navigate('/main');
@@ -105,6 +108,7 @@ const BuddyAccept = () => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종버디" customBackLink="/main" />
       <p className={style.title}>버디를 찾았습니다!</p>
       <img className={style.find_buddy} src={findBuddy} alt="findBuddy" />
 

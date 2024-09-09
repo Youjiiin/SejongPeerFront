@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import style from './InputTextBox.module.css';
+import { toast } from 'sonner';
 
 const EmailBox = props => {
   const [inputEmail, setInputEmail] = useState('');
@@ -13,10 +14,10 @@ const EmailBox = props => {
     setInputEmail(inputValue + '@sju.ac.kr');
     props.emailData(inputValue + '@sju.ac.kr');
     if (inputValue.includes('@')) {
-      props.errorHandler('* @sju.ac.kr을 제외하고 작성해주세요');
+      props.errorHandler('@sju.ac.kr을 제외하고 작성해주세요');
     } else {
       if (sendEmail === false) {
-        props.errorHandler('* 이메일 인증을 진행해주세요');
+        props.errorHandler('이메일 인증을 진행해주세요');
       } else {
         props.errorHandler('');
       }
@@ -30,9 +31,9 @@ const EmailBox = props => {
   //이메일 인증번호 전송
   const sendEmailHandler = async e => {
     if (inputEmail.includes('@sju.ac.kr@sju.ac.kr')) {
-      alert('* @sju.ac.kr을 제외하고 작성해주세요');
+      toast.error('@sju.ac.kr을 제외하고 작성해주세요');
     } else {
-      alert('메일이 전송 되었습니다.');
+      toast.success('메일이 전송 되었습니다.');
       let emailSend = {
         email: inputEmail,
       };
@@ -56,13 +57,13 @@ const EmailBox = props => {
         }
 
         setSendEmail(true);
-        props.errorHandler('* 인증코드를 작성해주세요');
+        props.errorHandler('인증코드를 작성해주세요');
       } catch (error) {
         console.error('Error occurred:', error);
         console.error(error.message);
-        alert(error.message);
+        toast.error(error.message);
         props.errorHandler(
-          '* 이메일 전송을 실패했습니다. 이메일을 다시 확인해 주세요'
+          '이메일 전송을 실패했습니다. 이메일을 다시 확인해 주세요'
         );
         e.preventDefault();
       }
@@ -98,15 +99,15 @@ const EmailBox = props => {
       setModifyEmail(true);
       setCheckCode(true);
       props.errorHandler('');
-      alert('인증성공');
+      toast.success('인증성공');
     } catch (error) {
       console.error('Error occurred:', error);
-      alert(
+      toast.error(
         '확인에 실패했습니다. 다시 시도해주세요. (에러 내용: ' +
           error.message +
           ')'
       );
-      props.errorHandler('* 이메일 혹은 인증코드를 확인해주세요');
+      props.errorHandler('이메일 혹은 인증코드를 확인해주세요');
       e.preventDefault();
     }
   }

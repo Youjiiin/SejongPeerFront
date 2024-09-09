@@ -9,7 +9,8 @@ const InputTextBox = props => {
   const isPhone = props.id === 'phoneNum';
 
   const inputHandler = event => {
-    const regex = /^[a-zA-Z0-9]{10,}$/;
+    const regex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*?]{10,}$/;
+
 
     let inputValue = event.target.value;
     //아이디
@@ -30,11 +31,11 @@ const InputTextBox = props => {
           props.errorHandler('');
         } else {
           props.errorHandler(
-            '* 비밀번호는 영어와 숫자를 모두 포함해야 합니다.'
+            `영어와 숫자를 모두 포함해야 합니다.\n \t(특수문자는 !@#$%^&*?만)`
           );
         }
       } else {
-        props.errorHandler('* 비밀번호는 10자이상으로 작성해주세요');
+        props.errorHandler('비밀번호는 10자이상으로 작성해주세요');
       }
       //패스워드 확인
     } else if (props.id === 'pwdCheck') {
@@ -43,9 +44,9 @@ const InputTextBox = props => {
       if (inputValue !== props.pwdValue) {
         props.errorHandler('동일하게 비밀번호를 입력해 주세요');
       } else if (!regex.test(inputValue)) {
-        props.errorHandler('* 비밀번호는 영어와 숫자를 모두 포함해야 합니다.');
+        props.errorHandler('비밀번호는 영어와 숫자를 모두 포함해야 합니다.');
       } else if (inputValue.length < 10) {
-        props.errorHandler('* 비밀번호는 10자이상으로 작성해주세요');
+        props.errorHandler('비밀번호는 10자이상으로 작성해주세요');
       } else {
         props.errorHandler(''); // 에러 메시지를 지웁니다.
       }
@@ -68,14 +69,14 @@ const InputTextBox = props => {
     else if (props.id === 'phoneNum') {
       props.phoneNumData(inputValue);
       if (inputValue.includes('-')) {
-        props.errorHandler('* 하이픈(-)은 빼고 작성해주세요');
+        props.errorHandler('하이픈(-)은 빼고 작성해주세요');
       } else {
         if (inputValue.length < 11) {
-          props.errorHandler('* 전화번호는 11자리로 입력해주세요');
+          props.errorHandler('전화번호는 11자리로 입력해주세요');
         } else if (inputValue.length === 11) {
           props.errorHandler('');
         } else if (inputValue.length > 11) {
-          props.errorHandler('* 전화번호는 11자리로 입력해주세요');
+          props.errorHandler('전화번호는 11자리로 입력해주세요');
           event.preventDefault();
         }
       } //성별

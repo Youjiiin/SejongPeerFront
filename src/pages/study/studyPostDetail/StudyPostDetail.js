@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
+import Modal from '../../../components/modal/Modal';
 import Popup from '../../../components/studyPopup/Popup';
 import styled from 'styled-components';
 import useStore from './useStore';
@@ -14,9 +17,9 @@ import {
   fetchStudyData,
   applyForStudy,
   cancelStudyApplication,
-  toggleScrap,
-  fetchScrapCount,
   deletePostHandler,
+  addScrap,
+  deleteScrap, // 추가: 스크랩 삭제 함수 가져오기
 } from './api';
 
 const StudyListPostDetail = () => {
@@ -30,71 +33,79 @@ const StudyListPostDetail = () => {
     setScrapped,
     setScrapCount,
   } = useStore();
+
   const {
     isPopupVisible,
     popupMessage,
     popupTitle,
     setPopupVisible,
     setPopupMessage,
-    setPopupTitle,
   } = usePopupStroe();
 
   const { studyId } = useParams();
-
   const navigate = useNavigate();
+
+  const [isImgOpen, setImgOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isWriter, setIsWriter] = useState(false);
+  const [ismodalOpen, setIsmodalOpen] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (studyData) {
+      console.log(studyData.recruitmentStatus);
+      if (studyData.recruitmentStatus === '마감') {
+        setIsFinished(true);
+      }
+    }
+  }, [studyData]);
+
   const modifyHandler = () => {
-    navigate(`/study/modify/${studyId}`)
+    navigate(`/study/modify/${studyId}`);
   };
 
-  const deleteHandler = async() => {
-    try {
-      const data = await deletePostHandler(studyId);
-      console.log(data);
-      alert('게시글이 삭제되었습니다!');
-      navigate('/study');
-    } catch(error) {
-      console.error('Error fetching study data:', error);
-    }
-  }
+  const handleImageClick = image => {
+    setSelectedImage(image);
+    setImgOpen(true);
+  };
 
-  const [ismodalOpen, setIsmodalOpen] = useState(false);
+  const deleteHandler = async () => {
+    try {
+      await deletePostHandler(studyId);
+      toast.success('게시글이 삭제되었습니다!');
+      navigate('/study');
+    } catch (error) {
+      toast.error('게시글 삭제 실패!', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchStudyData(studyId);
-        setStudyData(data);
-        const scrapped = localStorage.getItem(`isScrapped_${studyId}`);
-        setScrapped(scrapped ? JSON.parse(scrapped) : data.data.isScrapped);
-        const appliedStatus = localStorage.getItem(`isApplied_${studyId}`);
-        if (appliedStatus) {
-          setApplied(JSON.parse(appliedStatus));
-        }
-        const scrapData = await fetchScrapCount(studyId);
-        console.log(data)
-        setScrapCount(scrapData.data.scrapCount);
+        console.log(data.data.isScraped);
+        setStudyData(data.data);
+
+        // 서버에서 지원 여부 상태 가져오기
+        setApplied(data.data.isApplied); // 서버 응답의 isApplied 상태로 설정
+        setScrapped(data.data.isScraped); // 서버에서 받은 isScrapped 상태로 설정
+        setScrapCount(data.data.scrapCount); // 서버에서 받은 scrapCount 설정
       } catch (error) {
-        console.error('Error fetching study data:', error);
+        toast.error('스터디 데이터를 가져오는데 실패했습니다!', error);
       }
     };
 
     fetchData();
-  }, [studyId, setStudyData, setScrapped, setApplied]);
+  }, [studyId, setStudyData, setScrapped, setApplied, setScrapCount]);
 
-  const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
     const getNick = localStorage.getItem('nickname');
-
-    if (studyData && getNick === studyData.data.writerNickname) {
+    if (studyData && getNick === studyData.writerNickname) {
       setIsWriter(true);
     } else {
       setIsWriter(false);
     }
   }, [studyData]);
-
-  if (!studyData) {
-    return <div>Loading..</div>;
-  }
 
   const togglePopup = message => {
     setPopupMessage(message);
@@ -110,168 +121,209 @@ const StudyListPostDetail = () => {
       if (isApplied) {
         const response = await cancelStudyApplication(studyId);
         if (response.status === 200) {
-          togglePopup('지원 취소 완료');
-          setApplied(false);
-          localStorage.setItem(`isApplied_${studyId}`, false);
+          toast.success('지원 취소 완료');
+          setApplied(false); // 지원 취소 응답에 따라 상태 업데이트
         } else {
           console.error('Failed to cancel study application:', response);
         }
       } else {
         const response = await applyForStudy(studyId);
         if (response.status === 201) {
-          togglePopup(
-            '지원 완료! 모집자가 수락 후, 모집인원이 다 차거나 마감일이 되면 메시지로 오픈채팅 링크가 전달됩니다.'
-          );
-          setApplied(true);
-          localStorage.setItem(`isApplied_${studyId}`, true);
+          toast.success('지원 완료!');
+          setApplied(true); // 지원 완료 응답에 따라 상태 업데이트
         } else {
           console.error('Failed to apply for study:', response);
         }
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        togglePopup('이미 신청한 스터디입니다!');
-        setApplied(true);
-        localStorage.setItem(`isApplied_${studyId}`, true);
+        toast.error('이미 신청한 스터디입니다!');
+        setApplied(true); // 이미 신청한 상태로 설정
+      } else if (error.response.status === 403) {
+        toast.error('1시간 패널티 부과 중입니다!');
       } else {
         console.error('Error applying for study:', error);
       }
-
-      if (error.response.status === 403) {
-        togglePopup('1시간 패널티 부과 중입니다!');
-      }
     }
   };
 
-  const toggleScrapHandler = async () => {
+  const handleScrapToggle = async () => {
     try {
-      const response = await toggleScrap(studyId, isScrapped);
-      if (response.status === 200) {
-        const newScrappedStatus = !isScrapped;
-        setScrapped(newScrappedStatus);
-        localStorage.setItem(`isScrapped_${studyId}`, newScrappedStatus);
-
-        if (newScrappedStatus) {
-          alert('스크랩에 추가합니다!');
-          localStorage.setItem(`scrapId_${studyId}`, response.data.data);
-          setScrapCount(scrapCount + 1);
-        } else {
-          alert('스크랩에서 제거합니다!');
-          localStorage.removeItem(`scrapId_${studyId}`);
+      if (isScrapped) {
+        // 스크랩 삭제 로직
+        const response = await deleteScrap(studyId);
+        if (response.status === 200) {
+          toast.success('스크랩에서 제거되었습니다!');
+          setScrapped(false); // 스크랩 삭제 후 상태 업데이트
           setScrapCount(scrapCount - 1);
+        } else {
+          toast.error('스크랩에 실패했습니다!', response);
         }
       } else {
-        console.error('스크랩 실패:', response);
+        // 스크랩 추가 로직
+        const response = await addScrap(studyId);
+        if (response.data.status === 201) {
+          const newScrapId = response.data.data.scrapId; // scrapId를 서버 응답에서 받아옴
+          toast.success('스크랩에 추가되었습니다!');
+          setScrapped(true); // 스크랩 추가 후 상태 업데이트
+          setScrapCount(scrapCount + 1);
+        } else {
+          toast.error('스크랩에 실패했습니다!', response);
+        }
       }
     } catch (error) {
-      if (error.response && error.response.status === 403) {
-        console.error('권한이 없음.');
-      } else {
-        console.error('스크랩 실패:', error);
-      }
+      console.error(error);
+      toast.error('스크랩 처리 중 오류가 발생했습니다.');
     }
   };
-  console.log(studyData.data.img)
+
+  if (!studyData) {
+    return <div>Loading..</div>;
+  }
 
   return (
     <Container>
-      <div>
+      <SubHeader text="세종스터디" customBackLink="/study" />
+      <Wrapper>
         <Title>
-          {studyData.data.title}
-          {isWriter ? <img 
-            src={more}
-            style={{
-              width: '24px',
-              height: '24px'
-            }}
-            alt='more'
-            onClick={()=>{setIsmodalOpen(!ismodalOpen)}}
-          /> : <></>}
+          {studyData.title}
+          {isWriter && (
+            <img
+              src={more}
+              style={{ width: '24px', height: '24px' }}
+              alt="more"
+              onClick={() => setIsmodalOpen(!ismodalOpen)}
+            />
+          )}
         </Title>
-        {ismodalOpen ? <MoreModal>
-        <div style={{
-        width: '90%', 
-        display: 'flex', 
-        justifyContent: 'space-evenly', 
-        borderBottom: '1px solid #E5E5E5'
-        }}
-        onClick={modifyHandler}>
-          <p style={{
-            fontSize: '14px',
-            color:'#555555',
-            fontWeight: '700',
-            margin: '8px',
-          }}>수정하기</p>
-        </div>
-          <p style={{
-            fontSize: '14px',
-            color:'#555555',
-            fontWeight: '700',
-            margin: '8px',
-          }}
-          onClick={deleteHandler}
-          >삭제하기</p>
-        </MoreModal> : <></>}
+        {ismodalOpen && (
+          <MoreModal>
+            <div
+              style={{
+                width: '90%',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                borderBottom: '1px solid #E5E5E5',
+              }}
+              onClick={modifyHandler}
+            >
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: '#555555',
+                  fontWeight: '700',
+                  margin: '8px',
+                }}
+              >
+                수정하기
+              </p>
+            </div>
+            <p
+              style={{
+                fontSize: '14px',
+                color: '#555555',
+                fontWeight: '700',
+                margin: '8px',
+              }}
+              onClick={deleteHandler}
+            >
+              삭제하기
+            </p>
+          </MoreModal>
+        )}
         <FlexContainer>
-          <Title2>{studyData.data.writerMajor}</Title2>
-          <Nickname>{studyData.data.writerNickname}</Nickname>
+          <Title2>{studyData.writerMajor}</Title2>
+          <Nickname>{studyData.writerNickname}</Nickname>
         </FlexContainer>
         <FlexContainer>
           <ApplicationPeriod>지원기간</ApplicationPeriod>
           <ApplicationPeriod2>
-            {studyData.data.recruitmentStart}
-          </ApplicationPeriod2>
-          ~
-          <ApplicationPeriod3>
-            {studyData.data.recruitmentEnd}
-          </ApplicationPeriod3>
+            {studyData.recruitmentStart}
+          </ApplicationPeriod2>{' '}
+          ~<ApplicationPeriod3>{studyData.recruitmentEnd}</ApplicationPeriod3>
         </FlexContainer>
         <FlexContainer>
           <Title2>방식</Title2>
           <StudyMethod>
-            {studyData.data.studyFrequency} • {studyData.data.studyMethod}
+            {studyData.studyFrequency} • {studyData.studyMethod}
           </StudyMethod>
         </FlexContainer>
         <FlexContainer>
           <Title2>문의</Title2>
-          <StudyMethod>{studyData.data.questionKakaoLink}</StudyMethod>
+          <StudyMethod>{studyData.questionKakaoLink}</StudyMethod>
         </FlexContainer>
-        <Tag>
-          <TagText>{studyData.data.categoryName}</TagText>
-        </Tag>
-        <Line />
-        <Content>{studyData.data.content}</Content>
-        <TagContainer>
-          {studyData.data.imgUrlList && studyData.data.imgUrlList.map((image) => (
-            <img style={{
-              width: '100px',
-              height: '100px',
-              borderRadius: '8px'
-            }} key={image.imageId} src={image.imgUrl} alt={`Image ${image.imageId}`} />
+        <FlexContainer2>
+          <Tag>
+            <TagText>{studyData.categoryName}</TagText>
+          </Tag>
+          {studyData.tags.map((tag, index) => (
+            <Tag2 key={index}>
+              <TagText2>{tag}</TagText2>
+            </Tag2>
           ))}
+        </FlexContainer2>
+        <Line />
+        <Content>{studyData.content}</Content>
+        <TagContainer>
+          {studyData.imgUrlList &&
+            studyData.imgUrlList.map(image => (
+              <img
+                style={{ width: '100px', height: '100px', borderRadius: '8px' }}
+                key={image.imageId}
+                src={image.imgUrl}
+                alt={`Image ${image.imageId}`}
+                onClick={() => handleImageClick(image)}
+              />
+            ))}
         </TagContainer>
+        <Modal isOpen={isImgOpen} onClose={() => setImgOpen(false)}>
+          {selectedImage ? (
+            <img
+              style={{
+                width: '300px',
+                height: '300px',
+                borderRadius: '8px',
+                margin: 'auto',
+                display: 'block',
+                objectFit: 'contain',
+              }}
+              src={selectedImage.imgUrl}
+              alt={`Image ${selectedImage.imageId}`}
+            />
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Modal>
 
         <CommentContainer>
-          <ScrapButton onClick={toggleScrapHandler}>
+          <ScrapButton onClick={handleScrapToggle}>
             <ScrapImage src={isScrapped ? filledHeart : heart} alt="heart" />
             <ScrapCount>{scrapCount}</ScrapCount>
           </ScrapButton>
-          {isWriter ? <ApplyButton>
-            {`신청현황 보기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
-          </ApplyButton> :  <ApplyButton onClick={applyForStudyHandler} isApplied={isApplied}>       
-            {isApplied
-              ? '지원취소'
-              : `지원하기 (${studyData.data.participantCount} / ${studyData.data.totalRecruitmentCount})`}
-          </ApplyButton>}
+          {isFinished ? (
+            <FinishedButon>모집완료</FinishedButon>
+          ) : isWriter ? (
+            <ApplyButton onClick={() => navigate('/mypost')}>
+              {`신청현황 보기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
+            </ApplyButton>
+          ) : (
+            <ApplyButton onClick={applyForStudyHandler}>
+              {isApplied
+                ? '지원취소'
+                : `지원하기 (${studyData.participantCount} / ${studyData.totalRecruitmentCount})`}
+            </ApplyButton>
+          )}
         </CommentContainer>
+
         {isPopupVisible && (
           <Popup
             title={popupTitle}
             message={popupMessage}
+            message2="*스터디 신청 후 취소할 시, 취소한 스터디의 지원에 1시간 제한이 생깁니다."
             onClose={closePopup}
           />
         )}
-      </div>
+      </Wrapper>
     </Container>
   );
 };
@@ -279,7 +331,7 @@ const StudyListPostDetail = () => {
 export default StudyListPostDetail;
 
 const Container = styled.div`
-  margin-top: 80px;
+  /* margin: auto; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -287,6 +339,13 @@ const Container = styled.div`
   height: 85%;
   background-color: ${COLORS.back1};
   position: relative;
+`;
+
+const Wrapper = styled.div`
+  margin-top: 16px;
+  @media (min-width: 768px) {
+    width: 375px;
+  }
 `;
 
 const Title = styled.div`
@@ -354,6 +413,14 @@ const FlexContainer = styled.div`
   width: 100%;
 `;
 
+const FlexContainer2 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  width: 100%;
+  gap: 4px;
+`;
+
 const Line = styled.div`
   height: 1px;
   width: 100vw;
@@ -367,18 +434,17 @@ const Line = styled.div`
 `;
 
 const Content = styled.div`
-  margin: auto;
   max-width: 343px;
   width: 100%;
-  height: 120px;
   flex-shrink: 0;
   color: ${COLORS.font1};
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
-  letter-spacing: -0.333px;
+  letter-spacing: -0.3333px;
   text-align: left;
+  white-space: pre-wrap;
 `;
 
 const TagContainer = styled.div`
@@ -400,8 +466,29 @@ const Tag = styled.button`
   cursor: pointer;
 `;
 
+const Tag2 = styled.button`
+  display: flex;
+  padding: 4px 8px;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 500;
+  border-radius: 15px;
+  border: 1px solid ${COLORS.font3};
+  margin-top: 15px;
+  background: none;
+  cursor: pointer;
+`;
+
 const TagText = styled.div`
   color: ${COLORS.main};
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.333px;
+`;
+const TagText2 = styled.div`
+  color: ${COLORS.font3};
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -413,6 +500,7 @@ const CommentContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 30px;
 `;
 
 const ScrapButton = styled.button`
@@ -460,18 +548,36 @@ const ApplyButton = styled.button`
   border: none;
 `;
 
+const FinishedButon = styled.button`
+  width: 287px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 28px;
+  background-color: ${COLORS.line2};
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.333px;
+  margin-top: 15px;
+  cursor: pointer;
+  border: none;
+`;
+
 const MoreModal = styled.div`
   width: 84px;
   height: 72px;
   border-radius: 12px;
   position: absolute;
   right: 16px;
-  top: 20px;
+  top: 85px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 2;
-  background-color: #FAFAFA;
-  border: 1px solid #E5E5E5;
-`
+  background-color: #fafafa;
+  border: 1px solid #e5e5e5;
+`;

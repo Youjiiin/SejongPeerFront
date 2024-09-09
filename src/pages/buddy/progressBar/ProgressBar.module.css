@@ -55,7 +55,7 @@
   height: 90%;
   width: 20vw;
   margin-left: 3%;
-  border: 2px solid #ff4b4b;
+  border: 1px solid #e5e5e5;
   border-radius: 25px;
   background-color: #ffffff;
   font-size: 1rem;
@@ -128,7 +128,7 @@
     height: 90%;
     width: 10vw;
     margin-left: 3%;
-    border: 2px solid #ff4b4b;
+    border: 1px solid #e5e5e5;
     border-radius: 25px;
     background-color: transparent;
     font-size: 1rem;

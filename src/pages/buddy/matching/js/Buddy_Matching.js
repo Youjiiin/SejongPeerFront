@@ -5,6 +5,7 @@ import Major from './B_Major';
 import GradeDiff from './B_Grade';
 import Final from './Buddy_Final';
 import ProgressBar from '../../progressBar/ProgressBar.js';
+import { SubHeader } from '../../../../components/headerRefactor/SubHeader';
 
 import style from '../css/Buddy_Matching.module.css';
 
@@ -22,7 +23,9 @@ const Buddy_Matching = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      let wrapperWidth = width;
+      let wrapperWidth;
+      const c = window.innerWidth; // c를 window.innerWidth로 정의합니다.
+
       if (c < 415) {
         wrapperWidth = window.innerWidth;
       } else {
@@ -93,6 +96,7 @@ const Buddy_Matching = () => {
 
   return (
     <div className={style.wrapper} style={mediaWidth}>
+      <SubHeader text="세종버디" customBackLink="/buddy/start2" />
       <div className={style.formWrapper} style={Slide}>
         <ChoiceGender sendChoiceGenderData={GenderChoiceData} />
         <Major sendMajorData={MajorData} sendSubMajorData={subMajorData} />

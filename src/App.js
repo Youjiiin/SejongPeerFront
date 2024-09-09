@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, createContext, useEffect } from 'react';
 import './App.css';
 import { jwtDecode } from 'jwt-decode';
+import { toast, Toaster } from 'sonner';
 
 // 메인 컴포넌트
-import Header from './components/header/Header.js';
 import StartLoading from './pages/main/landing/StartLoading.js';
 import MainPage from './pages/main/mainPage/MainPage.js';
 
@@ -40,9 +40,11 @@ import MyPage from './pages/myPage/mypage/MyPage.js';
 import Modify from './pages/myPage/modify/Modify.js';
 import MyPageScrapList from './pages/myPage/mypage/MyPageScrapList.js';
 import MyPost from './pages/myPage/myPost/myPost.js';
+import AppliedStudy from './pages/myPage/mypage/AppliedStudy';
+
 // 스터디
 import StudyList from '../src/pages/study/studyList/StudyList.js';
-import StudyPostDeatil from '../src/pages/study/studyPostDetail/StudyPostDetail.js';
+import StudyPostDetail from '../src/pages/study/studyPostDetail/StudyPostDetail.js';
 import StudyPostWrite from './pages/study/studyPostWrite/StudyPostWrite.js';
 import StudyFilter from '../src/pages/study/studyFilterPage/StudyFIlterPage.js';
 import StudyModify from './pages/study/studyModify/studyModify.js';
@@ -101,8 +103,8 @@ const App = () => {
     const timeUntilLogout = expTime - cuurentTime;
 
     setTimeout(() => {
-      console.log('logout');
-      alert('logout!');
+      // console.log('logout');
+      toast.message('로그아웃 되었습니다. 재로그인이 필요합니다!');
       logout();
     }, timeUntilLogout);
   };
@@ -151,6 +153,7 @@ const App = () => {
       }}
     >
       <Router>
+        <Toaster position="bottom-center" richColors />
         <div className="wrapper">
           {modalOpen && (
             <>
@@ -165,13 +168,14 @@ const App = () => {
               {modalContent === 'selectDoubleMajor' && <Major id="double" />}
             </>
           )}
-          <Header />
+          {/* <Header /> */}
           <main className={modalContent === 'buddyConfirm' ? 'fixed' : ''}>
             <Routes>
               <Route exact path="/" element={<StartLoading />} />
               <Route path="/main" element={<MainPage />} />
 
               <Route path="/buddy" element={<Buddy />} />
+
               {/* <Route path="/buddy/start1" element={<BuddyStart1 />} />
               <Route path="/buddy/start2" element={<BuddyStart2 />} />
               <Route path="/buddy/matching" element={<BuddyMatching />} />
@@ -195,7 +199,9 @@ const App = () => {
               <Route path="/personalinfo" element={<Agree1 />} />
               <Route path="/useinfo" element={<Agree2 />} />
               <Route path="/personalinfo2" element={<Agree3 />} />
+
               <Route path="/mypage" element={<MyPage />} />
+              <Route path="/mypage/appliedstudy" element={<AppliedStudy />} />
               <Route path="/mypage/modify" element={<Modify />} />
               <Route path="/mypage/scraplist" element={<MyPageScrapList />} />
               <Route path="/mypost" element={<MyPost />} />
@@ -203,7 +209,7 @@ const App = () => {
               <Route path="/study" element={<StudyList />} />
               <Route
                 path="/study/post/:studyId"
-                element={<StudyPostDeatil />}
+                element={<StudyPostDetail />}
               />
               <Route path="/study/post" element={<StudyPostWrite />} />
               <Route path="/study/filter" element={<StudyFilter />} />
@@ -215,7 +221,6 @@ const App = () => {
               <Route path="/fest/AnimalApply4" element={<AnimalApply4 />} />
               <Route path="/fest/AnimalApply5" element={<AnimalApply5 />} />
               <Route path="/fest/ApplyComplete" element={<ApplyComplete />} />
-
               <Route
                 path="/fest/AnimalMatchInfo"
                 element={<AnimalMatchInfo />}
@@ -224,7 +229,6 @@ const App = () => {
                 path="/fest/AnimalMatchResult"
                 element={<AnimalMatchResult />}
               />
-
               <Route path="/fest/animalcheck" element={<AnimalCheck />} />
               <Route path="/fest/animalresult" element={<AnimalResult />} />
             </Routes>

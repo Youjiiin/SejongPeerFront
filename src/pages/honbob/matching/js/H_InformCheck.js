@@ -18,7 +18,7 @@ const H_informCheck = props => {
             >
               •
             </span>{' '}
-            <span className={style.font}>대동지 성별</span>
+            <span className={style.font}>밥짝꿍 성별</span>
           </div>
 
           <div className={style.divBox}>{props.choiceGenderKorean}</div>
@@ -34,7 +34,7 @@ const H_informCheck = props => {
             >
               •
             </span>{' '}
-            <span className={style.font}>선호 액티비티</span>
+            <span className={style.font}>선호 메뉴</span>
           </div>
           <div className={style.divBox}>{props.choiceMenuKorean}</div>
         </div>

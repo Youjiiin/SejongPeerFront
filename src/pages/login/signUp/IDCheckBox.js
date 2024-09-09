@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { toast } from 'sonner';
 import style from './InputTextBox.module.css';
 
 const IDCheckBox = props => {
@@ -36,7 +36,7 @@ const IDCheckBox = props => {
     }
     //아이디 영어+숫자 최소 4자 이상 24자 이하
     if (!isValidUsername(username)) {
-      alert(validateAccountMsg);
+      toast.info(validateAccountMsg);
     } else {
       try {
         // 서버에 아이디 중복 확인 요청.
@@ -49,17 +49,17 @@ const IDCheckBox = props => {
         const data = await response.json();
 
         if (data.data.isExist) {
-          alert(existAccountMsg);
+          toast.error(existAccountMsg);
           props.errorHandler(existAccountMsg);
           props.idExistHandler(true);
         } else {
-          alert(availableAccountMsg);
+          toast.success(availableAccountMsg);
           RightIdHandler(availableAccountMsg);
           props.idExistHandler(false); // 아이디가 존재 X 사용 O
         }
       } catch (error) {
         console.error('There was an error!', error);
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
+        toast.error('오류가 발생했습니다. 다시 시도해주세요.');
       }
     }
   };

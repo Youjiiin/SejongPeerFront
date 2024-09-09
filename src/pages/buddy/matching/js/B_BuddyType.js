@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import check from '../../../../assets/image/check.png';
-import buddyImg3 from '../../../../assets/image/buddyImg3.png';
+import buddyImg4 from '../../../../assets/image/buddyImg4.png';
 import con from '../css/B_Container.module.css';
 import btn3 from '../css/B_Btn3.module.css';
 
@@ -88,7 +88,11 @@ const Grade = props => {
         </button>
       </div>
 
-      <img className={con.img3} src={buddyImg3} alt="buddyImg3" />
+      <img
+        style={{ width: '231px', height: '164px', marginTop: '18px' }}
+        src={buddyImg4}
+        alt="buddyImg4"
+      />
     </div>
   );
 };

@@ -1,36 +1,35 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../../App';
+import { toast } from 'sonner';
+import styled from 'styled-components';
+import { MainHeader } from '../../../components/headerRefactor/MainHeader';
 
-import MainBuddy from './MainBuddy';
-import MainHonbob from './MainHonbob';
 import kakao from '../../../assets/image/kakao.png';
-
-import reprot from '../../../assets/image/report.png';
 import honbobUse from '../../../assets/image/honbobUse.png';
 import peerUse from '../../../assets/image/peerUse.png';
 import buddyUse from '../../../assets/image/buddyUse.png';
 import buddy_button from '../../../assets/image/buddy_button.png';
 import honbobButton from '../../../assets/image/honbobButton.png';
-import ready from '../../../assets/image/ready.png';
-import style from './MainPage.module.css';
+import schoolBtn from '../../../assets/image/school.png';
+import externalBtn from '../../../assets/image/external.png';
 
-import useStudyInfoStore from '../../study/useStudyInfoStore';
 import { BuddyHandler, HonbobHandler } from './api';
+import COLORS from 'theme';
 
 const images = [honbobUse, buddyUse, peerUse];
 
 const MainPage = () => {
+  localStorage.removeItem('studyType');
   const navigate = useNavigate();
   const { setBuddyCount } = useContext(MyContext);
-  const { studyType, setStudyType } = useStudyInfoStore();
 
   const StudyHandler = type => {
-    setStudyType(type);
+    localStorage.setItem('studyType', type);
     const refreshToken = localStorage.getItem('refreshToken');
     const accessToken = localStorage.getItem('accessToken');
     if (refreshToken === null || accessToken === null) {
-      alert('로그인 후 이용 가능한 서비스입니다!');
+      toast.error('로그인 후 이용 가능한 서비스입니다!');
       navigate('/login');
     } else {
       navigate('/study');
@@ -55,7 +54,7 @@ const MainPage = () => {
   const urls = [
     'https://sejonghonbab.simple.ink/', // 혼밥 이용방법
     'https://sejongbuddy.simple.ink/', // 세종버디 이용방법
-    'https://sejongpeer.simple.ink/', // FAQ
+    'https://sejongpeer.notion.site/bd0e00cbc146400ab78e0e2ee34c8edf?pvs=4/', // FAQ
   ];
 
   // 이미지 클릭 이벤트 핸들러, 인덱스에 해당하는 URL로 이동
@@ -87,70 +86,185 @@ const MainPage = () => {
   };
 
   return (
-    <div className={style.container}>
-      <div
-        style={{
-          padding: '2vh',
-        }}
-        className={style.wrapper}
-      >
-        <img
-          className={style.useImg}
+    <Container>
+      <MainHeader />
+      <Wrapper>
+        <SliderImage
           src={images[currentImageIndex]}
           onClick={() => onImageClick(currentImageIndex)}
+          className={slideIn ? 'slide-in' : 'slide-out'}
         />
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            gap: '4%',
-            marginTop: '1vh',
-          }}
-        >
-          <img
+        <ButtonRow>
+          <ActionButton
             src={buddy_button}
-            className={style.btn1}
             onClick={() => BuddyHandler(navigate, setBuddyCount)}
           />
-          <img
+          <ActionButton
             src={honbobButton}
-            className={style.btn1}
             onClick={() => HonbobHandler(navigate)}
           />
-        </div>
+        </ButtonRow>
         {/* 세종 스터디 버튼 임시로 숨겨둠 - 축제 때문에 */}
-        <div className={style.festButton}>
-          <div className={style.studyText}>
-            <h3 className={style.title}>세종스터디</h3>
-            <p className={style.title} style={{ fontFamily: 'Pretendard' }}>
-              인생 팀원 구하기
-            </p>
-          </div>
-          <div className={style.studyContainer}>
-            <button
-              className={style.school}
+        <FestButton>
+          <StudyText>
+            <Title>세종스터디</Title>
+            <Subtitle>인생 팀원 구하기</Subtitle>
+          </StudyText>
+          <StudyContainer>
+            <StudyButton
               onClick={() => StudyHandler('lecture')}
-            ></button>
-            <button
-              className={style.except}
+              src={schoolBtn}
+            />
+            <StudyButton
               onClick={() => StudyHandler('external_activity')}
-            ></button>
-          </div>
-        </div>
-      </div>
-      <div onClick={kakaoChat}>
-        <button
-          className={style.kakao}
-          onClick={kakaoChat}
-          style={{ gap: '10px' }}
-        >
-          <img src={kakao} alt="카카오톡 문의하기" />
-          카카오톡 문의하기
-        </button>
-      </div>
-    </div>
+              src={externalBtn}
+            />
+          </StudyContainer>
+        </FestButton>
+        <KakaoButton onClick={kakaoChat}>
+          <KakaoImage src={kakao} alt="카카오톡 문의하기" />
+          <KakaoText>카카오톡 문의하기</KakaoText>
+        </KakaoButton>
+      </Wrapper>
+    </Container>
   );
 };
 
 export default MainPage;
+
+const Container = styled.div`
+  width: 100vw;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff7f7;
+
+  @media (max-width: 768px) {
+    /* height: 85vh; */
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2vh;
+`;
+
+const SliderImage = styled.img`
+  width: 343px;
+  height: 112px;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 112px;
+  }
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  margin-top: 1vh;
+  gap: 10px;
+`;
+
+const ActionButton = styled.img`
+  width: 166px;
+  height: auto;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 45vw;
+    height: auto;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+`;
+
+const FestButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  background-color: white;
+  height: 204px;
+  width: 343px;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  margin-top: 2vh;
+  padding-bottom: 10px;
+
+  @media (max-width: 768px) {
+    height: 204px;
+    width: 100%;
+    margin-top: 10px;
+  }
+`;
+
+const StudyText = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin-left: 16px;
+`;
+
+const Title = styled.p`
+  font-family: 'jalnan';
+  margin: 16px 4px 4px 0px;
+`;
+
+const Subtitle = styled.p`
+  font-family: 'Pretendard';
+  font-size: 14px;
+  margin: 16px 4px 4px 0px;
+`;
+
+const StudyContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+`;
+
+const StudyButton = styled.img`
+  width: 152px;
+  height: auto;
+  border: none;
+  @media (max-width: 768px) {
+    width: 41vw;
+  }
+`;
+
+const KakaoButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  height: 5vh;
+  font-size: 16px;
+  border: none;
+  padding: 10px;
+  background-color: white;
+  border-radius: 50px;
+  /* border: 1px solid var(--line_02, #e5e5e5); */
+`;
+
+const KakaoImage = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const KakaoText = styled.p`
+  font-size: 14px;
+  font-weight: 800;
+  color: ${COLORS.font2};
+  @media (max-width: 768px) {
+  }
+`;

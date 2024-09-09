@@ -4,32 +4,25 @@ import style from '../css/H_Menu.module.css';
 const H_Menu = props => {
   // const [isClicked, setIsClicked] = useState(null);
   const [clickedIndex, setClickedIndex] = useState(null);
-  const menu = [
-    '공연 보기',
-    '밥 먹기',
-    '낮 부스 가기',
-    '밤 주점 가기',
-    '학교 나가기',
-    '상관없음',
-  ];
+  const menu = ['한식', '양식', '중식', '일식', '학식', '상관없음'];
 
   const menuChoice = index => {
     setClickedIndex(index);
     if (index == 0) {
       props.setChoiceMenu('KOREAN');
-      props.setChoiceMenuKorean('공연 보기');
+      props.setChoiceMenuKorean('한식');
     } else if (index == 1) {
       props.setChoiceMenu('WESTERN');
-      props.setChoiceMenuKorean('밥 먹기');
+      props.setChoiceMenuKorean('양식');
     } else if (index == 2) {
       props.setChoiceMenu('CHINESE');
-      props.setChoiceMenuKorean('낮 부스 가기');
+      props.setChoiceMenuKorean('중식');
     } else if (index == 3) {
       props.setChoiceMenu('JAPANESE');
-      props.setChoiceMenuKorean('밤 주점 가기');
+      props.setChoiceMenuKorean('일식');
     } else if (index == 4) {
       props.setChoiceMenu('CAFETERIA');
-      props.setChoiceMenuKorean('학교 나가기');
+      props.setChoiceMenuKorean('학식');
     } else {
       props.setChoiceMenu('NO_MATTER');
       props.setChoiceMenuKorean('상관없음');
@@ -38,7 +31,7 @@ const H_Menu = props => {
 
   return (
     <div className={con.container}>
-      <p className={con.title}>원하는 축제 액티비티를 선택해주세요!</p>
+      <p className={con.title}>원하는 식사 종류를 선택해주세요!</p>
       <div className={style.menuContainer}>
         {menu.map((val, index) => (
           <button
@@ -51,7 +44,6 @@ const H_Menu = props => {
               color: index === 4 ? 'red' : 'black',
             }}
           >
-            {' '}
             {index === 0 || index === 1 || index === 2 || index === 3 ? (
               <div className={style.menuBox}>
                 <div className={`${style.imgBox} ${style[`item-${index}`]}`} />

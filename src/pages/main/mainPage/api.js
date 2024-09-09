@@ -1,13 +1,16 @@
 // api.js
 
+import { toast } from 'sonner';
+
 // Buddy 상태 확인
 export const BuddyHandler = async (navigate, setBuddyCount) => {
   const refreshToken = localStorage.getItem('refreshToken');
   const accessToken = localStorage.getItem('accessToken');
 
   if (refreshToken === null || accessToken === null) {
-    alert('로그인 후 이용 가능한 서비스입니다!');
-    navigate('/login');
+    // toast.error('로그인 후 이용 가능한 서비스입니다!');
+    // navigate('/login');
+    navigate('/buddy');
   } else {
     try {
       const response = await fetch(
@@ -21,17 +24,21 @@ export const BuddyHandler = async (navigate, setBuddyCount) => {
         }
       );
       const data = await response.json();
+      console.log(data);
 
-      if (data.data !== null) setBuddyCount(data.data.matchingCompletedCount);
-      else setBuddyCount(0);
-
-      statusHandler(
-        data.data.status,
-        data.data.matchingCompletedCount,
-        navigate
-      );
+      if (data.data !== null) {
+        setBuddyCount(data.data.matchingCompletedCount);
+        statusHandler(
+          data.data.status,
+          data.data.matchingCompletedCount,
+          navigate
+        );
+      } else {
+        setBuddyCount(0);
+        navigate('/buddy/start1');
+      }
     } catch (error) {
-      alert('에러가 발생했습니다.');
+      toast.error('에러가 발생했습니다.');
       console.log(error.message);
     }
   }
@@ -44,29 +51,27 @@ const statusHandler = (status, count, navigate) => {
       navigate(count > 0 ? '/buddy/success' : '/buddy?page=start1');
       break;
     case 'DENIED':
-      alert('상대방이 거절했습니다. 다시 신청해 주세요.');
-      navigate(count > 0 ? '/buddy/success' : '/buddy/start1');
       // toast.error('상대방이 거절했습니다. 다시 신청해 주세요.');
       navigate(count > 0 ? '/buddy/success' : '/buddy?page=start1');
       break;
     case 'MATCHING_COMPLETED':
-      alert('매칭에 성공했습니다. 정보를 확인해주세요!');
+      toast.success('매칭에 성공했습니다. 정보를 확인해주세요!');
       navigate('/buddy/success');
       break;
     case 'ACCEPT':
-      alert('신청 수락을 했습니다. 상대방이 수락할때까지 기다려 주세요.');
+      toast.info('신청 수락을 했습니다. 상대방이 수락할때까지 기다려 주세요.');
       break;
     case 'REJECT':
-      alert(
+      toast.error(
         '거절 패널티 1시간이 부과되었습니다. 1시간 이후에 다시 신청해 주세요.'
       );
       break;
     case 'IN_PROGRESS':
-      alert('매칭중입니다!');
+      toast.info('매칭중입니다!');
       navigate('/buddy/waiting');
       break;
     case 'FOUND_BUDDY':
-      alert('버디를 찾았습니다!');
+      toast.success('버디를 찾았습니다!');
       navigate('/buddy/accept');
       break;
     default:
@@ -79,8 +84,8 @@ export const HonbobHandler = async navigate => {
   const accessToken = localStorage.getItem('accessToken');
 
   if (refreshToken === null || accessToken === null) {
-    alert('로그인 후 이용 가능한 서비스입니다!');
-    navigate('/login');
+    // toast.error('로그인 후 이용 가능한 서비스입니다!');
+    navigate('/honbob/start1');
   } else {
     try {
       const response = await fetch(
@@ -99,27 +104,32 @@ export const HonbobHandler = async navigate => {
       }
 
       const data = await response.json();
+      console.log(data);
 
-      switch (data.data.status) {
-        case 'CANCEL':
-        case 'TIME_OUT':
-        case 'EXPIRED':
-          navigate('/honbob/start1');
-          break;
-        case 'IN_PROGRESS':
-          alert('매칭 중입니다!');
-          navigate('/honbob/waiting');
-          break;
-        case 'MATCHING_COMPLETED':
-          alert('매칭에 성공했습니다!');
-          navigate('/honbob/success');
-          break;
-        default:
-          break;
+      if (data.data) {
+        switch (data.data.status) {
+          case 'CANCEL':
+          case 'TIME_OUT':
+          case 'EXPIRED':
+            navigate('/honbob/start1');
+            break;
+          case 'IN_PROGRESS':
+            toast.info('매칭 중입니다!');
+            navigate('/honbob/waiting');
+            break;
+          case 'MATCHING_COMPLETED':
+            toast.info('매칭에 성공했습니다!');
+            navigate('/honbob/success');
+            break;
+          default:
+            break;
+        }
+      } else {
+        navigate('/honbob/start1');
       }
     } catch (error) {
       console.error('에러 체크:', error);
-      alert('매칭 체크 실패!');
+      toast.error('매칭 체크 실패!');
     }
   }
 };

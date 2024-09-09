@@ -8,6 +8,8 @@ import H_informCheck from './H_InformCheck.js';
 import ProgressBar from '../../progressBar/ProgressBar_Honbob.js';
 
 import style from '../css/Honbob_Matching.module.css';
+import { toast } from 'sonner';
+import { SubHeader } from '../../../../components/headerRefactor/SubHeader.js';
 
 const Honbob_Matching = () => {
   const [slide, setSlide] = useState(0);
@@ -127,12 +129,12 @@ const Honbob_Matching = () => {
         throw new Error(data.message);
       }
 
-      alert('제출 성공');
+      toast.success('제출 성공');
       setHonbobSubmit(false);
       navigate('/honbob/waiting');
     } catch (error) {
       console.error(error.message);
-      alert(error.message);
+      toast.error(error.message);
       e.preventDefault();
     }
   };
@@ -145,6 +147,7 @@ const Honbob_Matching = () => {
 
   return (
     <div className={style.wrapper} style={mediaWidth}>
+      <SubHeader text="혼밥탈출" customBackLink="/honbob/start1" />
       <div className={style.formWrapper} style={Slide}>
         <H_Gender
           sendChoiceGenderData={GenderChoiceData}

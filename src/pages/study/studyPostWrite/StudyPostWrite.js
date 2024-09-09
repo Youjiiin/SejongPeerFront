@@ -8,6 +8,7 @@ import ConfirmModal from './confirmModal/ConfirmModal';
 
 // modal components
 import StudyPostField from './studyPostField/StudyPostField';
+import StudyPostExternalField from './studyPostField/StudyPostExternalField';
 import StudyMember from './studyMember/StudyMember';
 
 // components
@@ -28,7 +29,6 @@ import Popup from '../../../components/studyPopup/Popup';
 
 //zustand
 import usePostStore from './usePostStore';
-import useStudyInfoStore from '../useStudyInfoStore';
 import usePopupStroe from '../../../components/studyPopup/usePopupStore';
 import useTimeTableStore from '../timeTable/useTimeTableStore';
 import { format } from 'date-fns';
@@ -38,6 +38,8 @@ import { useNavigate } from 'react-router-dom';
 
 //강의 시간표
 import getTimeTable from '../timeTable/getTimeTable';
+import { toast } from 'sonner';
+import { SubHeader } from '../../../components/headerRefactor/SubHeader';
 const StudyPostWrite = props => {
   const {
     title,
@@ -63,6 +65,7 @@ const StudyPostWrite = props => {
     setQuestionLink,
     setTags,
   } = usePostStore();
+
   const {
     isPopupVisible,
     popupMessage,
@@ -70,20 +73,29 @@ const StudyPostWrite = props => {
     setPopupVisible,
     setPopupMessage,
   } = usePopupStroe();
-  const { studyType } = useStudyInfoStore();
-  const { subjectName, setTableInfos, setShowData } = useTimeTableStore();
-  console.log(
-    title,
-    category,
-    startDate,
-    endDate,
-    memberNum,
-    selectedWay,
-    selectedFrequency,
-    questionLink,
-    content,
-    studyLink,
-    tags,);
+  const studyType = localStorage.getItem('studyType');
+  const { setTableInfos, setFilteredInfos, setShowData } = useTimeTableStore();
+  // console.log(
+  //   title,
+  //   category,
+  //   startDate,
+  //   endDate,
+  //   memberNum,
+  //   selectedWay,
+  //   selectedFrequency,
+  //   questionLink,
+  //   content,
+  //   studyLink,
+  //   tags
+  // );
+  // 게시글 초기화
+  const reset = usePostStore(state => state.reset);
+  const resetCategory = useTimeTableStore(state => state.reset);
+  useEffect(() => {
+    reset();
+    resetCategory();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleDatePickerFocus = event => {
@@ -95,11 +107,13 @@ const StudyPostWrite = props => {
     const fetchAndSetTimeTable = async () => {
       const data = await getTimeTable();
       setTableInfos(data.tableInfos);
+      setFilteredInfos(data.filteredInfos);
       setShowData(data.showData);
     };
 
     fetchAndSetTimeTable();
   }, []);
+
   // 모달 오픈,
   const [isClickedStudy, setIsClickedStudy] = useState(false);
   const [isClickedMember, setIsClickedMember] = useState(false);
@@ -163,6 +177,7 @@ const StudyPostWrite = props => {
   //이미지 업로드 통신
   const imgUpload = async id => {
     const imgs = [...imgFiles];
+
     const imgData = {
       studyId: id,
       base64ImagesList: imgs,
@@ -183,16 +198,22 @@ const StudyPostWrite = props => {
 
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
+
       console.log(data);
+
+      if (response.status === 413) {
+        console.log(`이미지 용량 혹은 형식을 확인하세요`);
+        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+        return 'imgError';
+      }
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
 
-      if (data.data !== null) {
-        errorClassName = data.data.errorClassName;
-      }
+      return data;
     } catch (err) {
       console.log('ErrorMessage : ', err.message);
+      throw err;
     }
   };
 
@@ -206,9 +227,35 @@ const StudyPostWrite = props => {
     setPopupVisible(false);
   };
 
-  const [isFilled, setIsFilled] = useState(true);
+  const calculateFileSize = (base64String) => {
+    // Base64 인코딩된 데이터만 추출 (data:image/png;base64, 이 부분 제거)
+    let base64Data = base64String.split(',')[1];
+    
+    // Base64 문자열 길이
+    let base64Length = base64Data.length;
+    
+    // 패딩 수 계산 (= 기호의 수)
+    let padding = (base64Data.match(/=*$/) || [''])[0].length;
+    
+    // 원본 바이트 수 계산
+    let fileSizeInBytes = (base64Length * 3) / 4 - padding;
+    
+    return fileSizeInBytes; // 파일 크기 (바이트)
+  }
 
+  const [isFilled, setIsFilled] = useState(true);
+  //게시글 작성 통신
   const submitHandler = async e => {
+    // 이미지 크기 확인
+    const imgs = [...imgFiles];
+    for (let i = 0; i < imgs.length; i++) {
+      const fileSize = calculateFileSize(imgs[i])
+      if (fileSize > 700000) {
+        togglePopup(`이미지 용량 혹은 형식을 확인하세요`);
+        return;
+      }
+    }
+
     //제목/모집기간/모집인원/내용/오픈채팅 링크/카테고리
     const validation = (name, text) => {
       if (text === '' || text === null) {
@@ -233,6 +280,13 @@ const StudyPostWrite = props => {
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
 
+    const tagSplit =
+      tags.length === 0
+        ? []
+        : tags
+            .replace(/(\s*)/g, '')
+            .split('#')
+            .filter(e => e !== '');
     const studyData =
       studyType === 'lecture'
         ? {
@@ -246,8 +300,9 @@ const StudyPostWrite = props => {
             lectureId: category,
             recruitmentStartAt: formStartDate,
             recruitmentEndAt: formEndDate,
-            tags: tags,
+            tags: tagSplit,
             images: null,
+            base64ImagesList: imgs,
           }
         : {
             title: title,
@@ -260,13 +315,16 @@ const StudyPostWrite = props => {
             externalActivityId: category,
             recruitmentStartAt: formStartDate,
             recruitmentEndAt: formEndDate,
-            tags: tags,
+            tags: tagSplit,
             images: null,
+            base64ImagesList: imgs,
           };
     console.log(studyData);
+    const studyTypeM =
+      studyType === 'lecture' ? studyType : 'external-activity';
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACK_SERVER}/study/${studyType}`,
+        `${process.env.REACT_APP_BACK_SERVER}/study/${studyTypeM}`,
         {
           method: 'POST',
           body: JSON.stringify(studyData),
@@ -279,37 +337,25 @@ const StudyPostWrite = props => {
       );
 
       const text = await response.text();
+      console.log(text)
+      console.log(response)
       const data = text ? JSON.parse(text) : {};
       const studyId = data.data.id;
-      if (imgFiles.length > 0) {
-        await imgUpload(studyId);
-      }
-      alert('게시글 작성 완료');
 
-      // 게시글 초기화
-      setTitle('');
-      setCategory(null);
-      setStartDate('');
-      setEndDate('');
-      setMemberNum(1);
-      setSelectedWay('FACE_TO_FACE');
-      setSelectedFrequency('ONCE_OR_TWICE_A_WEEK');
-      setContent('');
-      setStudyLink('');
-      setQuestionLink('');
-      setTags([]);
+      toast.success('게시글 작성 완료');
 
-      navigate(`/study/post/${studyId}`);
+      setTimeout(() => {
+        navigate(`/study/post/${studyId}`);
+      }, 100); // 2초 후에 이동
+      // 게시글 초기화 함수
+      reset();
+      resetCategory();
+
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
-
-      if (data.data !== null) {
-        errorClassName = data.data.errorClassName;
-      }
     } catch (err) {
       console.log('ErrorMessage : ', err.message);
-
       e.preventDefault();
     }
   };
@@ -336,6 +382,14 @@ const StudyPostWrite = props => {
     const formStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
     const formEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
 
+    let tagSplit;
+    if (typeof tags === 'string') {
+      tagSplit = tags
+        .replace(/(\s*)/g, '')
+        .split('#')
+        .filter(e => e !== '');
+    }
+
     const studyData = {
       title: title,
       content: content,
@@ -347,7 +401,7 @@ const StudyPostWrite = props => {
       lectureId: category,
       recruitmentStartAt: formStartDate,
       recruitmentEndAt: formEndDate,
-      tags: tags,
+      tags: tagSplit,
       images: null,
     };
     console.log(studyData);
@@ -369,7 +423,6 @@ const StudyPostWrite = props => {
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
 
-
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
@@ -379,17 +432,9 @@ const StudyPostWrite = props => {
       }
       alert('게시글 수정 완료');
 
-      // 게시글 초기화
-      setTitle('');
-      setStartDate('');
-      setEndDate('');
-      setMemberNum(1);
-      setSelectedWay('FACE_TO_FACE');
-      setSelectedFrequency('ONCE_OR_TWICE_A_WEEK');
-      setContent('');
-      setStudyLink('');
-      setQuestionLink('');
-      setTags([]);
+      //게시글 초기화
+      reset();
+      resetCategory();
 
       navigate(`/study/post/${props.studyId}`);
     } catch (err) {
@@ -411,6 +456,7 @@ const StudyPostWrite = props => {
 
   return (
     <div className={style.container}>
+      <SubHeader text="세종스터디" customBackLink="/study" />
       <div className={style.innerConatiner}>
         <PostHeader onOpenConfirmModal={openConfirmModal} />
         <div className={style.contentContainer}>
@@ -445,7 +491,13 @@ const StudyPostWrite = props => {
           deleteHandler={deleteHandler}
           state={isClickedStudy ? 'studyPostField' : null}
         >
-          {isClickedStudy && <StudyPostField />}
+          {isClickedStudy ? (
+            studyType === 'lecture' ? (
+              <StudyPostField />
+            ) : (
+              <StudyPostExternalField />
+            )
+          ) : null}
           {isClickedMember && <StudyMember />}
         </BottomModal>
       )}

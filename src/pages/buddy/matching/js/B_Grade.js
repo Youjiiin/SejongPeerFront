@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import check from '../../../../assets/image/check.png';
-import buddyImg3 from '../../../../assets/image/buddyImg3.png';
+import buddyImg5 from '../../../../assets/image/buddyImg5.png';
 import btn3 from '../css/B_Btn3.module.css';
 import con from '../css/B_Container.module.css';
 
@@ -92,7 +92,11 @@ const GradeDiff = props => {
           {anyClicked && <img className={btn3.check} src={check} alt="check" />}
         </button>
       </div>
-      <img className={con.img3} src={buddyImg3} alt="buddyImg3" />
+      <img
+        style={{ width: '203px', height: '100px', marginTop: '14px' }}
+        src={buddyImg5}
+        alt="buddyImg3"
+      />
     </div>
   );
 };

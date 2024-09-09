@@ -202,7 +202,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40vh;
+    width: 100%;
+    margin-top: 20px;
     height: 5vh;
     font-size: 16px;
     border: none;
@@ -210,6 +211,10 @@
     background-color: #fafafa;
     border-radius: 50px;
     border: 1px solid var(--line_02, #e5e5e5);
+  }
+  .kakao img {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -238,7 +243,7 @@
     margin-top: 7vh;
     background-color: #fff7f7;
     width: 100vw;
-    height: 85vh;
+    /* height: 85vh; */
   }
 
   .useImg {
@@ -451,7 +456,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 351px;
+    width: 100%;
+    margin-top: 20px;
     height: 5vh;
     font-size: 16px;
     border: none;
@@ -460,6 +466,10 @@
     border-radius: 50px;
     border: 1px solid var(--line_02, #e5e5e5);
     color: black;
+  }
+  .kakao img {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -516,7 +526,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40vh;
+    width: 100%;
+    margin-top: 0;
     height: 5vh;
     font-size: 16px;
     border: none;
@@ -524,5 +535,9 @@
     background-color: #fafafa;
     border-radius: 50px;
     border: 1px solid var(--line_02, #e5e5e5);
+  }
+  .kakao img {
+    width: 20px;
+    height: 20px;
   }
 }

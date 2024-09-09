@@ -19,7 +19,6 @@ const ImageUpload = ({
         setIsPost(true);
         }
     }, []);
-    console.log(imgUrlList);
 
     return (
         <div className={style.iamgeContainer}>

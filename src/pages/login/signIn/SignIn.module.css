@@ -1,18 +1,18 @@
 .entire_Container {
-  background-color: #FFF7F7;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.container {
-  background-color: #FFF7F7;
+  background-color: #fff7f7;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10vh;
+}
+
+.container {
+  background-color: #fff7f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 64px;
 }
 
 .signInBtn {
@@ -36,7 +36,7 @@
   font-weight: 500;
   cursor: pointer;
 }
-.SignUpBtn {
+.signUpBtn {
   border: none;
   background-color: transparent;
   font-size: 14px;

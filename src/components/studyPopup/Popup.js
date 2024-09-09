@@ -50,7 +50,7 @@ const PopupTitle = styled.h2`
 const PopupMessage = styled.p`
   font-size: 14px;
   color: ${COLORS.font2};
-  line-height: 1.5;
+  line-height: 1;
   margin-bottom: 20px;
 `;
 

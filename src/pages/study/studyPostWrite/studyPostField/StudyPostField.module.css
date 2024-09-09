@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  height: 55vh;
+  height: 100%;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -14,6 +14,7 @@
   align-items: center;
   padding: 0 5%;
   border-bottom: 1px solid #e5e5e5;
+  gap: 2.5%;
 }
 
 .header span {
@@ -45,7 +46,10 @@
   width: 24px;
   height: 24px;
 }
-
+.backImg {
+  width: 10px;
+  height: 20px;
+}
 .search_input {
   background-color: transparent;
   border: none;
@@ -65,7 +69,17 @@
   font-weight: 600;
   cursor: pointer;
 }
+.cateGoryItem_E {
+  padding: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.DesText {
+  font-size: 0.9rem;
+  color: #777777;
+}
 .subsProfsDiv {
+  font-size: 1em;
   width: 100%;
   display: flex;
   justify-content: space-between;

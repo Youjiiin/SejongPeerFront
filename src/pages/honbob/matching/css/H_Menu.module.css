@@ -134,7 +134,6 @@
     width: 18vh;
     height: 18vh;
     margin-bottom: 1vh;
-    padding-top: 20px;
     border-radius: 36px;
     /* border: 1px solid #e5e5e5; */
     cursor: pointer;
@@ -144,8 +143,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-bottom: 2vh;
-    box-sizing: border-box;
   }
   .menuBox {
     margin-bottom: 1vh;
@@ -179,26 +176,19 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    width: 150%;
+    width: 108px;
+    height: 80px;
     margin-bottom: 5%;
-    aspect-ratio: 2/1;
+    aspect-ratio: 1/1;
   }
 
-  /* .item-1 {
-    background-image: url('../../../../assets/image/westernFood.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    background-size: 100% 100%;
-    width: 100%;
-    aspect-ratio: 1/1;
-  } */
   .item-1 {
     background-image: url('../../../../assets/image/westernFood.png');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
-    width: 70%;
+    background-size: contain;
+    width: 108px;
+    height: 80px;
     aspect-ratio: 1/1;
   }
 
@@ -206,11 +196,10 @@
     background-image: url('../../../../assets/image/ChineseFood.png');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 100% 100%;
-    width: 50%;
+    background-size: contain;
+    width: 108px;
+    height: 80px;
     aspect-ratio: 1/1;
-    margin-bottom: 20%;
-    /* aspect-ratio:; */
   }
 
   .item-3 {
@@ -218,8 +207,8 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
-    width: 50%;
+    width: 108px;
+    height: 80px;
     aspect-ratio: 1/1;
-    margin-bottom: 20%;
   }
 }

@@ -16,13 +16,15 @@ const Back = () => {
   const backHandler = () => {
     if (location.pathname === '/main') {
       navigate('/main');
+    } else if (location.pathname === '/study') {
+      navigate('/main');
+    } else if (location.pathname.startsWith('/study/post') || location.pathname.startsWith('/study/modify')) {
+      navigate('/study');
     } else {
       navigate(-1);
     }
   };
-  const goLoginHandler = () => {
-    navigate('/login');
-  };
+
   const warningMessage = () => {
     const backToMain = window.confirm(
       '확인을 누르면 메인 화면으로 이동합니다.\n지금까지 작성한 내용들이 모두 초기화 됩니다.'
